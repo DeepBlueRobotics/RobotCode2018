@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  * Gets the script name and runs the script.
  */
-public class RunAuto extends CommandGroup implements RunAutoInterface {
+public class RunScript extends CommandGroup implements RunScriptInterface {
 
-    public RunAuto(String scriptName) {
+    public RunScript(String scriptName) {
     		// TODO
     	
         // Add Commands here:
