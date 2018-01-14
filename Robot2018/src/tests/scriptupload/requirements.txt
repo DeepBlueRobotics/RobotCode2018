@@ -1,12 +1,1 @@
-Requirements:
-    pynetworktables
-
-Instructions:
-    Use pip to install:
-        Windozer:
-            py -3 -m pip install pynetworktables
-        Linux/Mac:
-            pip3 install pynetworktables
-    full instructions at http://robotpy.readthedocs.io/en/stable/install/pynetworktables.html#pynetworktables-install
-
-pynetworktables does not need to be on the roboRIO for this script
+pynetworktables==2018.0.0
