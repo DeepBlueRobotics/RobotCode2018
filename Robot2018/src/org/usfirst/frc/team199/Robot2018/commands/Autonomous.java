@@ -32,7 +32,7 @@ public class Autonomous extends CommandGroup implements AutonomousInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-    @Override
+	@Override
 	public Position getStartingPos() {
 		// TODO 
 		return null;

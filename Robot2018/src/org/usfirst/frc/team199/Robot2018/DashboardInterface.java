@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * Directly copied from Robot2017 - kev
+ * Directly copied from Robot2017 - @kevinzwang
  */
 
 public interface DashboardInterface {
