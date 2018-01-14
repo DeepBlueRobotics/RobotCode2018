@@ -26,10 +26,38 @@ public class Robot extends IterativeRobot {
 	public static final ClimberAssist climberAssist = new ClimberAssist();
 	public static final IntakeEject intakeEject = new IntakeEject();
 	public static final Lift lift = new Lift();
+	public static Drivetrain dt;
+
 	public static OI oi;
 
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
+
+
+	public static double getConst(String key, double def) {
+		if(!SmartDashboard.containsKey(key)) {
+			SmartDashboard.putNumber(key, def);
+		}
+		return SmartDashboard.getNumber(key, def);
+	}
+	public void sendValuesToDashboard() {
+		ArrayList<String> boolKeys = new ArrayList<String>();
+		ArrayList<Boolean> boolDef = new ArrayList<Boolean>();
+			boolKeys.add("Arcade Drive");
+			boolKeys.add("Arcade Drive Default Setup");
+			boolKeys.add("Square Drive Values");
+			boolKeys.add("High Gear");
+			
+			boolDef.add(true);
+			boolDef.add(true);
+			boolDef.add(false);
+			boolDef.add(false);
+		for(int i = 0; i < boolKeys.size(); i++) {
+			if(!SmartDashboard.containsKey(boolKeys.get(i))) {
+				SmartDashboard.putBoolean(boolKeys.get(i), boolDef.get(i));
+			}
+		}
+	}
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -37,7 +65,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+		dt = new Drivetrain();
 		oi = new OI();
+		sendValuesToDashboard();
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 	}
