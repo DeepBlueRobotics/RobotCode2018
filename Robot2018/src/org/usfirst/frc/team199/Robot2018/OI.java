@@ -5,10 +5,10 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package org.usfirst.frc.team199.robot;
+package org.usfirst.frc.team199.Robot2018;
 
-import org.usfirst.frc.team199.robot.commands.ShiftDrive;
-import org.usfirst.frc.team199.robot.commands.ShiftDriveType;
+import org.usfirst.frc.team199.Robot2018.commands.ShiftDrive;
+import org.usfirst.frc.team199.Robot2018.commands.ShiftDriveType;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;

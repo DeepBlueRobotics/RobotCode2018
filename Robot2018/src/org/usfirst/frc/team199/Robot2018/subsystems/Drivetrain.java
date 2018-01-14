@@ -5,10 +5,10 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package org.usfirst.frc.team199.robot.subsystems;
+package org.usfirst.frc.team199.Robot2018.subsystems;
 
-import org.usfirst.frc.team199.robot.RobotMap;
-import org.usfirst.frc.team199.robot.commands.TeleopDrive;
+import org.usfirst.frc.team199.Robot2018.RobotMap;
+import org.usfirst.frc.team199.Robot2018.commands.TeleopDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;

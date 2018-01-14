@@ -5,10 +5,9 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package org.usfirst.frc.team199.robot.commands;
+package org.usfirst.frc.team199.Robot2018.commands;
 
-import org.usfirst.frc.team199.robot.Robot;
-import org.usfirst.frc.team199.robot.motion.PID;
+import org.usfirst.frc.team199.Robot2018.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
