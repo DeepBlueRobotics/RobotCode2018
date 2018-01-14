@@ -1,6 +1,11 @@
 
 package org.usfirst.frc.team199.Robot2018;
 
+import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
+import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
+import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEject;
+import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -16,7 +21,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
-
+	
+	public static final Climber climber = new Climber();
+	public static final ClimberAssist climberAssist = new ClimberAssist();
+	public static final IntakeEject intakeEject = new IntakeEject();
+	public static final Lift lift = new Lift();
 	public static OI oi;
 
 	Command autonomousCommand;
