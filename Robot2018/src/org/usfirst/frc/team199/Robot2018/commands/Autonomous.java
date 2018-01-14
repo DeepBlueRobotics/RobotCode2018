@@ -29,37 +29,37 @@ public class Autonomous extends CommandGroup implements AutonomousInterface {
         // arm.
     }
 
-	@Override
 	/**
 	 * {@inheritDoc}
 	 */
+    @Override
 	public Position getStartingPos() {
 		// TODO 
 		return null;
 	}
 
-	@Override
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Strategy[] getStrategies() {
 		// TODO 
 		return null;
 	}
 
-	@Override
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public double getDelay() {
 		// TODO 
 		return 0;
 	}
 
-	@Override
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String pickScript() {
 		// TODO 
 		return null;

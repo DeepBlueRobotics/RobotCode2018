@@ -29,10 +29,10 @@ public class TestAuto extends CommandGroup implements TestAutoInterface {
         // arm.
     }
 
-	@Override
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getScriptToTest() {
 		// TODO 
 		return null;

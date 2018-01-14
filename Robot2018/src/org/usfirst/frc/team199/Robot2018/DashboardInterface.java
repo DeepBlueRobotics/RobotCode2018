@@ -1,19 +1,10 @@
-/**
- * 
- */
 package org.usfirst.frc.team199.Robot2018;
 
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- *
- * Will be able to: - display a value on smartdashboard with particular key and
- * object value, - modify key so that it can be used by dashboard widget - get a
- * value of particular type, accessing SmartDashboard as would be expected
- * except with a different key - two methods for each kind of getting, with and
- * without default values
- * 
+ * Directly copied from Robot2017 - kev
  */
 
 public interface DashboardInterface {
@@ -64,11 +55,11 @@ public interface DashboardInterface {
 	}
 
 	/**
-	 * Converts the specified display key into one with its subsystem name
-	 * appended as a prefix, to be compatible with the Subsystem widget on
-	 * SmartDashboard for organizational purposes
+	 * Converts the specified display key into one with its subsystem name appended
+	 * as a prefix, to be compatible with the Subsystem widget on SmartDashboard for
+	 * organizational purposes
 	 * 
-	 * @param key - The name of the original key
+	 * @param key The name of the original key
 	 * @return A modified key with prefix subsystem name
 	 */
 	default String getKey(String key) {
