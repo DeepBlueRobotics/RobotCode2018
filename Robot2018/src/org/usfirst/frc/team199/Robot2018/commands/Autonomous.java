@@ -1,5 +1,6 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
@@ -55,7 +56,15 @@ public class Autonomous extends CommandGroup implements AutonomousInterface {
 		// TODO 
 		return 0;
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getFMS() {
+		return DriverStation.getInstance().getGameSpecificMessage();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
