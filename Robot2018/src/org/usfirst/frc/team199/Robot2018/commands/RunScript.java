@@ -40,7 +40,7 @@ public class RunScript extends CommandGroup implements RunScriptInterface {
 	    				addSequential(new DeployToScale());
 	    				break;
 	    			case "exchange":
-	    				addSequential(new DeployToExchange);
+	    				addSequential(new DeployToExchange());
 	    				break;
 	    			case "wait":
 	    				addSequential(new WaitCommand(Double.parseDouble(cmdArgs[0])));
