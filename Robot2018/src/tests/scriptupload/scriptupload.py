@@ -4,8 +4,9 @@ NetworkTables.initialize(server='roboRIO-199-FRC.local')
 prefs = NetworkTables.getTable("Preferences")
 
 go = False #true when file has been successfully read
-file = [] #an array of strings which represent each line of the file
+lines = [] #an array of strings which represent each line of the file
 filename = input("File name: ") #the name of the file to read (user input)
+oneline = "" #the file as a single string
 
 #loops until a file is read into the file array
 while not go:
@@ -14,15 +15,16 @@ while not go:
             quit()
             
         with open(filename) as script:
-            file = script.readlines()
+            lines = script.readlines()
+            "".join(lines)
             #balex's testing
-            for line in file:
-                print(repr(line))
+            #for line in file:
+             #   print(repr(line))
             
         break
     except:
         filename = input("Not found. Try another name (enter to quit): ") or "quit" #retry, or quit (in case the file doesn't exist)
 
 #puts the string array
-prefs.putStringArray("autoscripts", file)
+prefs.putString("autoscripts", file)
 print("Uploaded %s as a String[] to key \"autoscripts\"" % filename)
