@@ -24,5 +24,5 @@ while not go:
         filename = input("Not found. Try another name (enter to quit): ") or "quit" #retry, or quit (in case the file doesn't exist)
 
 #puts the string array
-prefs.putStringArray("autoscript", file)
-print("Uploaded %s as a String[] to key \"autoscript\"" % filename)
+prefs.putStringArray("autoscripts", file)
+print("Uploaded %s as a String[] to key \"autoscripts\"" % filename)
