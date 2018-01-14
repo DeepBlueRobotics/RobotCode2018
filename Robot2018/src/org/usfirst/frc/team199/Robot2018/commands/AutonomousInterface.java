@@ -47,9 +47,7 @@ public interface AutonomousInterface extends DashboardInterface{
 	 * 
 	 * @return FMS data
 	 */
-	default String getFMS() {
-		return DriverStation.getInstance().getGameSpecificMessage();
-	}
+	public String getFMS();
 	
 	/**
 	 * Pick the script to run for Autonomous
