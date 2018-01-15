@@ -7,7 +7,7 @@
 
 package org.usfirst.frc.team199.Robot2018;
 
-import org.usfirst.frc.team199.Robot2018.commands.ShiftDrive;
+import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftDriveType;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -63,7 +63,7 @@ public class OI {
 	public OI() {
 		leftJoy = new Joystick(0);
 			shiftDrive = new JoystickButton(leftJoy, getButton("Button Shift Drive", 1));
-			shiftDrive.whenPressed(new ShiftDrive());
+			shiftDrive.whenPressed(new ShiftLowGear());
 			shiftDriveType = new JoystickButton(leftJoy, getButton("Button Shift Drive Type", 2));
 			shiftDriveType.whenPressed(new ShiftDriveType());
 		rightJoy = new Joystick(1);

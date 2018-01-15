@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class ShiftDrive extends Command {
+public class ShiftHighGear extends Command {
 
 	Timer tim;
-    public ShiftDrive() {
+    public ShiftHighGear() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }
@@ -26,13 +26,8 @@ public class ShiftDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if(SmartDashboard.getBoolean("High Gear", false)) {
-    		Robot.dt.pushGear(true);
-    		SmartDashboard.putBoolean("High Gear", true);
-    	} else {
-    		Robot.dt.pushGear(false);
-    		SmartDashboard.putBoolean("High Gear", false);
-    	}
+    	Robot.dt.pushGear(true);
+    	SmartDashboard.putBoolean("High Gear", true);
     }
 
     // Make this return true when this Command no longer needs to run execute()

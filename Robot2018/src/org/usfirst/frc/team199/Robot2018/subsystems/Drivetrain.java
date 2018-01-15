@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team199.Robot2018.subsystems;
 
+import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.RobotMap;
 import org.usfirst.frc.team199.Robot2018.commands.TeleopDrive;
 
@@ -49,7 +50,7 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource{
 	private final DoubleSolenoid dtGear = RobotMap.dtGear;
 	
 	public void pushGear(boolean forw) {
-		if(forw) {
+		if(forw ^ SmartDashboard.getBoolean("Drivetrain Gear Shift Backwards", false)) {
 			dtGear.set(DoubleSolenoid.Value.kForward);
 		} else {
 			dtGear.set(DoubleSolenoid.Value.kReverse);
