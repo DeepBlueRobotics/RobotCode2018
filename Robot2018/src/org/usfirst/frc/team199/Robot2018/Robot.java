@@ -1,12 +1,20 @@
 
 package org.usfirst.frc.team199.Robot2018;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.omg.CORBA.PRIVATE_MEMBER;
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
 import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEject;
 import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -27,7 +35,8 @@ public class Robot extends IterativeRobot {
 	public static final IntakeEject intakeEject = new IntakeEject();
 	public static final Lift lift = new Lift();
 	public static OI oi;
-
+	public static Map<String, ArrayList<String>> autoScripts = new HashMap<String, ArrayList<String>>();
+	
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -43,6 +52,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	/**
+	 * 
 	 * This function is called once each time the robot enters Disabled mode.
 	 * You can use it to reset any subsystem information you want to clear when
 	 * the robot is disabled.
