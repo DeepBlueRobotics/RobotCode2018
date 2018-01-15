@@ -19,7 +19,7 @@ while not go:
     try:
         with open(filename) as script:
             lines = script.readlines()
-            "".join(lines) 
+            "".join(lines)
         break
     except:
         retry = True
