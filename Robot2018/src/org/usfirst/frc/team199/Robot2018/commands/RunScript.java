@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class RunScript extends CommandGroup implements RunScriptInterface {
 
     public RunScript(String scriptName) {
-    		ArrayList<String> script = Robot.autoScripts.getOrDefault(scriptName, new ArrayList<String>());
+    		String[] script = Robot.autoScripts.getOrDefault(scriptName, new String[0]);
     		
     		outerloop:
     		for(String cmd : script) {
