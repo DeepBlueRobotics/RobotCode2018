@@ -1,6 +1,18 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package org.usfirst.frc.team199.Robot2018;
 
-import edu.wpi.first.wpilibj.buttons.Button;
+import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
+import org.usfirst.frc.team199.Robot2018.commands.ShiftDriveType;
+
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -34,4 +46,27 @@ public class OI {
 	// Start the command when the button is released and let it run the command
 	// until it is finished as determined by it's isFinished method.
 	// button.whenReleased(new ExampleCommand());
+	
+	public Joystick leftJoy;
+		public JoystickButton shiftDrive;
+		public JoystickButton shiftDriveType;
+	public Joystick rightJoy;
+	public Joystick manipulator;
+	
+	
+	public int getButton(String key, int def) {
+		if(!SmartDashboard.containsKey(key)) {
+			SmartDashboard.putNumber(key, def);
+		}
+		return (int) SmartDashboard.getNumber(key, def);
+	}
+	public OI() {
+		leftJoy = new Joystick(0);
+			shiftDrive = new JoystickButton(leftJoy, getButton("Button Shift Drive", 1));
+			shiftDrive.whenPressed(new ShiftLowGear());
+			shiftDriveType = new JoystickButton(leftJoy, getButton("Button Shift Drive Type", 2));
+			shiftDriveType.whenPressed(new ShiftDriveType());
+		rightJoy = new Joystick(1);
+		manipulator = new Joystick(2);
+	}
 }
