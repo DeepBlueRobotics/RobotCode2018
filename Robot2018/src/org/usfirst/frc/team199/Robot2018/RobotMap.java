@@ -89,11 +89,11 @@ public class RobotMap {
 		turnController.setAbsoluteTolerance(Robot.getConst("ConstTurnTolerance", 1));
 		moveController = new PIDController(Robot.getConst("ConstMovekP", 1), Robot.getConst("ConstMovekI", 0),
 				Robot.getConst("ConstMovekD", 0), Robot.dt, Robot.dt);
-		turnController.disable();
-		turnController.setInputRange(-180, 180);
-		turnController.setOutputRange(-1.0, 1.0);
-		turnController.setContinuous();
-		turnController.setAbsoluteTolerance(Robot.getConst("ConstMoveTolerance", 2));
+		moveController.disable();
+		moveController.setInputRange(0, Double.MAX_VALUE);
+		moveController.setOutputRange(-1.0, 1.0);
+		moveController.setContinuous(false);
+		moveController.setAbsoluteTolerance(Robot.getConst("ConstMoveTolerance", 2));
 		// moveLeftController = new PIDController(Robot.getConst("ConstMoveLeftkP", 1),
 		// Robot.getConst("ConstMoveLeftkI", 0), Robot.getConst("ConstMoveLeftkD", 0),
 		// Robot.dt.getLeftDrive(), (PIDOutput) Robot.dt.getLeftDrive());
