@@ -1,5 +1,6 @@
 #nt setup
 from networktables import NetworkTables
+import __future__
 NetworkTables.initialize(server='roboRIO-199-FRC.local')
 prefs = NetworkTables.getTable("Preferences")
 
