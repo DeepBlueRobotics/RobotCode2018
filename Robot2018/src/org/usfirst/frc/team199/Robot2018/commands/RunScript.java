@@ -1,9 +1,10 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
-import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
+
+import org.usfirst.frc.team199.Robot2018.Robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -15,7 +16,7 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class RunScript extends CommandGroup implements RunScriptInterface {
 
     public RunScript(String scriptName) {
-    		String[] script = Robot.autoScripts.getOrDefault(scriptName, new String[0]);
+    		ArrayList<String> script = Robot.autoScripts.getOrDefault(scriptName, new ArrayList<String>());
     		
     		outerloop:
     		for(String cmd : script) {
@@ -34,13 +35,13 @@ public class RunScript extends CommandGroup implements RunScriptInterface {
 	    				addSequential(new AutoMove(cmdArgs[0]));
 	    				break;
 	    			case "switch":
-	    				addSequential(new DeployToSwitch());
+	    				addSequential(new EjectToSwitch());
 	    				break;
 	    			case "scale":
-	    				addSequential(new DeployToScale());
+	    				addSequential(new EjectToScale());
 	    				break;
 	    			case "exchange":
-	    				addSequential(new DeployToExchange());
+	    				addSequential(new EjectToExchange());
 	    				break;
 	    			case "wait":
 	    				addSequential(new WaitCommand(Double.parseDouble(cmdArgs[0])));
