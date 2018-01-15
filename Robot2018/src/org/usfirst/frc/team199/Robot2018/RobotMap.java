@@ -56,7 +56,7 @@ public class RobotMap {
 	public static DoubleSolenoid dtGear;
 
 	private void configSRX(WPI_TalonSRX mc) {
-		int kTimeout = (int) Robot.getConst("ConstkTimeoutMs", 10);
+		int kTimeout = (int) Robot.getConst("kTimeoutMs", 10);
 		mc.configNominalOutputForward(0, kTimeout);
 		mc.configNominalOutputReverse(0, kTimeout);
 		mc.configPeakOutputForward(1, kTimeout);
@@ -65,35 +65,35 @@ public class RobotMap {
 
 	public RobotMap() {
 
-		leftEnc = new Encoder(getPort("Port1LeftEnc", 0), getPort("Port2LeftEnc", 1));
-		dtLeftDrive = new WPI_TalonSRX(getPort("PortLeftTalonSRXDrive", 1));
+		leftEnc = new Encoder(getPort("1LeftEnc", 0), getPort("2LeftEnc", 1));
+		dtLeftDrive = new WPI_TalonSRX(getPort("LeftTalonSRXDrive", 1));
 		configSRX(dtLeftDrive);
-		dtLeftSlave = new WPI_TalonSRX(getPort("PortLeftTalonSRXSlave", 1));
+		dtLeftSlave = new WPI_TalonSRX(getPort("LeftTalonSRXSlave", 1));
 		configSRX(dtLeftSlave);
 		dtLeft = new SpeedControllerGroup(dtLeftDrive, dtLeftSlave);
 
-		rightEnc = new Encoder(getPort("Port1RightEnc", 2), getPort("Port2RightEnc", 3));
-		dtRightDrive = new WPI_TalonSRX(getPort("PortRightTalonSRXDrive", 2));
+		rightEnc = new Encoder(getPort("1RightEnc", 2), getPort("2RightEnc", 3));
+		dtRightDrive = new WPI_TalonSRX(getPort("RightTalonSRXDrive", 2));
 		configSRX(dtRightDrive);
-		dtRightSlave = new WPI_TalonSRX(getPort("PortRightTalonSRXSlave", 1));
+		dtRightSlave = new WPI_TalonSRX(getPort("RightTalonSRXSlave", 1));
 		configSRX(dtRightSlave);
 		dtRight = new SpeedControllerGroup(dtRightDrive, dtRightSlave);
 
 		robotDrive = new DifferentialDrive(dtLeft, dtRight);
-		turnController = new PIDController(Robot.getConst("ConstTurnkP", 1), Robot.getConst("ConstTurnkI", 0),
-				Robot.getConst("ConstTurnkD", 0), ahrs, Robot.dt);
+		turnController = new PIDController(Robot.getConst("TurnkP", 1), Robot.getConst("TurnkI", 0),
+				Robot.getConst("TurnkD", 0), ahrs, Robot.dt);
 		turnController.disable();
 		turnController.setInputRange(-180, 180);
 		turnController.setOutputRange(-1.0, 1.0);
 		turnController.setContinuous();
-		turnController.setAbsoluteTolerance(Robot.getConst("ConstTurnTolerance", 1));
-		moveController = new PIDController(Robot.getConst("ConstMovekP", 1), Robot.getConst("ConstMovekI", 0),
-				Robot.getConst("ConstMovekD", 0), Robot.dt, Robot.dt);
+		turnController.setAbsoluteTolerance(Robot.getConst("TurnTolerance", 1));
+		moveController = new PIDController(Robot.getConst("MovekP", 1), Robot.getConst("MovekI", 0),
+				Robot.getConst("MovekD", 0), Robot.dt, Robot.dt);
 		moveController.disable();
 		moveController.setInputRange(0, Double.MAX_VALUE);
 		moveController.setOutputRange(-1.0, 1.0);
 		moveController.setContinuous(false);
-		moveController.setAbsoluteTolerance(Robot.getConst("ConstMoveTolerance", 2));
+		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 2));
 		// moveLeftController = new PIDController(Robot.getConst("ConstMoveLeftkP", 1),
 		// Robot.getConst("ConstMoveLeftkI", 0), Robot.getConst("ConstMoveLeftkD", 0),
 		// Robot.dt.getLeftDrive(), (PIDOutput) Robot.dt.getLeftDrive());
@@ -114,8 +114,8 @@ public class RobotMap {
 		// 2));
 
 		ahrs = new AHRS(SerialPort.Port.kMXP);
-		dtGyro = new AnalogGyro(getPort("PortGyro", 0));
-		dtGear = new DoubleSolenoid(getPort("Port1dtGearSolenoid", 0), getPort("Port2dtGearSolenoid", 1));
+		dtGyro = new AnalogGyro(getPort("Gyro", 0));
+		dtGear = new DoubleSolenoid(getPort("1dtGearSolenoid", 0), getPort("2dtGearSolenoid", 1));
 
 	}
 
@@ -131,8 +131,8 @@ public class RobotMap {
 	 */
 	public int getPort(String key, int def) {
 		if (!SmartDashboard.containsKey(key)) {
-			SmartDashboard.putNumber(key, def);
+			SmartDashboard.putNumber("Port/" + key, def);
 		}
-		return (int) SmartDashboard.getNumber(key, def);
+		return (int) SmartDashboard.getNumber("Port/" + key, def);
 	}
 }

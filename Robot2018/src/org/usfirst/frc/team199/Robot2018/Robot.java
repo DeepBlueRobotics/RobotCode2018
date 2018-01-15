@@ -38,9 +38,9 @@ public class Robot extends IterativeRobot {
 
 	public static double getConst(String key, double def) {
 		if (!SmartDashboard.containsKey(key)) {
-			SmartDashboard.putNumber(key, def);
+			SmartDashboard.putNumber("Const/" + key, def);
 		}
-		return SmartDashboard.getNumber(key, def);
+		return SmartDashboard.getNumber("Const/" + key, def);
 	}
 
 	public void sendValuesToDashboard() {

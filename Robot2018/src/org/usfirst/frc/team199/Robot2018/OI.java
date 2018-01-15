@@ -55,16 +55,16 @@ public class OI {
 
 	public int getButton(String key, int def) {
 		if (!SmartDashboard.containsKey(key)) {
-			SmartDashboard.putNumber(key, def);
+			SmartDashboard.putNumber("Button/" + key, def);
 		}
-		return (int) SmartDashboard.getNumber(key, def);
+		return (int) SmartDashboard.getNumber("Button/" + key, def);
 	}
 
 	public OI() {
 		leftJoy = new Joystick(0);
-		shiftDrive = new JoystickButton(leftJoy, getButton("Button Shift Drive", 1));
+		shiftDrive = new JoystickButton(leftJoy, getButton("Shift Drive", 1));
 		shiftDrive.whenPressed(new ShiftLowGear());
-		shiftDriveType = new JoystickButton(leftJoy, getButton("Button Shift Drive Type", 2));
+		shiftDriveType = new JoystickButton(leftJoy, getButton("Shift Drive Type", 2));
 		shiftDriveType.whenPressed(new ShiftDriveType());
 		rightJoy = new Joystick(1);
 		manipulator = new Joystick(2);
