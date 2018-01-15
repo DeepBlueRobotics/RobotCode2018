@@ -12,7 +12,6 @@ import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -24,11 +23,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	
+
 	public static final Climber climber = new Climber();
 	public static final ClimberAssist climberAssist = new ClimberAssist();
 	public static final IntakeEject intakeEject = new IntakeEject();
 	public static final Lift lift = new Lift();
+	public static RobotMap rmap;
 	public static Drivetrain dt;
 
 	public static OI oi;
@@ -36,38 +36,39 @@ public class Robot extends IterativeRobot {
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
 
-
 	public static double getConst(String key, double def) {
-		if(!SmartDashboard.containsKey(key)) {
+		if (!SmartDashboard.containsKey(key)) {
 			SmartDashboard.putNumber(key, def);
 		}
 		return SmartDashboard.getNumber(key, def);
 	}
+
 	public void sendValuesToDashboard() {
 		ArrayList<String> boolKeys = new ArrayList<String>();
 		ArrayList<Boolean> boolDef = new ArrayList<Boolean>();
-			boolKeys.add("Arcade Drive");
-			boolKeys.add("Arcade Drive Default Setup");
-			boolKeys.add("Square Drive Values");
-			boolKeys.add("High Gear");
-			
-			boolDef.add(true);
-			boolDef.add(true);
-			boolDef.add(false);
-			boolDef.add(false);
-		for(int i = 0; i < boolKeys.size(); i++) {
-			if(!SmartDashboard.containsKey(boolKeys.get(i))) {
+		boolKeys.add("Arcade Drive");
+		boolKeys.add("Arcade Drive Default Setup");
+		boolKeys.add("Square Drive Values");
+		boolKeys.add("High Gear");
+
+		boolDef.add(true);
+		boolDef.add(true);
+		boolDef.add(false);
+		boolDef.add(false);
+		for (int i = 0; i < boolKeys.size(); i++) {
+			if (!SmartDashboard.containsKey(boolKeys.get(i))) {
 				SmartDashboard.putBoolean(boolKeys.get(i), boolDef.get(i));
 			}
 		}
 	}
 
 	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
+	 * This function is run when the robot is first started up and should be used
+	 * for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
+		rmap = new RobotMap();
 		dt = new Drivetrain();
 		oi = new OI();
 		sendValuesToDashboard();
@@ -76,9 +77,9 @@ public class Robot extends IterativeRobot {
 	}
 
 	/**
-	 * This function is called once each time the robot enters Disabled mode.
-	 * You can use it to reset any subsystem information you want to clear when
-	 * the robot is disabled.
+	 * This function is called once each time the robot enters Disabled mode. You
+	 * can use it to reset any subsystem information you want to clear when the
+	 * robot is disabled.
 	 */
 	@Override
 	public void disabledInit() {
@@ -92,24 +93,24 @@ public class Robot extends IterativeRobot {
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString code to get the auto name from the text box below the Gyro
+	 * between different autonomous modes using the dashboard. The sendable chooser
+	 * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+	 * remove all of the chooser code and uncomment the getString code to get the
+	 * auto name from the text box below the Gyro
 	 *
 	 * You can add additional auto modes by adding additional commands to the
-	 * chooser code above (like the commented example) or additional comparisons
-	 * to the switch structure below with additional strings & commands.
+	 * chooser code above (like the commented example) or additional comparisons to
+	 * the switch structure below with additional strings & commands.
 	 */
 	@Override
 	public void autonomousInit() {
 		autonomousCommand = chooser.getSelected();
 
 		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
+		 * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
+		 * switch(autoSelected) { case "My Auto": autonomousCommand = new
+		 * MyAutoCommand(); break; case "Default Auto": default: autonomousCommand = new
+		 * ExampleCommand(); break; }
 		 */
 
 		// schedule the autonomous command (example)
