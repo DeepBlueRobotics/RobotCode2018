@@ -29,10 +29,10 @@ public class RunScript extends CommandGroup implements RunScriptInterface {
 	    				addSequential(new AutoMoveTo(cmdArgs));
 	    				break;
 	    			case "turn":
-	    				addSequential(new AutoTurn(cmdArgs[0]));
+	    				addSequential(new AutoTurn(Double.parseDouble(cmdArgs[0])));
 	    				break;
 	    			case "move":
-	    				addSequential(new AutoMove(cmdArgs[0]));
+	    				addSequential(new AutoMove(Double.parseDouble(cmdArgs[0])));
 	    				break;
 	    			case "switch":
 	    				addSequential(new EjectToSwitch());
