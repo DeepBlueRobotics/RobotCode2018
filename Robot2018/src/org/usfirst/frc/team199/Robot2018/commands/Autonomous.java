@@ -1,7 +1,10 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
+import java.util.Map;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 
 /**
  * Initially run during Auto. Responsible for getting input from SmartDashboard
@@ -9,68 +12,36 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class Autonomous extends CommandGroup implements AutonomousInterface {
 
-    public Autonomous() {
-    		// TODO
-    	
-        // Add Commands here:
-        // e.g. addSequential(new Command1());
-        //      addSequential(new Command2());
-        // these will run in order.
-
-        // To run multiple commands at the same time,
-        // use addParallel()
-        // e.g. addParallel(new Command1());
-        //      addSequential(new Command2());
-        // Command1 and Command2 will run in parallel.
-
-        // A command group will require all of the subsystems that each member
-        // would require.
-        // e.g. if Command1 requires chassis, and Command2 requires arm,
-        // a CommandGroup containing them would require both the chassis and the
-        // arm.
+    public Autonomous(String startPos, Map<String, String> strategies, double delay) {
+    		String scriptName = "";
+    		
+    		scriptName += startPos.substring(0, 1);
+    		
+    		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
+    		
+    		String chosenStrat = strategies.get(fmsInput.substring(0, 2));
+    		
+    		// skip the next steps if robot is chosen to do nothing
+    		if (chosenStrat.equals("Do nothing"))
+    			return;
+    		
+    		// add switch, switch, and exchange location if going for them, "x" if not 
+    		if (chosenStrat.contains("Switch"))
+    			scriptName += fmsInput.substring(0, 1);
+    		else
+    			scriptName += "x";
+    		
+    		if (chosenStrat.contains("Scale"))
+    			scriptName += fmsInput.substring(1, 2);
+    		else
+    			scriptName += "x";
+    		
+    		if (chosenStrat.contains("Exchange"))
+    			scriptName += "E";
+    		else
+    			scriptName += "x";
+    		
+    		addSequential(new WaitCommand(delay));
+    		addSequential(new RunScript(scriptName));
     }
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Position getStartingPos() {
-		// TODO 
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Strategy[] getStrategies() {
-		// TODO 
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public double getDelay() {
-		// TODO 
-		return 0;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getFMS() {
-		return DriverStation.getInstance().getGameSpecificMessage();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String pickScript() {
-		// TODO 
-		return null;
-	}
 }
