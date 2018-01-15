@@ -29,15 +29,7 @@ public class TeleopDrive extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		if(SmartDashboard.getBoolean("Arcade Drive", true)) {
-			if(SmartDashboard.getBoolean("Arcade Drive Default Setup", true)) {
-				Robot.dt.arcadeDrive(Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getX());
-			} else {
-				Robot.dt.arcadeDrive(Robot.oi.rightJoy.getY(), Robot.oi.leftJoy.getX());
-			}
-		} else {
-			Robot.dt.tankDrive(Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getY());
-		}
+		Robot.dt.teleopDrive();
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

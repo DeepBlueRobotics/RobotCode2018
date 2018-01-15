@@ -27,9 +27,9 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * An example subsystem.  You can replace me with your own Subsystem.
+ * An example subsystem. You can replace me with your own Subsystem.
  */
-public class Drivetrain extends Subsystem implements PIDOutput, PIDSource{
+public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
@@ -42,159 +42,196 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource{
 	private final DifferentialDrive robotDrive = RobotMap.robotDrive;
 	private final PIDController turnController = RobotMap.turnController;
 	private final PIDController moveController = RobotMap.moveController;
-//	private final PIDController moveLeftController = RobotMap.moveLeftController;
-//	private final PIDController moveRightController = RobotMap.moveRightController;
-	
+	// private final PIDController moveLeftController = RobotMap.moveLeftController;
+	// private final PIDController moveRightController =
+	// RobotMap.moveRightController;
+
 	private final AHRS ahrs = RobotMap.ahrs;
 	private final AnalogGyro dtGyro = RobotMap.dtGyro;
 	private final DoubleSolenoid dtGear = RobotMap.dtGear;
-	
+
 	public void pushGear(boolean forw) {
-		if(forw ^ SmartDashboard.getBoolean("Drivetrain Gear Shift Backwards", false)) {
+		if (forw ^ SmartDashboard.getBoolean("Drivetrain Gear Shift Backwards", false)) {
 			dtGear.set(DoubleSolenoid.Value.kForward);
 		} else {
 			dtGear.set(DoubleSolenoid.Value.kReverse);
 		}
 	}
+
 	public void stopGear() {
 		dtGear.set(DoubleSolenoid.Value.kOff);
 	}
-	
+
 	private double pidOut = 0;
+
 	public void resetAHRS() {
 		ahrs.reset();
 	}
-	
+
 	public void setLeftMotor(double value) {
 		dtLeft.set(value);
 	}
+
 	private void stopLeftMotor() {
 		dtLeft.stopMotor();
 	}
-	
+
 	public void setRightMotor(double value) {
 		dtRight.set(value);
 	}
+
 	private void stopRightMotor() {
 		dtRight.stopMotor();
 	}
-	
+
 	public void stopDrive() {
 		stopRightMotor();
 		stopLeftMotor();
 	}
-	
+
+	public void resetEnc() {
+		leftEnc.reset();
+		rightEnc.reset();
+	}
+
+	public void teleopDrive() {
+		if (SmartDashboard.getBoolean("Arcade Drive", true)) {
+			if (SmartDashboard.getBoolean("Arcade Drive Default Setup", true)) {
+				Robot.dt.arcadeDrive(Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getX());
+			} else {
+				Robot.dt.arcadeDrive(Robot.oi.rightJoy.getY(), Robot.oi.leftJoy.getX());
+			}
+		} else {
+			Robot.dt.tankDrive(Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getY());
+		}
+	}
+
 	public void arcadeDrive(double speed, double turn) {
 		robotDrive.arcadeDrive(speed, turn, SmartDashboard.getBoolean("Square Drive Values", false));
 	}
+
 	public void tankDrive(double leftSpeed, double rightSpeed) {
 		robotDrive.tankDrive(leftSpeed, rightSpeed, SmartDashboard.getBoolean("Square Drive Values", false));
 	}
-	
+
 	public double getDtLeft() {
 		return dtLeft.get();
 	}
+
 	public double getDtRight() {
 		return dtRight.get();
 	}
-	
+
 	public double getGyro() {
 		return dtGyro.getAngle();
 	}
+
 	public void resetGyro() {
 		dtGyro.reset();
 	}
-	
+
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleopDrive());
 	}
-	
+
 	public void disableTurnPid() {
 		turnController.disable();
 	}
+
 	public void enableTurnPid() {
 		turnController.enable();
 	}
+
 	public void setSetTurn(double set) {
 		turnController.setSetpoint(set);
 	}
-	
-//	public void disableMoveLeftPid() {
-//		moveLeftController.disable();
-//	}
-//	public void enableMoveLeftPid() {
-//		moveLeftController.enable();
-//	}
-//	public void setSetMoveLeft(double set) {
-//		moveLeftController.setSetpoint(set);
-//	}
-//	
-//	public void disableMoveRightPid() {
-//		moveRightController.disable();
-//	}
-//	public void enableMoveRightPid() {
-//		moveRightController.enable();
-//	}
-//	public void setSetMoveRight(double set) {
-//		moveRightController.setSetpoint(set);
-//	}
-	
+
+	// public void disableMoveLeftPid() {
+	// moveLeftController.disable();
+	// }
+	// public void enableMoveLeftPid() {
+	// moveLeftController.enable();
+	// }
+	// public void setSetMoveLeft(double set) {
+	// moveLeftController.setSetpoint(set);
+	// }
+	//
+	// public void disableMoveRightPid() {
+	// moveRightController.disable();
+	// }
+	// public void enableMoveRightPid() {
+	// moveRightController.enable();
+	// }
+	// public void setSetMoveRight(double set) {
+	// moveRightController.setSetpoint(set);
+	// }
+
 	public void setDistanncePerPuls(boolean left, double dist) {
-		if(left) {
+		if (left) {
 			leftEnc.setDistancePerPulse(dist);
 		} else {
 			rightEnc.setDistancePerPulse(dist);
 		}
 	}
+
 	public double getPidOut() {
 		return pidOut;
 	}
+
 	@Override
 	public double pidGet() {
 		return average(leftEnc.getDistance(), rightEnc.getDistance());
 	}
+
 	public PIDSource getLeftDrive() {
 		return (PIDSource) dtLeftDrive;
 	}
+
 	public PIDSource getRightDrive() {
 		return (PIDSource) dtRightDrive;
 	}
-//	public boolean onTargetLeft() {
-//		return moveLeftController.onTarget();
-//	}
-//	public boolean onTargetRight() {
-//		return moveRightController.onTarget();
-//	}
+
+	// public boolean onTargetLeft() {
+	// return moveLeftController.onTarget();
+	// }
+	// public boolean onTargetRight() {
+	// return moveRightController.onTarget();
+	// }
 	public void enableMovePid() {
 		moveController.enable();
 	}
+
 	public void disableMovePid() {
 		moveController.disable();
 	}
+
 	public void setSetMove(double set) {
 		moveController.setSetpoint(set);
 	}
+
 	@Override
 	public void pidWrite(double output) {
 		pidOut = output;
 	}
-	
+
 	public static double average(double a, double b) {
-		return (a+b)/2;
+		return (a + b) / 2;
 	}
 
 	public boolean onTurnTarg() {
 		return turnController.onTarget();
 	}
+
 	public boolean onDriveTarg() {
 		return moveController.onTarget();
 	}
+
 	@Override
 	public void setPIDSourceType(PIDSourceType pidSource) {
 	}
 
 	@Override
 	public PIDSourceType getPIDSourceType() {
-		return null;
+		return PIDSourceType.kDisplacement;
 	}
 }

@@ -10,37 +10,40 @@ import edu.wpi.first.wpilibj.command.Command;
 public class PIDDrive extends Command {
 
 	double target;
-    public PIDDrive(double targ) {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-    	target = targ;
-    	requires(Robot.dt);
-    }
 
-    // Called just before this Command runs the first time
-    protected void initialize() {
-    	Robot.dt.enableMovePid();
-    	Robot.dt.setSetMove(target);
-    }
+	public PIDDrive(double targ) {
+		// Use requires() here to declare subsystem dependencies
+		// eg. requires(chassis);
+		target = targ;
+		requires(Robot.dt);
+	}
 
-    // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-    	Robot.dt.arcadeDrive(Robot.dt.getPidOut(), 0);
-    }
+	// Called just before this Command runs the first time
+	protected void initialize() {
+		Robot.dt.resetEnc();
+		Robot.dt.enableMovePid();
+		Robot.dt.setSetMove(target);
+	}
 
-    // Make this return true when this Command no longer needs to run execute()
-    protected boolean isFinished() {
-        return Robot.dt.onDriveTarg();
-    }
+	// Called repeatedly when this Command is scheduled to run
+	protected void execute() {
+		Robot.dt.arcadeDrive(Robot.dt.getPidOut(), 0);
+	}
 
-    // Called once after isFinished returns true
-    protected void end() {
-    	Robot.dt.stopDrive();
-    }
+	// Make this return true when this Command no longer needs to run execute()
+	protected boolean isFinished() {
+		return Robot.dt.onDriveTarg();
+	}
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() {
-    	end();
-    }
+	// Called once after isFinished returns true
+	protected void end() {
+		Robot.dt.disableMovePid();
+		Robot.dt.stopDrive();
+	}
+
+	// Called when another command which requires one or more of the same
+	// subsystems is scheduled to run
+	protected void interrupted() {
+		end();
+	}
 }

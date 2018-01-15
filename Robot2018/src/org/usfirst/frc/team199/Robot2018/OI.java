@@ -7,8 +7,8 @@
 
 package org.usfirst.frc.team199.Robot2018;
 
-import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftDriveType;
+import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -46,26 +46,26 @@ public class OI {
 	// Start the command when the button is released and let it run the command
 	// until it is finished as determined by it's isFinished method.
 	// button.whenReleased(new ExampleCommand());
-	
+
 	public Joystick leftJoy;
-		public JoystickButton shiftDrive;
-		public JoystickButton shiftDriveType;
+	public JoystickButton shiftDrive;
+	public JoystickButton shiftDriveType;
 	public Joystick rightJoy;
 	public Joystick manipulator;
-	
-	
+
 	public int getButton(String key, int def) {
-		if(!SmartDashboard.containsKey(key)) {
+		if (!SmartDashboard.containsKey(key)) {
 			SmartDashboard.putNumber(key, def);
 		}
 		return (int) SmartDashboard.getNumber(key, def);
 	}
+
 	public OI() {
 		leftJoy = new Joystick(0);
-			shiftDrive = new JoystickButton(leftJoy, getButton("Button Shift Drive", 1));
-			shiftDrive.whenPressed(new ShiftLowGear());
-			shiftDriveType = new JoystickButton(leftJoy, getButton("Button Shift Drive Type", 2));
-			shiftDriveType.whenPressed(new ShiftDriveType());
+		shiftDrive = new JoystickButton(leftJoy, getButton("Button Shift Drive", 1));
+		shiftDrive.whenPressed(new ShiftLowGear());
+		shiftDriveType = new JoystickButton(leftJoy, getButton("Button Shift Drive Type", 2));
+		shiftDriveType.whenPressed(new ShiftDriveType());
 		rightJoy = new Joystick(1);
 		manipulator = new Joystick(2);
 	}
