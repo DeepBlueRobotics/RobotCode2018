@@ -12,12 +12,10 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
  */
 public class Autonomous extends CommandGroup implements AutonomousInterface {
 
-    public Autonomous(String startPos, Map<String, String> strategies, double delay) {
+    public Autonomous(String startPos, Map<String, String> strategies, double delay, String fmsInput) {
     		String scriptName = "";
     		
     		scriptName += startPos.substring(0, 1);
-    		
-    		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
     		
     		String chosenStrat = strategies.get(fmsInput.substring(0, 2));
     		
