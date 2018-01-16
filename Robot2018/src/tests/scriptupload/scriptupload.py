@@ -5,7 +5,7 @@ prefs = NetworkTables.getTable("Preferences")
 
 go = False #true when file has been successfully read
 file = [] #an array of strings which represent each line of the file
-filename = raw_input("File name: ") #the name of the file to read (user input)
+filename = input("File name: ") #the name of the file to read (user input)
 
 #loops until a file is read into the file array
 while not go:
