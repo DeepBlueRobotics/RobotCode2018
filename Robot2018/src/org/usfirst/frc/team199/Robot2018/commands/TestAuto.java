@@ -1,6 +1,7 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Used for testing the autonomous interfaces. Runs the script specified in
@@ -17,6 +18,6 @@ public class TestAuto extends CommandGroup implements TestAutoInterface {
 	 */
 	@Override
 	public String getScriptToTest() { 
-		return getString("Auto Script", "NOTHING");
+		return SmartDashboard.getString("Auto Script", "NOTHING");
 	}
 }
