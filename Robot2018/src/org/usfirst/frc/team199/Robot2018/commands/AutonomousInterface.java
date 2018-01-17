@@ -1,10 +1,7 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
-import org.usfirst.frc.team199.Robot2018.DashboardInterface;
 
-import edu.wpi.first.wpilibj.DriverStation;
-
-public interface AutonomousInterface extends DashboardInterface{
+public interface AutonomousInterface {
 	public enum Position {
 		LEFT,
 		CENTER,
