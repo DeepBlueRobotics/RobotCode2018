@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 
@@ -16,7 +15,8 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class RunScript extends CommandGroup implements RunScriptInterface {
 
     public RunScript(String scriptName) {
-    		ArrayList<String> script = Robot.autoScripts.getOrDefault(scriptName, new ArrayList<String>());
+    		// make sure to uncomment this when autoScripts is written
+    		ArrayList<String> script = null; // Robot.autoScripts.getOrDefault(scriptName, new ArrayList<String>());
     		
     		outerloop:
     		for(String cmd : script) {
@@ -55,7 +55,7 @@ public class RunScript extends CommandGroup implements RunScriptInterface {
 	    			case "end":
 	    				break outerloop;
 	    			default:
-	    				throw new Exception();
+	    				System.out.println("`" + cmdParts[0] + "`" + " is not a valid command name. Check AAA Reference.");
     			}
     		}
     }
