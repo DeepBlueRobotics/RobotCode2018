@@ -10,10 +10,9 @@ package org.usfirst.frc.team199.Robot2018.commands;
 import org.usfirst.frc.team199.Robot2018.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * An example command.  You can replace me with your own command.
+ * An example command. You can replace me with your own command.
  */
 public class TeleopDrive extends Command {
 	public TeleopDrive() {

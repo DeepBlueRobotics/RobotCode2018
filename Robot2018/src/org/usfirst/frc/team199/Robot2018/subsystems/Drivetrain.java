@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * An example subsystem. You can replace me with your own Subsystem.
@@ -51,7 +50,7 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 	private final DoubleSolenoid dtGear = RobotMap.dtGear;
 
 	public void pushGear(boolean forw) {
-		if (forw ^ SmartDashboard.getBoolean("Drivetrain Gear Shift Backwards", false)) {
+		if (forw ^ Robot.getBool("Drivetrain Gear Shift Backwards", false)) {
 			dtGear.set(DoubleSolenoid.Value.kForward);
 		} else {
 			dtGear.set(DoubleSolenoid.Value.kReverse);
@@ -95,8 +94,8 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 	}
 
 	public void teleopDrive() {
-		if (SmartDashboard.getBoolean("Arcade Drive", true)) {
-			if (SmartDashboard.getBoolean("Arcade Drive Default Setup", true)) {
+		if (Robot.getBool("Arcade Drive", true)) {
+			if (Robot.getBool("Arcade Drive Default Setup", true)) {
 				Robot.dt.arcadeDrive(Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getX());
 			} else {
 				Robot.dt.arcadeDrive(Robot.oi.rightJoy.getY(), Robot.oi.leftJoy.getX());
@@ -107,11 +106,11 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 	}
 
 	public void arcadeDrive(double speed, double turn) {
-		robotDrive.arcadeDrive(speed, turn, SmartDashboard.getBoolean("Square Drive Values", false));
+		robotDrive.arcadeDrive(speed, turn, Robot.getBool("Square Drive Values", false));
 	}
 
 	public void tankDrive(double leftSpeed, double rightSpeed) {
-		robotDrive.tankDrive(leftSpeed, rightSpeed, SmartDashboard.getBoolean("Square Drive Values", false));
+		robotDrive.tankDrive(leftSpeed, rightSpeed, Robot.getBool("Square Drive Values", false));
 	}
 
 	public double getDtLeft() {
