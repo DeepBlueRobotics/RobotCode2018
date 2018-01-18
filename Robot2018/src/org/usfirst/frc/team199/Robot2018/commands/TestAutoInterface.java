@@ -1,8 +1,6 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
-import org.usfirst.frc.team199.Robot2018.DashboardInterface;
-
-public interface TestAutoInterface extends DashboardInterface {
+public interface TestAutoInterface {
 	/**
 	 * gets the script name that we want to run from SmartDashboard
 	 * 
