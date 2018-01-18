@@ -33,3 +33,4 @@ tester = "" #a variable to check if autoscripts is None
 tester = prefs.getValue("autoscripts", None)
 if tester != oneline:
     print("It doesn't look like key \"autoscripts"\ is filled, maybe you aren't connected to networktables?")
+
