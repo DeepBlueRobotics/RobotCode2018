@@ -165,12 +165,12 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 	// moveRightController.setSetpoint(set);
 	// }
 
-	public void setDistanncePerPuls(boolean left, double dist) {
-		if (left) {
-			leftEnc.setDistancePerPulse(dist);
-		} else {
-			rightEnc.setDistancePerPulse(dist);
-		}
+	public void setDistancePerPulseLeft(double dist) {
+		leftEnc.setDistancePerPulse(dist);
+	}
+
+	public void setDistancePerPulseRight(double dist) {
+		rightEnc.setDistancePerPulse(dist);
 	}
 
 	public double getPidOut() {
