@@ -49,11 +49,13 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 	private final AnalogGyro dtGyro = RobotMap.dtGyro;
 	private final DoubleSolenoid dtGear = RobotMap.dtGear;
 
+	private double pidOut = 0;
+
 	/**
 	 * Activates the solenoid to push the drivetrain into low or high gear
 	 * 
 	 * @param forw
-	 *            if the solenoid is to be pushed forward or not
+	 *            If the solenoid is to be pushed forward or not (backwards)
 	 */
 	public void changeShiftGear(boolean forw) {
 		if (forw ^ Robot.getBool("Drivetrain Gear Shift Backwards", false)) {
@@ -63,42 +65,73 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 		}
 	}
 
+	/**
+	 * Stops the solenoid that pushes the drivetrain into low or high gear
+	 */
 	public void stopGear() {
 		dtGear.set(DoubleSolenoid.Value.kOff);
 	}
 
-	private double pidOut = 0;
-
+	/**
+	 * Resets the AHRS value
+	 */
 	public void resetAHRS() {
 		ahrs.reset();
 	}
 
+	/**
+	 * Runs the left side of the drivetrain at the specified speed
+	 * 
+	 * @param value
+	 *            Value for the motor(s) to run at
+	 */
 	public void setLeftMotor(double value) {
 		dtLeft.set(value);
 	}
 
+	/**
+	 * Tells the left side of the drivetrain to stop running
+	 */
 	private void stopLeftMotor() {
 		dtLeft.stopMotor();
 	}
 
+	/**
+	 * Runs the right side of the drivetrain at the specified speed
+	 * 
+	 * @param value
+	 *            Value for the motor(s) to run at
+	 */
 	public void setRightMotor(double value) {
 		dtRight.set(value);
 	}
 
+	/**
+	 * Tells the right side of the drivetrain to stop running
+	 */
 	private void stopRightMotor() {
 		dtRight.stopMotor();
 	}
 
+	/**
+	 * Tells the drivetrain to stop running
+	 */
 	public void stopDrive() {
 		stopRightMotor();
 		stopLeftMotor();
 	}
 
+	/**
+	 * Resets the encoders' distances to zero
+	 */
 	public void resetEnc() {
 		leftEnc.reset();
 		rightEnc.reset();
 	}
 
+	/**
+	 * Drives based on joystick input and SmartDashboard values
+	 */
 	public void teleopDrive() {
 		if (Robot.getBool("Arcade Drive", true)) {
 			if (Robot.getBool("Arcade Drive Default Setup", true)) {
@@ -111,26 +144,62 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 		}
 	}
 
+	/**
+	 * Drives the robot based on parameters and SmartDashboard values
+	 * 
+	 * @param speed
+	 *            The amount to move forward
+	 * @param turn
+	 *            The amount to turn
+	 */
 	public void arcadeDrive(double speed, double turn) {
 		robotDrive.arcadeDrive(speed, turn, Robot.getBool("Square Drive Values", false));
 	}
 
+	/**
+	 * Drive the robot based on parameters and SmartDashboard values
+	 * 
+	 * @param leftSpeed
+	 *            The value to run the left of the drivetrain at
+	 * @param rightSpeed
+	 *            The value to run the right of the drivetrain at
+	 */
 	public void tankDrive(double leftSpeed, double rightSpeed) {
 		robotDrive.tankDrive(leftSpeed, rightSpeed, Robot.getBool("Square Drive Values", false));
 	}
 
+	/**
+	 * Used for getting the speed at which the left side of the drivetrain is
+	 * currently running
+	 * 
+	 * @return The speed that the left side of the drivetrain is set to
+	 */
 	public double getDtLeft() {
 		return dtLeft.get();
 	}
 
+	/**
+	 * Used for getting the speed at which the right side of the drivetrain is
+	 * currently running
+	 * 
+	 * @return The speed that the right side of the drivetrain is set to
+	 */
 	public double getDtRight() {
 		return dtRight.get();
 	}
 
+	/**
+	 * Used to get the angle that the gyro currently reads
+	 * 
+	 * @return The angle that the gyro reads
+	 */
 	public double getGyro() {
 		return dtGyro.getAngle();
 	}
 
+	/**
+	 * Resets the gyro to 0
+	 */
 	public void resetGyro() {
 		dtGyro.reset();
 	}
@@ -139,46 +208,79 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 		setDefaultCommand(new TeleopDrive());
 	}
 
+	/**
+	 * Disables the turnPID PIDController used for turning
+	 */
 	public void disableTurnPid() {
 		turnController.disable();
 	}
 
+	/**
+	 * Enables the turnPID PIDController used for turning
+	 */
 	public void enableTurnPid() {
 		turnController.enable();
 	}
 
+	/**
+	 * Sets the setPoint of the turnPID PIDController
+	 * 
+	 * @param set
+	 *            The value to set the setPoint at
+	 */
 	public void setSetTurn(double set) {
 		turnController.setSetpoint(set);
 	}
 
-	// public void disableMoveLeftPid() {
-	// moveLeftController.disable();
-	// }
-	// public void enableMoveLeftPid() {
-	// moveLeftController.enable();
-	// }
-	// public void setSetMoveLeft(double set) {
-	// moveLeftController.setSetpoint(set);
-	// }
-	//
-	// public void disableMoveRightPid() {
-	// moveRightController.disable();
-	// }
-	// public void enableMoveRightPid() {
-	// moveRightController.enable();
-	// }
-	// public void setSetMoveRight(double set) {
-	// moveRightController.setSetpoint(set);
-	// }
+	/**
+	 * Enable the movePID PIDController used for moving
+	 */
+	public void enableMovePid() {
+		moveController.enable();
+	}
 
+	/**
+	 * Disables the movePID PIDController used for moving
+	 */
+	public void disableMovePid() {
+		moveController.disable();
+	}
+
+	/**
+	 * Sets the setPoint of the movePID PIDController
+	 * 
+	 * @param set
+	 *            The value to set the setPoint at
+	 */
+	public void setSetMove(double set) {
+		moveController.setSetpoint(set);
+	}
+
+	/**
+	 * Sets the distancePerPulse property on the left encoder
+	 * 
+	 * @param dist
+	 *            The distance to set the distancePerPulse at
+	 */
 	public void setDistancePerPulseLeft(double dist) {
 		leftEnc.setDistancePerPulse(dist);
 	}
 
+	/**
+	 * Sets the distancePerPulse property on the right encoder
+	 * 
+	 * @param dist
+	 *            The distance to set the distancePerPulse at
+	 */
 	public void setDistancePerPulseRight(double dist) {
 		rightEnc.setDistancePerPulse(dist);
 	}
 
+	/**
+	 * Returns the value that Drivetrain receives due to implementing PIDOutput
+	 * 
+	 * @return The value that is written by PIDControllers
+	 */
 	public double getPidOut() {
 		return pidOut;
 	}
@@ -188,45 +290,45 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 		return average(leftEnc.getDistance(), rightEnc.getDistance());
 	}
 
-	public PIDSource getLeftDrive() {
-		return (PIDSource) dtLeftDrive;
-	}
-
-	public PIDSource getRightDrive() {
-		return (PIDSource) dtRightDrive;
-	}
-
 	// public boolean onTargetLeft() {
 	// return moveLeftController.onTarget();
 	// }
 	// public boolean onTargetRight() {
 	// return moveRightController.onTarget();
 	// }
-	public void enableMovePid() {
-		moveController.enable();
-	}
-
-	public void disableMovePid() {
-		moveController.disable();
-	}
-
-	public void setSetMove(double set) {
-		moveController.setSetpoint(set);
-	}
 
 	@Override
 	public void pidWrite(double output) {
 		pidOut = output;
 	}
 
+	/**
+	 * Returns the average of two numbers
+	 * 
+	 * @param a
+	 *            First number to average
+	 * @param b
+	 *            Second number to average
+	 * @return The arithmetic mean of a and b
+	 */
 	public static double average(double a, double b) {
 		return (a + b) / 2;
 	}
 
+	/**
+	 * Returns whether the turnController PIDController senses that it's on target
+	 * 
+	 * @return Whether the turnController PIDController is on target
+	 */
 	public boolean onTurnTarg() {
 		return turnController.onTarget();
 	}
 
+	/**
+	 * Returns whether the moveController PIDController senses that it's on target
+	 * 
+	 * @return Whether the moveController PIDController is on target
+	 */
 	public boolean onDriveTarg() {
 		return moveController.onTarget();
 	}
