@@ -43,6 +43,14 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 	private double pidOut = 0;
 
 	/**
+	 * Updates the PIDControllers' PIDConstants based on SmartDashboard values
+	 */
+	public void updatePidConstants() {
+		turnController.setPID(Robot.getConst("TurnkP", 1), Robot.getConst("TurnkI", 0), Robot.getConst("TurnkD", 0));
+		moveController.setPID(Robot.getConst("MovekP", 1), Robot.getConst("MovekI", 0), Robot.getConst("MovekD", 0));
+	}
+
+	/**
 	 * Activates the solenoid to push the drivetrain into low or high gear
 	 * 
 	 * @param forw

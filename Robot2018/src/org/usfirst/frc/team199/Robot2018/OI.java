@@ -9,6 +9,7 @@ package org.usfirst.frc.team199.Robot2018;
 
 import org.usfirst.frc.team199.Robot2018.commands.ShiftDriveType;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
+import org.usfirst.frc.team199.Robot2018.commands.UpdatePIDConstants;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -51,6 +52,7 @@ public class OI {
 	private JoystickButton shiftDrive;
 	private JoystickButton shiftDriveType;
 	public Joystick rightJoy;
+	private JoystickButton updatePidConstants;
 	public Joystick manipulator;
 
 	public int getButton(String key, int def) {
@@ -66,7 +68,11 @@ public class OI {
 		shiftDrive.whenPressed(new ShiftLowGear());
 		shiftDriveType = new JoystickButton(leftJoy, getButton("Shift Drive Type", 2));
 		shiftDriveType.whenPressed(new ShiftDriveType());
+		
 		rightJoy = new Joystick(1);
+		updatePidConstants = new JoystickButton(rightJoy, getButton("Get PID Constants", 8));
+		updatePidConstants.whenPressed(new UpdatePIDConstants());
+		
 		manipulator = new Joystick(2);
 	}
 }
