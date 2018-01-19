@@ -48,13 +48,13 @@ public class OI {
 	// button.whenReleased(new ExampleCommand());
 
 	public Joystick leftJoy;
-	public JoystickButton shiftDrive;
-	public JoystickButton shiftDriveType;
+	private JoystickButton shiftDrive;
+	private JoystickButton shiftDriveType;
 	public Joystick rightJoy;
 	public Joystick manipulator;
 
 	public int getButton(String key, int def) {
-		if (!SmartDashboard.containsKey(key)) {
+		if (!SmartDashboard.containsKey("Button/" + key)) {
 			SmartDashboard.putNumber("Button/" + key, def);
 		}
 		return (int) SmartDashboard.getNumber("Button/" + key, def);
