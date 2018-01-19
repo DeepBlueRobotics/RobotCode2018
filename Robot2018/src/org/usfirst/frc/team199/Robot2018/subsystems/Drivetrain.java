@@ -49,7 +49,13 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 	private final AnalogGyro dtGyro = RobotMap.dtGyro;
 	private final DoubleSolenoid dtGear = RobotMap.dtGear;
 
-	public void pushGear(boolean forw) {
+	/**
+	 * Activates the solenoid to push the drivetrain into low or high gear
+	 * 
+	 * @param forw
+	 *            if the solenoid is to be pushed forward or not
+	 */
+	public void changeShiftGear(boolean forw) {
 		if (forw ^ Robot.getBool("Drivetrain Gear Shift Backwards", false)) {
 			dtGear.set(DoubleSolenoid.Value.kForward);
 		} else {

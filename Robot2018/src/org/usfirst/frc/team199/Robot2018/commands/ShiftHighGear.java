@@ -27,7 +27,7 @@ public class ShiftHighGear extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		Robot.dt.pushGear(true);
+		Robot.dt.changeShiftGear(true);
 		SmartDashboard.putBoolean("High Gear", true);
 	}
 
