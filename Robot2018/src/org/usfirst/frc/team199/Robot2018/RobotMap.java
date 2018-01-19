@@ -55,6 +55,13 @@ public class RobotMap {
 	public static AnalogGyro dtGyro;
 	public static DoubleSolenoid dtGear;
 
+	/**
+	 * This function takes in a TalonSRX motorController and sets nominal and peak
+	 * outputs to the default
+	 * 
+	 * @param mc
+	 *            the TalonSRX to configure
+	 */
 	private void configSRX(WPI_TalonSRX mc) {
 		int kTimeout = (int) Robot.getConst("kTimeoutMs", 10);
 		mc.configNominalOutputForward(0, kTimeout);
@@ -66,7 +73,7 @@ public class RobotMap {
 	public RobotMap() {
 
 		leftEnc = new Encoder(getPort("1LeftEnc", 0), getPort("2LeftEnc", 1));
-		dtLeftDrive = new WPI_TalonSRX(getPort("LeftTalonSRXDrive", 1));
+		dtLeftDrive = new WPI_TalonSRX(getPort("LeftTalonSRXDrive", 0));
 		configSRX(dtLeftDrive);
 		dtLeftSlave = new WPI_TalonSRX(getPort("LeftTalonSRXSlave", 1));
 		configSRX(dtLeftSlave);
@@ -75,7 +82,7 @@ public class RobotMap {
 		rightEnc = new Encoder(getPort("1RightEnc", 2), getPort("2RightEnc", 3));
 		dtRightDrive = new WPI_TalonSRX(getPort("RightTalonSRXDrive", 2));
 		configSRX(dtRightDrive);
-		dtRightSlave = new WPI_TalonSRX(getPort("RightTalonSRXSlave", 1));
+		dtRightSlave = new WPI_TalonSRX(getPort("RightTalonSRXSlave", 3));
 		configSRX(dtRightSlave);
 		dtRight = new SpeedControllerGroup(dtRightDrive, dtRightSlave);
 
@@ -130,7 +137,7 @@ public class RobotMap {
 	 * @return returns the Port
 	 */
 	public int getPort(String key, int def) {
-		if (!SmartDashboard.containsKey(key)) {
+		if (!SmartDashboard.containsKey("Port/" + key)) {
 			SmartDashboard.putNumber("Port/" + key, def);
 		}
 		return (int) SmartDashboard.getNumber("Port/" + key, def);
