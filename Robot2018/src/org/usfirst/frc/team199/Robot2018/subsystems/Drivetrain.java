@@ -11,7 +11,6 @@ import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.RobotMap;
 import org.usfirst.frc.team199.Robot2018.commands.TeleopDrive;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -25,25 +24,17 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
-/**
- * An example subsystem. You can replace me with your own Subsystem.
- */
 public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
 	private final Encoder leftEnc = RobotMap.leftEnc;
 	private final Encoder rightEnc = RobotMap.rightEnc;
-	private final WPI_TalonSRX dtLeftDrive = RobotMap.dtLeftDrive;
-	private final WPI_TalonSRX dtRightDrive = RobotMap.dtRightDrive;
 	private final SpeedControllerGroup dtLeft = RobotMap.dtLeft;
 	private final SpeedControllerGroup dtRight = RobotMap.dtRight;
 	private final DifferentialDrive robotDrive = RobotMap.robotDrive;
 	private final PIDController turnController = RobotMap.turnController;
 	private final PIDController moveController = RobotMap.moveController;
-	// private final PIDController moveLeftController = RobotMap.moveLeftController;
-	// private final PIDController moveRightController =
-	// RobotMap.moveRightController;
 
 	private final AHRS ahrs = RobotMap.ahrs;
 	private final AnalogGyro dtGyro = RobotMap.dtGyro;
