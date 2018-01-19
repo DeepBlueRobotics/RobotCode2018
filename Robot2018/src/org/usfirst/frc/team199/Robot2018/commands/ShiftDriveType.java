@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ShiftDriveType extends Command {
 
 	Timer tim;
+	boolean arcadeDrive;
 
 	public ShiftDriveType() {
 		// Use requires() here to declare subsystem dependencies
@@ -23,11 +24,12 @@ public class ShiftDriveType extends Command {
 		tim = new Timer();
 		tim.reset();
 		tim.start();
+		arcadeDrive = Robot.getBool("Arcade Drive", true);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		SmartDashboard.putBoolean("Arcade Drive", !SmartDashboard.getBoolean("Arcade Drive", false));
+		SmartDashboard.putBoolean("Bool/Arcade Drive", !arcadeDrive);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
