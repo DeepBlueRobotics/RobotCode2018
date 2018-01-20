@@ -50,6 +50,8 @@ public class OI {
 	private JoystickButton shiftLowGear;
 	private JoystickButton shiftHighGear;
 	private JoystickButton shiftDriveType;
+	private JoystickButton PIDMove;
+	private JoystickButton PIDTurn;
 	public Joystick rightJoy;
 	private JoystickButton updatePidConstants;
 	private JoystickButton updateEncoderDPP;
@@ -70,6 +72,10 @@ public class OI {
 		shiftHighGear.whenPressed(new ShiftHighGear());
 		shiftDriveType = new JoystickButton(leftJoy, getButton("Shift Drive Type", 2));
 		shiftDriveType.whenPressed(new ShiftDriveType());
+		PIDMove = new JoystickButton(leftJoy, getButton("PID Move", 7));
+		PIDMove.whenPressed(new PIDMove(40));
+		PIDTurn = new JoystickButton(leftJoy, getButton("PID Turn", 8));
+		PIDTurn.whenPressed(new PIDTurn(30));
 		
 		rightJoy = new Joystick(1);
 		updatePidConstants = new JoystickButton(rightJoy, getButton("Get PID Constants", 8));
