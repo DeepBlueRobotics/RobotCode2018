@@ -8,6 +8,7 @@
 package org.usfirst.frc.team199.Robot2018;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -38,12 +39,12 @@ public class RobotMap {
 
 	public static Encoder leftEnc;
 	public static WPI_TalonSRX dtLeftDrive;
-	public static WPI_TalonSRX dtLeftSlave;
+	public static WPI_VictorSPX dtLeftSlave;
 	public static SpeedControllerGroup dtLeft;
 
 	public static Encoder rightEnc;
 	public static WPI_TalonSRX dtRightDrive;
-	public static WPI_TalonSRX dtRightSlave;
+	public static WPI_VictorSPX dtRightSlave;
 	public static SpeedControllerGroup dtRight;
 	public static DifferentialDrive robotDrive;
 	public static PIDController turnController;
@@ -69,21 +70,36 @@ public class RobotMap {
 		mc.configPeakOutputForward(1, kTimeout);
 		mc.configPeakOutputReverse(-1, kTimeout);
 	}
+	
+	/**
+	 * This function takes in a VictorSPX motorController and sets nominal and peak
+	 * outputs to the default
+	 * 
+	 * @param mc
+	 *            the VictorSPX to configure
+	 */
+	private void configSPX(WPI_VictorSPX mc) {
+		int kTimeout = (int) Robot.getConst("kTimeoutMs", 10);
+		mc.configNominalOutputForward(0, kTimeout);
+		mc.configNominalOutputReverse(0, kTimeout);
+		mc.configPeakOutputForward(1, kTimeout);
+		mc.configPeakOutputReverse(-1, kTimeout);
+	}
 
 	public RobotMap() {
 
 		leftEnc = new Encoder(getPort("1LeftEnc", 0), getPort("2LeftEnc", 1));
 		dtLeftDrive = new WPI_TalonSRX(getPort("LeftTalonSRXDrive", 0));
 		configSRX(dtLeftDrive);
-		dtLeftSlave = new WPI_TalonSRX(getPort("LeftTalonSRXSlave", 1));
-		configSRX(dtLeftSlave);
+		dtLeftSlave = new WPI_VictorSPX(getPort("LeftTalonSPXSlave", 1));
+		configSPX(dtLeftSlave);
 		dtLeft = new SpeedControllerGroup(dtLeftDrive, dtLeftSlave);
 
 		rightEnc = new Encoder(getPort("1RightEnc", 2), getPort("2RightEnc", 3));
 		dtRightDrive = new WPI_TalonSRX(getPort("RightTalonSRXDrive", 2));
 		configSRX(dtRightDrive);
-		dtRightSlave = new WPI_TalonSRX(getPort("RightTalonSRXSlave", 3));
-		configSRX(dtRightSlave);
+		dtRightSlave = new WPI_VictorSPX(getPort("RightTalonSPXSlave", 3));
+		configSPX(dtRightSlave);
 		dtRight = new SpeedControllerGroup(dtRightDrive, dtRightSlave);
 
 		robotDrive = new DifferentialDrive(dtLeft, dtRight);
