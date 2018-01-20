@@ -13,7 +13,7 @@ public class AutonomousUtilities {
 		String scriptFile = Preferences.getInstance().getString("autoscripts", null); //gets the string in autoscripts
 		if (scriptFile == null) {
 			//the script has failed
-			returnThis = true; //make isFinished return true
+			//returnThis = true; //make isFinished return true
 		}
 		ArrayList<String> lines = new ArrayList<String>(Arrays.asList(scriptFile.split("\\r?\\n"))); //splits the input from Preferences into lines and makes an ArrayList
 		boolean finished = false; //new boolean to see if our test is finished
@@ -24,8 +24,14 @@ public class AutonomousUtilities {
 			lines = returned.get(1);
 			Robot.autoScripts.put(returned.get(0).get(0).substring(0, returned.get(0).get(0).length()-1), returned.get(0)); //sending scripts to Robot.java's hashmap
 		}
-		returnThis = true; //command is finished
+		//returnThis = true; //command is finished
 	}
+	/**
+	 * A utility for splitting an array at the first colon it finds. 
+	 * @param lines the array to split.
+	 * @param linesToIgnore how many indices to ignore
+	 * @return an array list of the two array 
+	 */
 	private static ArrayList<ArrayList<String>> colonSplit(ArrayList<String> lines, int linesToIgnore) {
 		ArrayList<String> current = new ArrayList<String>(); //this will be the ArrayList with the part before the first colon (it's initialized here because otherwise eclipse tells me it might not have been initialized)
 		boolean finished = true; //this will be true if it can't find a colon where there should be one
