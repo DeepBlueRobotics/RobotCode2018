@@ -71,7 +71,7 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 	/**
 	 * Stops the solenoid that pushes the drivetrain into low or high gear
 	 */
-	public void stopGear() {
+	public void turnGearSolenoidOff() {
 		dtGear.set(DoubleSolenoid.Value.kOff);
 	}
 
