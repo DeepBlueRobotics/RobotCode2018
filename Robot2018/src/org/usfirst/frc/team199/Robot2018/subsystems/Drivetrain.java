@@ -42,6 +42,10 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 
 	private double pidOut = 0;
 
+	public void initDefaultCommand() {
+		setDefaultCommand(new TeleopDrive());
+	}
+	
 	/**
 	 * Updates the PIDControllers' PIDConstants based on SmartDashboard values
 	 */
@@ -201,10 +205,6 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 	 */
 	public void resetGyro() {
 		dtGyro.reset();
-	}
-
-	public void initDefaultCommand() {
-		setDefaultCommand(new TeleopDrive());
 	}
 
 	/**
