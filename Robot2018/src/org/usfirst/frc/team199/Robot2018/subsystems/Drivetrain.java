@@ -227,7 +227,7 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 	 * @param set
 	 *            The value to set the setPoint at
 	 */
-	public void setSetTurn(double set) {
+	public void setTurnSetpoint(double set) {
 		turnController.setSetpoint(set);
 	}
 
@@ -251,7 +251,7 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
 	 * @param set
 	 *            The value to set the setPoint at
 	 */
-	public void setSetMove(double set) {
+	public void setMoveSetpoint(double set) {
 		moveController.setSetpoint(set);
 	}
 

@@ -21,7 +21,7 @@ public class PIDTurn extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		Robot.dt.resetAHRS();
-		Robot.dt.setSetTurn(target);
+		Robot.dt.setTurnSetpoint(target);
 		Robot.dt.enableTurnPid();
 	}
 

@@ -22,7 +22,7 @@ public class PIDDrive extends Command {
 	protected void initialize() {
 		Robot.dt.resetEnc();
 		Robot.dt.enableMovePid();
-		Robot.dt.setSetMove(target);
+		Robot.dt.setMoveSetpoint(target);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
