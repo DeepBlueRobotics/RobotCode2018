@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class PIDDrive extends Command {
+public class PIDMove extends Command {
 
 	double target;
 
-	public PIDDrive(double targ) {
+	public PIDMove(double targ) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		target = targ;
