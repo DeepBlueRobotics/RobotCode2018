@@ -1,8 +1,6 @@
 
 package org.usfirst.frc.team199.Robot2018;
 
-import java.util.ArrayList;
-
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
 import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
@@ -37,29 +35,17 @@ public class Robot extends IterativeRobot {
 	SendableChooser<Command> chooser = new SendableChooser<>();
 
 	public static double getConst(String key, double def) {
-		if (!SmartDashboard.containsKey(key)) {
-			SmartDashboard.putNumber(key, def);
+		if (!SmartDashboard.containsKey("Const/" + key)) {
+			SmartDashboard.putNumber("Const/" + key, def);
 		}
-		return SmartDashboard.getNumber(key, def);
+		return SmartDashboard.getNumber("Const/" + key, def);
 	}
 
-	public void sendValuesToDashboard() {
-		ArrayList<String> boolKeys = new ArrayList<String>();
-		ArrayList<Boolean> boolDef = new ArrayList<Boolean>();
-		boolKeys.add("Arcade Drive");
-		boolKeys.add("Arcade Drive Default Setup");
-		boolKeys.add("Square Drive Values");
-		boolKeys.add("High Gear");
-
-		boolDef.add(true);
-		boolDef.add(true);
-		boolDef.add(false);
-		boolDef.add(false);
-		for (int i = 0; i < boolKeys.size(); i++) {
-			if (!SmartDashboard.containsKey(boolKeys.get(i))) {
-				SmartDashboard.putBoolean(boolKeys.get(i), boolDef.get(i));
-			}
+	public static boolean getBool(String key, boolean def) {
+		if (!SmartDashboard.containsKey("Bool/" + key)) {
+			SmartDashboard.putBoolean("Bool/" + key, def);
 		}
+		return SmartDashboard.getBoolean("Bool/" + key, def);
 	}
 
 	/**
@@ -71,7 +57,6 @@ public class Robot extends IterativeRobot {
 		rmap = new RobotMap();
 		dt = new Drivetrain();
 		oi = new OI();
-		sendValuesToDashboard();
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 	}
