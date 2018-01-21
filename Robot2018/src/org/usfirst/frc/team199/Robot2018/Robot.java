@@ -1,15 +1,19 @@
 
 package org.usfirst.frc.team199.Robot2018;
 
+import java.util.ArrayList;
+import java.util.Map;
+
+import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
 import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEject;
 import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -27,6 +31,8 @@ public class Robot extends IterativeRobot {
 	public static final IntakeEject intakeEject = new IntakeEject();
 	public static final Lift lift = new Lift();
 	public static OI oi;
+	
+	public static Map<String, ArrayList<String[]>> autoScripts;
 
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
@@ -40,6 +46,8 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
+
+		autoScripts = AutoUtils.parseScriptFile(Preferences.getInstance().getString("autoscripts", ""));
 	}
 
 	/**
@@ -66,7 +74,7 @@ public class Robot extends IterativeRobot {
 	 *
 	 * You can add additional auto modes by adding additional commands to the
 	 * chooser code above (like the commented example) or additional comparisons
-	 * to the switch structure below with additional strings & commands.
+	 * to the switch structure below with additional strings &amp; commands.
 	 */
 	@Override
 	public void autonomousInit() {
