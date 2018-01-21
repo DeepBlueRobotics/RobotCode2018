@@ -12,7 +12,7 @@ Ex:
 ```
 1 | LLRx:
 2 | wait 5  # wait for other robots to move past
-3 | move (12, 24) (30, 48.5) 125.75 # move to those points and turn 
+3 | move (12,24) (30,48.5) 125.75 # move to those points and turn 
 4 | scale # place cube in scale
 5 | end # end the script (not necessary)
 ```
@@ -49,8 +49,8 @@ Ex:
 | intake | Intakes a cube in front of the robot. | `intake` |
 | jump | Jumps to the specified script and continues the current script when finished. (Doesn’t make the robot go up.) | `jump MoveToRScale`
 | move | Move forward or backwards for the specified amount in inches, relative to the current position. | `move 24` |
-| moveto | Move to 1 or more points, sequentially, with an optional last value having a final angle to face towards, all relative to the starting position. | `moveto (12, 0) (36, 12)` <br> `moveto (0, 12) 90` |
+| moveto | Move to 1 or more points, sequentially, with an optional last value having a final angle to face towards, all relative to the starting position. | `moveto (12,0) (36,12)` <br> `moveto (0,12) 90` |
 | scale | Place a cube at scale height. | `scale` |
 | switch | Place a cube at switch height. | `switch` |
-| turn | Turn towards a relative point or rotate clockwise by an angle in degrees, relative to the current position. <br> Negative angle for counterclockwise. | `turn (36, 48)` <br> `turn 45` |
+| turn | Turn towards a relative point or rotate clockwise by an angle in degrees, relative to the current position. <br> Negative angle for counterclockwise. | `turn (36,48)` <br> `turn 45` |
 | wait | Waits for the number of seconds before proceeding to next command. | `wait 5` |
