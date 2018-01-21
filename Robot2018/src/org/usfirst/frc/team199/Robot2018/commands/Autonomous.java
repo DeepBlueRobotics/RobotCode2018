@@ -91,7 +91,7 @@ public class Autonomous extends CommandGroup implements AutonomousInterface {
     		this.delay = delay;
     		scriptName += startPos.getShortName();
     		
-    		// add switch, switch, and exchange location if going for them, "x" if not 
+    		// add switch, scale, and exchange location if going for them, "x" if not 
     		if (chosenStrat == Strategy.SWITCH || chosenStrat == Strategy.SWITCH_EXCHANGE || chosenStrat == Strategy.SWITCH_SCALE)
     			scriptName += fmsInput.substring(0, 1);
     		else
