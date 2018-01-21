@@ -7,7 +7,13 @@
 
 package org.usfirst.frc.team199.Robot2018;
 
-import org.usfirst.frc.team199.Robot2018.commands.*;
+import org.usfirst.frc.team199.Robot2018.commands.PIDMove;
+import org.usfirst.frc.team199.Robot2018.commands.PIDTurn;
+import org.usfirst.frc.team199.Robot2018.commands.SetDistancePerPulse;
+import org.usfirst.frc.team199.Robot2018.commands.ShiftDriveType;
+import org.usfirst.frc.team199.Robot2018.commands.ShiftHighGear;
+import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
+import org.usfirst.frc.team199.Robot2018.commands.UpdatePIDConstants;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -73,16 +79,16 @@ public class OI {
 		shiftDriveType = new JoystickButton(leftJoy, getButton("Shift Drive Type", 2));
 		shiftDriveType.whenPressed(new ShiftDriveType());
 		PIDMove = new JoystickButton(leftJoy, getButton("PID Move", 7));
-		PIDMove.whenPressed(new PIDMove(40));
+		PIDMove.whenPressed(new PIDMove(40), Robot.dt);
 		PIDTurn = new JoystickButton(leftJoy, getButton("PID Turn", 8));
-		PIDTurn.whenPressed(new PIDTurn(30));
-		
+		PIDTurn.whenPressed(new PIDTurn(30), Robot.dt);
+
 		rightJoy = new Joystick(1);
 		updatePidConstants = new JoystickButton(rightJoy, getButton("Get PID Constants", 8));
 		updatePidConstants.whenPressed(new UpdatePIDConstants());
 		updateEncoderDPP = new JoystickButton(rightJoy, getButton("Get Encoder Dist Per Pulse", 9));
 		updateEncoderDPP.whenPressed(new SetDistancePerPulse());
-		
+
 		manipulator = new Joystick(2);
 	}
 }
