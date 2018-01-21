@@ -28,6 +28,7 @@ public class Robot extends IterativeRobot {
 	public static final Lift lift = new Lift();
 	public static RobotMap rmap;
 	public static Drivetrain dt;
+	public static Listener listen;
 
 	public static OI oi;
 
@@ -57,6 +58,7 @@ public class Robot extends IterativeRobot {
 		rmap = new RobotMap();
 		dt = new Drivetrain();
 		oi = new OI();
+		listen = new Listener();
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 	}

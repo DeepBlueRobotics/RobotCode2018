@@ -1,6 +1,7 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
+import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -10,35 +11,37 @@ import edu.wpi.first.wpilibj.command.Command;
 public class PIDTurn extends Command {
 
 	double target;
+	DrivetrainInterface dt;
 
-	public PIDTurn(double targ) {
+	public PIDTurn(double targ, DrivetrainInterface dt) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		target = targ;
+		this.dt = dt;
 		requires(Robot.dt);
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		Robot.dt.resetAHRS();
-		Robot.dt.setTurnSetpoint(target);
-		Robot.dt.enableTurnPid();
+		dt.resetAHRS();
+		dt.setTurnSetpoint(target);
+		dt.enableTurnPid();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		Robot.dt.arcadeDrive(0, Robot.dt.getPidOut());
+		dt.arcadeDrive(0, dt.getPidOut());
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return Robot.dt.onTurnTarg();
+		return dt.onTurnTarg();
 	}
 
 	// Called once after isFinished returns true
 	protected void end() {
-		Robot.dt.disableTurnPid();
-		Robot.dt.stopDrive();
+		dt.disableTurnPid();
+		dt.stopDrive();
 	}
 
 	// Called when another command which requires one or more of the same

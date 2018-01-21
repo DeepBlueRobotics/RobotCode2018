@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
-public class Drivetrain extends Subsystem implements PIDOutput, PIDSource {
+public class Drivetrain extends Subsystem implements PIDOutput, PIDSource, DrivetrainInterface {
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
