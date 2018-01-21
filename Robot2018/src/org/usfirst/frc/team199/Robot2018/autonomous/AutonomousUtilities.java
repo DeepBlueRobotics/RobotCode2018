@@ -8,9 +8,18 @@ import org.usfirst.frc.team199.Robot2018.Robot;
 import edu.wpi.first.wpilibj.Preferences;
 
 public class AutonomousUtilities {
-	private static boolean returnThis;
-	public static void splitScriptFile() {
-		String scriptFile = Preferences.getInstance().getString("autoscripts", null); //gets the string in autoscripts
+	//private static boolean returnThis;
+	/**
+	 * hi yes this is javadoc
+	 * @param isTest a string to test with, or null to get from preferences table 
+	 */
+	public static void splitScriptFile(String isTest) {
+		String scriptFile;
+		//if (isTest==null) {
+			//scriptFile = Preferences.getInstance().getString("autoscripts", null); //gets the string in autoscripts
+		//} else {
+			scriptFile = isTest;
+		//}
 		if (scriptFile == null) {
 			//the script has failed
 			//returnThis = true; //make isFinished return true
@@ -27,12 +36,13 @@ public class AutonomousUtilities {
 		//returnThis = true; //command is finished
 	}
 	/**
-	 * A utility for splitting an array at the first colon it finds. 
+	 * A utility function for splitting an array at the first colon it finds. 
+	 * Tested and working fine
 	 * @param lines the array to split.
 	 * @param linesToIgnore how many indices to ignore
 	 * @return an array list of the two array 
 	 */
-	private static ArrayList<ArrayList<String>> colonSplit(ArrayList<String> lines, int linesToIgnore) {
+	static ArrayList<ArrayList<String>> colonSplit(ArrayList<String> lines, int linesToIgnore) {
 		ArrayList<String> current = new ArrayList<String>(); //this will be the ArrayList with the part before the first colon (it's initialized here because otherwise eclipse tells me it might not have been initialized)
 		boolean finished = true; //this will be true if it can't find a colon where there should be one
 		for (int i = linesToIgnore; i < lines.size(); i++) { //loop through the indices between the lines to ignore and the end of the array
