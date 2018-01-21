@@ -10,13 +10,13 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 
 /**
- * Gets the script name and runs the script.
+ * Gets the script name and interprets the script into individual commands.
  */
 public class RunScript extends CommandGroup implements RunScriptInterface {
 
     public RunScript(String scriptName) {
     		// make sure to uncomment this when autoScripts is written
-    		ArrayList<String> script = null; // Robot.autoScripts.getOrDefault(scriptName, new ArrayList<String>());
+    		ArrayList<String> script = new ArrayList<String>(); // Robot.autoScripts.getOrDefault(scriptName, new ArrayList<String>());
     		
     		outerloop:
     		for(String cmd : script) {

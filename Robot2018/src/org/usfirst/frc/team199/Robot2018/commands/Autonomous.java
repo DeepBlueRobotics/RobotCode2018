@@ -1,5 +1,6 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -68,6 +69,9 @@ public class Autonomous extends CommandGroup implements AutonomousInterface {
 		}
 	}
 	
+	double delay;
+	String scriptName = "";
+	
 	/**
 	 * Based on the input given, generates a unique script name and executes RunScript with it
 	 * 
@@ -79,15 +83,14 @@ public class Autonomous extends CommandGroup implements AutonomousInterface {
 	 * and other side switch, respectively 
 	 */
     public Autonomous(Position startPos, Map<String, Strategy> strategies, double delay, String fmsInput) {
-    		String scriptName = "";
-    		
-    		scriptName += startPos.getShortName();
-    		
     		Strategy chosenStrat = strategies.get(fmsInput.substring(0, 2));
     		
-    		// skip the next steps if robot is chosen to do nothing
+    		// skip the whole thing if robot is chosen to do nothing
     		if (chosenStrat == Strategy.NOTHING)
     			return;
+    		
+    		this.delay = delay;
+    		scriptName += startPos.getShortName();
     		
     		// add switch, switch, and exchange location if going for them, "x" if not 
     		if (chosenStrat == Strategy.SWITCH || chosenStrat == Strategy.SWITCH_EXCHANGE || chosenStrat == Strategy.SWITCH_SCALE)
@@ -107,5 +110,21 @@ public class Autonomous extends CommandGroup implements AutonomousInterface {
     		
     		addSequential(new WaitCommand(delay));
     		addSequential(new RunScript(scriptName));
+    }
+    
+    /**
+     * Used for testing purposes only
+     * @return the delay passed into the WaitCommand()
+     */
+    public double getDelay() {
+    		return delay;
+    }
+    
+    /**
+     * Used for testing purposes only
+     * @return the scriptName passed into RunScriot()
+     */
+    public String getScriptName() {
+    		return scriptName;
     }
 }
