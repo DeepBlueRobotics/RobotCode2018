@@ -2,14 +2,19 @@
 package org.usfirst.frc.team199.Robot2018;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
+import org.usfirst.frc.team199.Robot2018.commands.Autonomous;
+import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Position;
+import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Strategy;
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
 import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEject;
 import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -35,7 +40,9 @@ public class Robot extends TimedRobot {
 	public static Map<String, ArrayList<String[]>> autoScripts;
 
 	Command autonomousCommand;
-	SendableChooser<Command> chooser = new SendableChooser<>();
+	SendableChooser<Position> posChooser = new SendableChooser<Position>();
+	Map<String, SendableChooser<Strategy>> stratChoosers = new HashMap<String, SendableChooser<Strategy>>();
+	String[] fmsPossibilities = {"LL", "LR", "RL", "RR"};
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -44,8 +51,24 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", chooser);
+		
+		// put in position chooer
+		for (Position p : Position.values()) {
+			posChooser.addObject(p.getSDName(), p);
+		}
+		SmartDashboard.putData("Starting Position", posChooser);
+		
+		// put in strategy choosers
+		for (String input : fmsPossibilities) {
+			SendableChooser<Strategy> chooser = new SendableChooser<Strategy>();
+			for (Strategy s : Strategy.values()) {
+				chooser.addObject(s.getSDName(), s);
+			}
+			SmartDashboard.putData(input, chooser);
+			stratChoosers.put(input, chooser);
+		}
+		
+		SmartDashboard.putNumber("Auto Delay", 0);
 
 		autoScripts = AutoUtils.parseScriptFile(Preferences.getInstance().getString("autoscripts", ""));
 	}
@@ -78,18 +101,19 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		autonomousCommand = chooser.getSelected();
-
-		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
-
-		// schedule the autonomous command (example)
-		if (autonomousCommand != null)
-			autonomousCommand.start();
+		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
+		Position startPos = posChooser.getSelected();
+		double autoDelay = SmartDashboard.getNumber("Auto Delay", 0);
+		
+		Map<String, Strategy> strategies = new HashMap<String, Strategy>();
+		for (Map.Entry<String, SendableChooser<Strategy>> entry : stratChoosers.entrySet()) {
+		    String key = entry.getKey();
+		    SendableChooser<Strategy> chooser = entry.getValue();
+		    strategies.put(key, chooser.getSelected());
+		}
+		
+		Autonomous auto = new Autonomous(startPos, strategies, autoDelay, fmsInput);
+		auto.start();
 	}
 
 	/**
