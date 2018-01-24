@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class RunScript extends CommandGroup implements RunScriptInterface {
 
     public RunScript(String scriptName) {
-    		ArrayList<String> script = Robot.autoScripts.getOrDefault(scriptName, new ArrayList<String>());
+    		ArrayList<String> script = null; // Robot.autoScripts.getOrDefault(scriptName, new ArrayList<String>());
     		
     		outerloop:
     		for(String cmd : script) {
@@ -55,7 +55,7 @@ public class RunScript extends CommandGroup implements RunScriptInterface {
 	    			case "end":
 	    				break outerloop;
 	    			default:
-	    				throw new Exception();
+	    				// TODO: Handle this case
     			}
     		}
     }
