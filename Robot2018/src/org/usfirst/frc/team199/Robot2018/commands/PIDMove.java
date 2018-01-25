@@ -25,12 +25,13 @@ public class PIDMove extends Command {
 	protected void initialize() {
 		dt.resetEnc();
 		dt.enableMovePid();
-		dt.setMoveSetpoint(target);
+		dt.setMoveSetpointLeft(target);
+		dt.setMoveSetpointRight(target);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		dt.arcadeDrive(dt.getPidOut(), 0);
+		dt.tankDrive(dt.getLeftPidOut(), dt.getRightPidOut());
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
