@@ -96,7 +96,7 @@ public interface DrivetrainInterface {
 	 * 
 	 * @return The angle that the gyro reads
 	 */
-	public double getGyro();
+	public double getGyroAngle();
 
 	/**
 	 * Resets the gyro to 0

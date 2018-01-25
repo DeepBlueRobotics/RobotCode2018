@@ -196,7 +196,7 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource, Drive
 	 * 
 	 * @return The angle that the gyro reads
 	 */
-	public double getGyro() {
+	public double getGyroAngle() {
 		return dtGyro.getAngle();
 	}
 
