@@ -96,7 +96,7 @@ public interface DrivetrainInterface {
 	 * 
 	 * @return The angle that the gyro reads
 	 */
-	public double getGyro();
+	public double getGyroAngle();
 
 	/**
 	 * Resets the gyro to 0
@@ -132,12 +132,20 @@ public interface DrivetrainInterface {
 	public void disableMovePid();
 
 	/**
-	 * Sets the setPoint of the movePID PIDController
+	 * Sets the setPoint of the moveLeftPID PIDController
 	 * 
 	 * @param set
 	 *            The value to set the setPoint at
 	 */
-	public void setMoveSetpoint(double set);
+	public void setMoveSetpointLeft(double set);
+
+	/**
+	 * Sets the setPoint of the moveRightPID PIDController
+	 * 
+	 * @param set
+	 *            The value to set the setPoint at
+	 */
+	public void setMoveSetpointRight(double set);
 
 	/**
 	 * Sets the distancePerPulse property on the left encoder
@@ -160,7 +168,22 @@ public interface DrivetrainInterface {
 	 * 
 	 * @return The value that is written by PIDControllers
 	 */
-	public double getPidOut();
+	public double getAnglePidOut();
+
+	/**
+	 * Returns the value that leftdrive should be set to according to PIDControllers
+	 * 
+	 * @return The value that is written by PIDControllers
+	 */
+	public double getLeftPidOut();
+
+	/**
+	 * Returns the value that rightdrive should be set to according to
+	 * PIDControllers
+	 * 
+	 * @return The value that is written by PIDControllers
+	 */
+	public double getRightPidOut();
 
 	/**
 	 * Returns whether the turnController PIDController senses that it's on target

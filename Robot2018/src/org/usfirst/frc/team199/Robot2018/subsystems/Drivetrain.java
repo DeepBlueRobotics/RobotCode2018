@@ -18,13 +18,11 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
-public class Drivetrain extends Subsystem implements PIDOutput, PIDSource, DrivetrainInterface {
+public class Drivetrain extends Subsystem implements PIDOutput, DrivetrainInterface {
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
@@ -34,24 +32,31 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource, Drive
 	private final SpeedControllerGroup dtRight = RobotMap.dtRight;
 	private final DifferentialDrive robotDrive = RobotMap.robotDrive;
 	private final PIDController turnController = RobotMap.turnController;
-	private final PIDController moveController = RobotMap.moveController;
+	// private final PIDController moveController = RobotMap.moveController;
+	private final PIDController moveLeftController = RobotMap.moveLeftController;
+	private final PIDController moveRightController = RobotMap.moveRightController;
 
 	private final AHRS ahrs = RobotMap.ahrs;
 	private final AnalogGyro dtGyro = RobotMap.dtGyro;
 	private final DoubleSolenoid dtGear = RobotMap.dtGear;
 
-	private double pidOut = 0;
+	private double anglePidOut = 0;
+	private double leftPidOut = 0;
+	private double rightPidOut = 0;
 
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleopDrive());
 	}
-	
+
 	/**
 	 * Updates the PIDControllers' PIDConstants based on SmartDashboard values
 	 */
 	public void updatePidConstants() {
 		turnController.setPID(Robot.getConst("TurnkP", 1), Robot.getConst("TurnkI", 0), Robot.getConst("TurnkD", 0));
-		moveController.setPID(Robot.getConst("MovekP", 1), Robot.getConst("MovekI", 0), Robot.getConst("MovekD", 0));
+		moveLeftController.setPID(Robot.getConst("MoveLeftkP", 1), Robot.getConst("MoveLeftkI", 0),
+				Robot.getConst("MoveLeftkD", 0));
+		moveRightController.setPID(Robot.getConst("MoveRightkP", 1), Robot.getConst("MoveRightkI", 0),
+				Robot.getConst("MoveRightkD", 0));
 	}
 
 	/**
@@ -196,7 +201,7 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource, Drive
 	 * 
 	 * @return The angle that the gyro reads
 	 */
-	public double getGyro() {
+	public double getGyroAngle() {
 		return dtGyro.getAngle();
 	}
 
@@ -235,24 +240,36 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource, Drive
 	 * Enable the movePID PIDController used for moving
 	 */
 	public void enableMovePid() {
-		moveController.enable();
+		moveLeftController.enable();
+		moveRightController.enable();
 	}
 
 	/**
 	 * Disables the movePID PIDController used for moving
 	 */
 	public void disableMovePid() {
-		moveController.disable();
+		moveLeftController.disable();
+		moveRightController.enable();
 	}
 
 	/**
-	 * Sets the setPoint of the movePID PIDController
+	 * Sets the setPoint of the moveLeftPID PIDController
 	 * 
 	 * @param set
 	 *            The value to set the setPoint at
 	 */
-	public void setMoveSetpoint(double set) {
-		moveController.setSetpoint(set);
+	public void setMoveSetpointLeft(double set) {
+		moveLeftController.setSetpoint(set);
+	}
+
+	/**
+	 * Sets the setPoint of the moveRightPID PIDController
+	 * 
+	 * @param set
+	 *            The value to set the setPoint at
+	 */
+	public void setMoveSetpointRight(double set) {
+		moveRightController.setSetpoint(set);
 	}
 
 	/**
@@ -280,15 +297,45 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource, Drive
 	 * 
 	 * @return The value that is written by PIDControllers
 	 */
-	public double getPidOut() {
-		return pidOut;
+	public double getAnglePidOut() {
+		return anglePidOut;
+	}
+	
+	/**
+	 * Returns the value that leftdrive should be set to according to PIDControllers
+	 * 
+	 * @return The value that is written by PIDControllers
+	 */
+	public double getLeftPidOut() {
+		return leftPidOut;
+	}
+	
+	/**
+	 * Returns the value that rightdrive should be set to according to PIDControllers
+	 * 
+	 * @return The value that is written by PIDControllers
+	 */
+	public double getRightPidOut() {
+		return rightPidOut;
 	}
 
-	@Override
-	public double pidGet() {
-		return average(leftEnc.getDistance(), rightEnc.getDistance());
+	/**
+	 * Returns the distance that the left encoder reads
+	 * 
+	 * @return How much the left encoder has travelled
+	 */
+	public double getLeftEnc() {
+		return leftEnc.getDistance();
 	}
 
+	/**
+	 * Returns the distance that the right encoder reads
+	 * 
+	 * @return How much the right encoder has travelled
+	 */
+	public double getRightEnc() {
+		return rightEnc.getDistance();
+	}
 	// public boolean onTargetLeft() {
 	// return moveLeftController.onTarget();
 	// }
@@ -298,7 +345,27 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource, Drive
 
 	@Override
 	public void pidWrite(double output) {
-		pidOut = output;
+		anglePidOut = output;
+	}
+
+	/**
+	 * Sets the leftPidOutput
+	 * 
+	 * @param output
+	 *            The value to set the output to
+	 */
+	public void pidLeftWrite(double output) {
+		leftPidOut = output;
+	}
+
+	/**
+	 * Sets the rightPidOutput
+	 * 
+	 * @param output
+	 *            The value to set the output to
+	 */
+	public void pidRightWrite(double output) {
+		rightPidOut = output;
 	}
 
 	/**
@@ -324,20 +391,13 @@ public class Drivetrain extends Subsystem implements PIDOutput, PIDSource, Drive
 	}
 
 	/**
-	 * Returns whether the moveController PIDController senses that it's on target
+	 * Returns whether the moveLeftController and moveRightController PIDController
+	 * sense that their on target
 	 * 
-	 * @return Whether the moveController PIDController is on target
+	 * @return Whether the moveController PIDControllers are on target
 	 */
 	public boolean onDriveTarg() {
-		return moveController.onTarget();
+		return moveLeftController.onTarget() && moveRightController.onTarget();
 	}
 
-	@Override
-	public void setPIDSourceType(PIDSourceType pidSource) {
-	}
-
-	@Override
-	public PIDSourceType getPIDSourceType() {
-		return PIDSourceType.kDisplacement;
-	}
 }

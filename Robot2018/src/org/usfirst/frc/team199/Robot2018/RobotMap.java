@@ -48,9 +48,9 @@ public class RobotMap {
 	public static SpeedControllerGroup dtRight;
 	public static DifferentialDrive robotDrive;
 	public static PIDController turnController;
-	public static PIDController moveController;
-	// public static PIDController moveLeftController;
-	// public static PIDController moveRightController;
+	// public static PIDController moveController;
+	public static PIDController moveLeftController;
+	public static PIDController moveRightController;
 
 	public static AHRS ahrs;
 	public static AnalogGyro dtGyro;
@@ -70,7 +70,7 @@ public class RobotMap {
 		mc.configPeakOutputForward(1, kTimeout);
 		mc.configPeakOutputReverse(-1, kTimeout);
 	}
-	
+
 	/**
 	 * This function takes in a VictorSPX motorController and sets nominal and peak
 	 * outputs to the default
@@ -110,31 +110,28 @@ public class RobotMap {
 		turnController.setOutputRange(-1.0, 1.0);
 		turnController.setContinuous();
 		turnController.setAbsoluteTolerance(Robot.getConst("TurnTolerance", 1));
-		moveController = new PIDController(Robot.getConst("MovekP", 1), Robot.getConst("MovekI", 0),
-				Robot.getConst("MovekD", 0), Robot.dt, Robot.dt);
-		moveController.disable();
-		moveController.setInputRange(0, Double.MAX_VALUE);
-		moveController.setOutputRange(-1.0, 1.0);
-		moveController.setContinuous(false);
-		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 2));
-		// moveLeftController = new PIDController(Robot.getConst("ConstMoveLeftkP", 1),
-		// Robot.getConst("ConstMoveLeftkI", 0), Robot.getConst("ConstMoveLeftkD", 0),
-		// Robot.dt.getLeftDrive(), (PIDOutput) Robot.dt.getLeftDrive());
-		// moveLeftController.disable();
-		// moveLeftController.setInputRange(0, Double.MAX_VALUE);
-		// moveLeftController.setOutputRange(-1.0, 1.0);
-		// moveLeftController.setContinuous(false);
-		// moveLeftController.setAbsoluteTolerance(Robot.getConst("ConstMoveToleranceLeft",
-		// 2));
-		// moveRightController = new PIDController(Robot.getConst("ConstMoveRightkP",
-		// 1), Robot.getConst("ConstMoveRightkI", 0), Robot.getConst("ConstMoveRightkD",
-		// 0), Robot.dt.getRightDrive(), (PIDOutput) Robot.dt.getRightDrive());
-		// moveRightController.disable();
-		// moveRightController.setInputRange(0, Double.MAX_VALUE);
-		// moveRightController.setOutputRange(-1.0, 1.0);
-		// moveRightController.setContinuous(false);
-		// moveRightController.setAbsoluteTolerance(Robot.getConst("ConstMoveToleranceRight",
-		// 2));
+		// moveController = new PIDController(Robot.getConst("MovekP", 1),
+		// Robot.getConst("MovekI", 0),
+		// Robot.getConst("MovekD", 0), Robot.dt, Robot.dt);
+		// moveController.disable();
+		// moveController.setInputRange(0, Double.MAX_VALUE);
+		// moveController.setOutputRange(-1.0, 1.0);
+		// moveController.setContinuous(false);
+		// moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 2));
+		moveLeftController = new PIDController(Robot.getConst("MoveLeftkP", 1), Robot.getConst("MoveLeftkI", 0),
+				Robot.getConst("MoveLeftkD", 0), Robot.ld, Robot.ld);
+		moveLeftController.disable();
+		moveLeftController.setInputRange(0, Double.MAX_VALUE);
+		moveLeftController.setOutputRange(-1.0, 1.0);
+		moveLeftController.setContinuous(false);
+		moveLeftController.setAbsoluteTolerance(Robot.getConst("ConstMoveToleranceLeft", 2));
+		moveRightController = new PIDController(Robot.getConst("ConstMoveRightkP", 1),
+				Robot.getConst("ConstMoveRightkI", 0), Robot.getConst("ConstMoveRightkD", 0), Robot.rd, Robot.rd);
+		moveRightController.disable();
+		moveRightController.setInputRange(0, Double.MAX_VALUE);
+		moveRightController.setOutputRange(-1.0, 1.0);
+		moveRightController.setContinuous(false);
+		moveRightController.setAbsoluteTolerance(Robot.getConst("ConstMoveToleranceRight", 2));
 
 		ahrs = new AHRS(SerialPort.Port.kMXP);
 		dtGyro = new AnalogGyro(getPort("Gyro", 0));
