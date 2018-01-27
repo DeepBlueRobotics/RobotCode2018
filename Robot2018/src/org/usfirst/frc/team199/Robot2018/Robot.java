@@ -1,6 +1,10 @@
 
 package org.usfirst.frc.team199.Robot2018;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
 import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEject;
@@ -28,6 +32,7 @@ public class Robot extends TimedRobot {
 	public static final IntakeEject intakeEject = new IntakeEject();
 	public static final Lift lift = new Lift();
 	public static OI oi;
+	public static Map<String, ArrayList<String>> autoScripts = new HashMap<String, ArrayList<String>>();
 
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
