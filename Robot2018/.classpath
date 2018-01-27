@@ -10,5 +10,8 @@
 	<classpathentry kind="var" path="wpiutil" sourcepath="wpiutil.sources"/>
 	<classpathentry kind="lib" path="lib/Pathfinder-Java-1.8.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="lib/mockito-core-2.13.3.jar"/>
+	<classpathentry kind="lib" path="lib/byte-buddy-1.7.9.jar"/>
+	<classpathentry kind="lib" path="lib/objenesis-2.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
