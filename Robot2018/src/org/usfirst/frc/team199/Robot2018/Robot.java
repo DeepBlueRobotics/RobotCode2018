@@ -65,6 +65,7 @@ public class Robot extends TimedRobot {
 		intakeEject = new IntakeEject();
 		lift = new Lift();
 		dt = new Drivetrain();
+		rmap.initPIDControllers();
 		ld = new LeftDrive();
 		rd = new RightDrive();
 		oi = new OI();
