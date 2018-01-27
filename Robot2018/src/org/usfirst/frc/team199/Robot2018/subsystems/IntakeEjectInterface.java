@@ -29,7 +29,7 @@ public interface IntakeEjectInterface {
 	 * stops the motors
 	 * 
 	 */
-	public boolean stopIntake();
+	public void stopIntake();
 	
 	/**
 	 * Spins the rollers

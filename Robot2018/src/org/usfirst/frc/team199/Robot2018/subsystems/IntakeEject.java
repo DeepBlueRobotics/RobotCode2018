@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	
-	private final SpeedController intakeRollers = RobotMap.intakeMotors;
+	private final SpeedController intakeMotors = RobotMap.intakeMotors;
 	
 	
 	
@@ -34,7 +34,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * a cube in front of the robot.
 	 */
 	public boolean detectCube() {
-		
+		return false;
 	}
 	
 	/**
@@ -43,15 +43,15 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * 
 	 */
 	public boolean hasCube() {
-		
+		return false;
 	}
 	
 	/**
 	 * stops the motors
 	 * 
 	 */
-	public boolean stopIntake() {
-		intakeRollers.stop();
+	public void stopIntake() {
+		intakeMotors.stopMotor();
 	}
 	
 	/**

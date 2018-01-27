@@ -24,7 +24,7 @@ public class Lift extends Subsystem implements LiftInterface {
 	 * Uses (insert sensor here) to detect the distance above the ground
 	 */
 	public double getDistance() {
-		
+		return -1;
 	}
 	
 	/**
