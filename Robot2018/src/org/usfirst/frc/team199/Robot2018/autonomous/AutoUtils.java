@@ -21,13 +21,15 @@ public class AutoUtils {
 		ArrayList<String[]> currScript = new ArrayList<String[]>();
 		String currScriptName  = "";
 		
-		int count = 0;
+		int count = 1;
 		for (String line : lines) {
 			// remove comments
-			line = line.substring(0, line.indexOf("#"));
+			int commentIndex = line.indexOf("#");
+			if (commentIndex != -1)
+				line = line.substring(0, line.indexOf("#"));
 			
-			// trim just to make it neater
-			line = line.trim();
+			// trim and remove extra whitespace just to make it neater
+			line = line.trim().replaceAll("\\s+", " ");
 			
 			// if there's no instruction on this line, skip
 			if (line.equals("")) {
@@ -38,7 +40,7 @@ public class AutoUtils {
 			if (line.endsWith(":")) {
 				autoScripts.put(currScriptName, currScript);
 				currScript = new ArrayList<String[]>();
-				currScriptName = line.substring(0, line.length() - 1);
+				currScriptName = line.substring(0, line.indexOf(":"));
 			} else {
 				
 				// first separate the command into instruction and args
@@ -65,6 +67,9 @@ public class AutoUtils {
 		
 		// puts the last script in
 		autoScripts.put(currScriptName, currScript);
+		
+		// remove the stray one in the beginning
+		autoScripts.remove("");
 		
 		return autoScripts;
 	}
@@ -191,8 +196,8 @@ public class AutoUtils {
 		
 		
 		// really ugly, but just checks if the stuff between the parentheses are numbers
-		if (!isDouble(s.substring(s.indexOf('('), s.indexOf(','))) 
-				|| !isDouble(s.substring(s.indexOf(',') + 1, s.indexOf(')'))))
+		if (!isDouble(s.substring(1, s.indexOf(','))) 
+				|| !isDouble(s.substring(s.indexOf(',') + 1, s.length() - 1)))
 			return false;
 		
 		return true;

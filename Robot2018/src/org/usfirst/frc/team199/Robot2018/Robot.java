@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
 		    strategies.put(key, chooser.getSelected());
 		}
 		
-		Autonomous auto = new Autonomous(startPos, strategies, autoDelay, fmsInput);
+		Autonomous auto = new Autonomous(startPos, strategies, autoDelay, fmsInput, false);
 		auto.start();
 	}
 

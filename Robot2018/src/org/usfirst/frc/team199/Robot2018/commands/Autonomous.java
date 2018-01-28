@@ -81,7 +81,7 @@ public class Autonomous extends CommandGroup implements AutonomousInterface {
 	 * @param fmsInput A three character String representing the FMS input of the positions of our side switch, scale,
 	 * and other side switch, respectively 
 	 */
-    public Autonomous(Position startPos, Map<String, Strategy> strategies, double delay, String fmsInput) {
+    public Autonomous(Position startPos, Map<String, Strategy> strategies, double delay, String fmsInput, boolean isTest) {
     		Strategy chosenStrat = strategies.get(fmsInput.substring(0, 2));
     		
     		// skip the whole thing if robot is chosen to do nothing
@@ -107,8 +107,10 @@ public class Autonomous extends CommandGroup implements AutonomousInterface {
     		else
     			scriptName += "x";
     		
-    		addSequential(new WaitCommand(delay));
-    		addSequential(new RunScript(scriptName));
+    		if (!isTest) {
+	    		addSequential(new WaitCommand(delay));
+	    		addSequential(new RunScript(scriptName));
+    		}
     }
     
     /**

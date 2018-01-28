@@ -10,7 +10,7 @@ import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Strategy;
 import java.util.HashMap;
 import java.util.Map;
 
-class TestAutonomous {
+class AutonomousTest {
 
 	@Test
 	void mansNotHot() {
@@ -31,7 +31,7 @@ class TestAutonomous {
 		String fmsInput = "LLL";
 		double delay = 0;
 		
-		Autonomous testAuto = new Autonomous(pos, strats, delay, fmsInput);
+		Autonomous testAuto = new Autonomous(pos, strats, delay, fmsInput, true);
 		
 		assertEquals("", testAuto.getScriptName());
 		assertEquals(delay, testAuto.getDelay());
@@ -50,7 +50,7 @@ class TestAutonomous {
 		String fmsInput = "LRL";
 		double delay = 0;
 		
-		Autonomous testAuto = new Autonomous(pos, strats, delay, fmsInput);
+		Autonomous testAuto = new Autonomous(pos, strats, delay, fmsInput, true);
 		
 		assertEquals("Rxxx", testAuto.getScriptName());
 		assertEquals(delay, testAuto.getDelay());
@@ -69,7 +69,7 @@ class TestAutonomous {
 		String fmsInput = "RRL";
 		double delay = 0;
 		
-		Autonomous testAuto = new Autonomous(pos, strats, delay, fmsInput);
+		Autonomous testAuto = new Autonomous(pos, strats, delay, fmsInput, true);
 		
 		assertEquals("CRRx", testAuto.getScriptName());
 		assertEquals(delay, testAuto.getDelay());
@@ -88,7 +88,7 @@ class TestAutonomous {
 		String fmsInput = "LLR";
 		double delay = 0;
 		
-		Autonomous testAuto = new Autonomous(pos, strats, delay, fmsInput);
+		Autonomous testAuto = new Autonomous(pos, strats, delay, fmsInput, true);
 		
 		assertEquals("LLxx", testAuto.getScriptName());
 		assertEquals(delay, testAuto.getDelay());
@@ -107,7 +107,7 @@ class TestAutonomous {
 		String fmsInput = "LRR";
 		double delay = 0;
 		
-		Autonomous testAuto = new Autonomous(pos, strats, delay, fmsInput);
+		Autonomous testAuto = new Autonomous(pos, strats, delay, fmsInput, true);
 		
 		assertEquals("RLxE", testAuto.getScriptName());
 		assertEquals(delay, testAuto.getDelay());
