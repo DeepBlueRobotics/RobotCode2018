@@ -103,13 +103,7 @@ public class RobotMap {
 		dtRight = new SpeedControllerGroup(dtRightDrive, dtRightSlave);
 
 		robotDrive = new DifferentialDrive(dtLeft, dtRight);
-		turnController = new PIDController(Robot.getConst("TurnkP", 1), Robot.getConst("TurnkI", 0),
-				Robot.getConst("TurnkD", 0), ahrs, Robot.dt);
-		turnController.disable();
-		turnController.setInputRange(-180, 180);
-		turnController.setOutputRange(-1.0, 1.0);
-		turnController.setContinuous();
-		turnController.setAbsoluteTolerance(Robot.getConst("TurnTolerance", 1));
+		
 		// moveController = new PIDController(Robot.getConst("MovekP", 1),
 		// Robot.getConst("MovekI", 0),
 		// Robot.getConst("MovekD", 0), Robot.dt, Robot.dt);
@@ -118,6 +112,23 @@ public class RobotMap {
 		// moveController.setOutputRange(-1.0, 1.0);
 		// moveController.setContinuous(false);
 		// moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 2));
+		
+
+		ahrs = new AHRS(SerialPort.Port.kMXP);
+		dtGyro = new AnalogGyro(getPort("Gyro", 0));
+		dtGear = new DoubleSolenoid(getPort("1dtGearSolenoid", 0), getPort("2dtGearSolenoid", 1));
+
+	}
+	
+	public void initPIDControllers() {
+		turnController = new PIDController(Robot.getConst("TurnkP", 1), Robot.getConst("TurnkI", 0),
+				Robot.getConst("TurnkD", 0), ahrs, Robot.dt);
+		turnController.disable();
+		turnController.setInputRange(-180, 180);
+		turnController.setOutputRange(-1.0, 1.0);
+		turnController.setContinuous();
+		turnController.setAbsoluteTolerance(Robot.getConst("TurnTolerance", 1));
+		
 		moveLeftController = new PIDController(Robot.getConst("MoveLeftkP", 1), Robot.getConst("MoveLeftkI", 0),
 				Robot.getConst("MoveLeftkD", 0), Robot.ld, Robot.ld);
 		moveLeftController.disable();
@@ -132,11 +143,6 @@ public class RobotMap {
 		moveRightController.setOutputRange(-1.0, 1.0);
 		moveRightController.setContinuous(false);
 		moveRightController.setAbsoluteTolerance(Robot.getConst("ConstMoveToleranceRight", 2));
-
-		ahrs = new AHRS(SerialPort.Port.kMXP);
-		dtGyro = new AnalogGyro(getPort("Gyro", 0));
-		dtGear = new DoubleSolenoid(getPort("1dtGearSolenoid", 0), getPort("2dtGearSolenoid", 1));
-
 	}
 
 	/**
