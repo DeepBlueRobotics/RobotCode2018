@@ -153,12 +153,12 @@ public class Drivetrain extends Subsystem implements PIDOutput, DrivetrainInterf
 	public void teleopDrive() {
 		if (Robot.getBool("Arcade Drive", true)) {
 			if (Robot.getBool("Arcade Drive Default Setup", true)) {
-				Robot.dt.arcadeDrive(Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getX());
+				Robot.dt.arcadeDrive(-Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getX());
 			} else {
-				Robot.dt.arcadeDrive(Robot.oi.rightJoy.getY(), Robot.oi.leftJoy.getX());
+				Robot.dt.arcadeDrive(-Robot.oi.rightJoy.getY(), Robot.oi.leftJoy.getX());
 			}
 		} else {
-			Robot.dt.tankDrive(Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getY());
+			Robot.dt.tankDrive(-Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getY());
 		}
 	}
 

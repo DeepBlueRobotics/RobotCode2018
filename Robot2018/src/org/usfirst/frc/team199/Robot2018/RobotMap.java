@@ -87,18 +87,26 @@ public class RobotMap {
 	}
 
 	public RobotMap() {
-
+		
+		ahrs = new AHRS(SerialPort.Port.kMXP);
+		dtGyro = new AnalogGyro(getPort("Gyro", 0));
+		//dtGear = new DoubleSolenoid(getPort("1dtGearSolenoid", 0), getPort("2dtGearSolenoid", 1));
+		
 		leftEnc = new Encoder(getPort("1LeftEnc", 0), getPort("2LeftEnc", 1));
-		dtLeftDrive = new WPI_TalonSRX(getPort("LeftTalonSRXDrive", 0));
+		dtLeftDrive = new WPI_TalonSRX(2);
+				//getPort("LeftTalonSRXDrive", 2));
 		configSRX(dtLeftDrive);
-		dtLeftSlave = new WPI_VictorSPX(getPort("LeftTalonSPXSlave", 1));
+		dtLeftSlave = new WPI_VictorSPX(0);
+				//getPort("LeftTalonSPXSlave", 0));
 		configSPX(dtLeftSlave);
 		dtLeft = new SpeedControllerGroup(dtLeftDrive, dtLeftSlave);
 
 		rightEnc = new Encoder(getPort("1RightEnc", 2), getPort("2RightEnc", 3));
-		dtRightDrive = new WPI_TalonSRX(getPort("RightTalonSRXDrive", 2));
+		dtRightDrive = new WPI_TalonSRX(1);
+				//getPort("RightTalonSRXDrive", 1));
 		configSRX(dtRightDrive);
-		dtRightSlave = new WPI_VictorSPX(getPort("RightTalonSPXSlave", 3));
+		dtRightSlave = new WPI_VictorSPX(3);
+				//getPort("RightTalonSPXSlave", 3));
 		configSPX(dtRightSlave);
 		dtRight = new SpeedControllerGroup(dtRightDrive, dtRightSlave);
 
@@ -112,14 +120,10 @@ public class RobotMap {
 		// moveController.setOutputRange(-1.0, 1.0);
 		// moveController.setContinuous(false);
 		// moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 2));
-		
-
-		ahrs = new AHRS(SerialPort.Port.kMXP);
-		dtGyro = new AnalogGyro(getPort("Gyro", 0));
-		dtGear = new DoubleSolenoid(getPort("1dtGearSolenoid", 0), getPort("2dtGearSolenoid", 1));
 
 	}
 	
+	/** Initializes pid controllers seperately from robotMap because the required parameters have not been initialized yet.*/
 	public void initPIDControllers() {
 		turnController = new PIDController(Robot.getConst("TurnkP", 1), Robot.getConst("TurnkI", 0),
 				Robot.getConst("TurnkD", 0), ahrs, Robot.dt);
