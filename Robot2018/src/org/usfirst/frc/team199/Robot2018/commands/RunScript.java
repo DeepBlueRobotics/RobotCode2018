@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 /**
  * Gets the script name and interprets the script into individual commands.
  */
-public class RunScript extends CommandGroup implements RunScriptInterface {
+public class RunScript extends CommandGroup {
 
     public RunScript(String scriptName) {
     		ArrayList<String[]> script = Robot.autoScripts.getOrDefault(scriptName, new ArrayList<String[]>());

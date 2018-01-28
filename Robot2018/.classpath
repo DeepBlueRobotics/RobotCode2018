@@ -8,7 +8,13 @@
 	<classpathentry kind="var" path="opencv" sourcepath="opencv.sources"/>
 	<classpathentry kind="var" path="cscore" sourcepath="cscore.sources"/>
 	<classpathentry kind="var" path="wpiutil" sourcepath="wpiutil.sources"/>
+	<classpathentry kind="lib" path="lib/Pathfinder-Java-1.8.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="lib" path="libs/jars/mockito-all-1.10.19.jar"/>
+	<classpathentry kind="lib" path="lib/mockito-core-2.13.3.jar"/>
+	<classpathentry kind="lib" path="lib/byte-buddy-1.7.9.jar"/>
+	<classpathentry kind="lib" path="lib/objenesis-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/CTRE_Phoenix-sources.jar"/>
+	<classpathentry kind="lib" path="lib/CTRE_Phoenix.jar"/>
+	<classpathentry kind="lib" path="lib/navx_frc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

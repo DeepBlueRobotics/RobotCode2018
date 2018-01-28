@@ -11,8 +11,11 @@ import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Position;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Strategy;
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
+import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
 import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEject;
+import org.usfirst.frc.team199.Robot2018.subsystems.LeftDrive;
 import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
+import org.usfirst.frc.team199.Robot2018.subsystems.RightDrive;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Preferences;
@@ -30,11 +33,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends TimedRobot {
-	
-	public static final Climber climber = new Climber();
-	public static final ClimberAssist climberAssist = new ClimberAssist();
-	public static final IntakeEject intakeEject = new IntakeEject();
-	public static final Lift lift = new Lift();
+
+	public static Climber climber;
+	public static ClimberAssist climberAssist;
+	public static IntakeEject intakeEject;
+	public static Lift lift;
+	public static RobotMap rmap;
+	public static Drivetrain dt;
+	public static LeftDrive ld;
+	public static RightDrive rd;
+	public static Listener listen;
+
 	public static OI oi;
 	
 	public static Map<String, ArrayList<String[]>> autoScripts;
@@ -44,12 +53,35 @@ public class Robot extends TimedRobot {
 	Map<String, SendableChooser<Strategy>> stratChoosers = new HashMap<String, SendableChooser<Strategy>>();
 	String[] fmsPossibilities = {"LL", "LR", "RL", "RR"};
 
+	public static double getConst(String key, double def) {
+		if (!SmartDashboard.containsKey("Const/" + key)) {
+			SmartDashboard.putNumber("Const/" + key, def);
+		}
+		return SmartDashboard.getNumber("Const/" + key, def);
+	}
+
+	public static boolean getBool(String key, boolean def) {
+		if (!SmartDashboard.containsKey("Bool/" + key)) {
+			SmartDashboard.putBoolean("Bool/" + key, def);
+		}
+		return SmartDashboard.getBoolean("Bool/" + key, def);
+	}
+
 	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
+	 * This function is run when the robot is first started up and should be used
+	 * for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
+		rmap = new RobotMap();
+		climber = new Climber();
+		climberAssist = new ClimberAssist();
+		intakeEject = new IntakeEject();
+		lift = new Lift();
+		dt = new Drivetrain();
+		rmap.initPIDControllers();
+		ld = new LeftDrive();
+		rd = new RightDrive();
 		oi = new OI();
 		
 		// put in position chooer
@@ -71,12 +103,14 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Auto Delay", 0);
 
 		autoScripts = AutoUtils.parseScriptFile(Preferences.getInstance().getString("autoscripts", ""));
+
+		listen = new Listener();
 	}
 
 	/**
-	 * This function is called once each time the robot enters Disabled mode.
-	 * You can use it to reset any subsystem information you want to clear when
-	 * the robot is disabled.
+	 * This function is called once each time the robot enters Disabled mode. You
+	 * can use it to reset any subsystem information you want to clear when the
+	 * robot is disabled.
 	 */
 	@Override
 	public void disabledInit() {
@@ -90,10 +124,10 @@ public class Robot extends TimedRobot {
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString code to get the auto name from the text box below the Gyro
+	 * between different autonomous modes using the dashboard. The sendable chooser
+	 * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+	 * remove all of the chooser code and uncomment the getString code to get the
+	 * auto name from the text box below the Gyro
 	 *
 	 * You can add additional auto modes by adding additional commands to the
 	 * chooser code above (like the commented example) or additional comparisons
