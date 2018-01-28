@@ -84,13 +84,13 @@ public class Robot extends TimedRobot {
 		rd = new RightDrive();
 		oi = new OI();
 		
-		// put in position chooer
+		// auto position chooser
 		for (Position p : Position.values()) {
 			posChooser.addObject(p.getSDName(), p);
 		}
 		SmartDashboard.putData("Starting Position", posChooser);
 		
-		// put in strategy choosers
+		// auto strategy choosers
 		for (String input : fmsPossibilities) {
 			SendableChooser<Strategy> chooser = new SendableChooser<Strategy>();
 			for (Strategy s : Strategy.values()) {
@@ -100,8 +100,10 @@ public class Robot extends TimedRobot {
 			stratChoosers.put(input, chooser);
 		}
 		
+		// auto delay chooser
 		SmartDashboard.putNumber("Auto Delay", 0);
-
+		
+		// parse scripts from Preferences, which maintains values throughout reboots
 		autoScripts = AutoUtils.parseScriptFile(Preferences.getInstance().getString("autoscripts", ""));
 
 		listen = new Listener();
@@ -123,15 +125,9 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable chooser
-	 * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
-	 * remove all of the chooser code and uncomment the getString code to get the
-	 * auto name from the text box below the Gyro
-	 *
-	 * You can add additional auto modes by adding additional commands to the
-	 * chooser code above (like the commented example) or additional comparisons
-	 * to the switch structure below with additional strings &amp; commands.
+	 * This function is called once during the start of autonomous in order to 
+	 * grab values from SmartDashboard and the FMS and call the Autonomous
+	 * command with those values.
 	 */
 	@Override
 	public void autonomousInit() {

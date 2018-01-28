@@ -107,6 +107,7 @@ public class Autonomous extends CommandGroup implements AutonomousInterface {
     		else
     			scriptName += "x";
     		
+    		// this is here because running this code outside of the RoboRIO is problematic
     		if (!isTest) {
 	    		addSequential(new WaitCommand(delay));
 	    		addSequential(new RunScript(scriptName));

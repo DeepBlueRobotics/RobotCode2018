@@ -26,7 +26,7 @@ public class AutoUtils {
 			// remove comments
 			int commentIndex = line.indexOf("#");
 			if (commentIndex != -1)
-				line = line.substring(0, line.indexOf("#"));
+				line = line.substring(0, commentIndex);
 			
 			// trim and remove extra whitespace just to make it neater
 			line = line.trim().replaceAll("\\s+", " ");
@@ -40,7 +40,7 @@ public class AutoUtils {
 			if (line.endsWith(":")) {
 				autoScripts.put(currScriptName, currScript);
 				currScript = new ArrayList<String[]>();
-				currScriptName = line.substring(0, line.indexOf(":"));
+				currScriptName = line.substring(0, line.length() - 1);
 			} else {
 				
 				// first separate the command into instruction and args
