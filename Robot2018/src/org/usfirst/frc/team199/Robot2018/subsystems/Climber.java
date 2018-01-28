@@ -4,13 +4,14 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 import org.usfirst.frc.team199.Robot2018.RobotMap;
 
-import edu.wpi.first.wpilibj.SpeedController;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 /**
  *
  */
 public class Climber extends Subsystem implements ClimberInterface {
 
-	private final SpeedController climberMotors = RobotMap.climberMotors;
+	private final WPI_TalonSRX climberMotor = RobotMap.climberMotor;
 	
 	
 	/**
@@ -25,12 +26,10 @@ public class Climber extends Subsystem implements ClimberInterface {
    
 
     /**
+	 * runs the motors
 	 * 
 	 */
-	public void runClimber() {
-		attachToLift();
-		attachToBar();
-		goUp();
+	public void runClimber(double speed) {
 		
 	}
 	
@@ -39,13 +38,6 @@ public class Climber extends Subsystem implements ClimberInterface {
 	 * Requires that Lift is on the ground
 	 */
 	public void attachToLift() {
-		
-	}
-	
-	/**
-	 * winches upwards
-	 */
-	public void goUp() {
 		
 	}
 	
@@ -60,7 +52,7 @@ public class Climber extends Subsystem implements ClimberInterface {
 	 * stops the climber
 	 */
 	public void stopClimber() {
-		climberMotors.stopMotor();
+		climberMotor.stopMotor();
 	}
 
 	

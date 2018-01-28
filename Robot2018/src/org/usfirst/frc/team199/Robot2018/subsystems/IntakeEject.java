@@ -2,7 +2,8 @@ package org.usfirst.frc.team199.Robot2018.subsystems;
 
 import org.usfirst.frc.team199.Robot2018.RobotMap;
 
-import edu.wpi.first.wpilibj.SpeedController;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -10,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	
-	private final SpeedController intakeMotors = RobotMap.intakeMotors;
+	private final WPI_TalonSRX intakeMotor = RobotMap.intakeMotor;
 	
 	
 	
@@ -25,15 +26,15 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
     /**
 	 * returns current motor value
 	 */
-	public double getIntake() {
-		return intakeMotors.get();
+	public double getIntakeSpeed() {
+		return intakeMotor.get();
 	}
 	
 	/**
 	 * Uses (insert sensor here) to detect 
 	 * a cube in front of the robot.
 	 */
-	public boolean detectCube() {
+	public boolean seeCube() {
 		return false;
 	}
 	
@@ -51,7 +52,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * 
 	 */
 	public void stopIntake() {
-		intakeMotors.stopMotor();
+		intakeMotor.stopMotor();
 	}
 	
 	/**

@@ -41,9 +41,9 @@ public class RobotMap {
 	// public static int rangefinderPort = 1;
 	// public static int rangefinderModule = 1;
 	
-	public static SpeedController intakeMotors;
-	public static SpeedController liftMotors;
-	public static SpeedController climberMotors;
+	public static WPI_TalonSRX intakeMotor;
+	public static WPI_TalonSRX liftMotor;
+	public static WPI_TalonSRX climberMotor;
 	
 	public static Encoder leftEnc;
 	public static WPI_TalonSRX dtLeftDrive;
@@ -96,12 +96,12 @@ public class RobotMap {
 
 	public RobotMap() {
 		
-		intakeMotors = new WPI_TalonSRX(getPort("IntakeTalonSRX", 4));
-		configSRX((WPI_TalonSRX) intakeMotors);
-		liftMotors = new WPI_TalonSRX(getPort("LiftTalonSRX", 5));
-		configSRX((WPI_TalonSRX) liftMotors);
-		climberMotors = new WPI_TalonSRX(getPort("ClimberTalonSRX", 6));
-		configSRX((WPI_TalonSRX) climberMotors);
+		intakeMotor = new WPI_TalonSRX(getPort("IntakeTalonSRX", 4));
+		configSRX(intakeMotor);
+		liftMotor = new WPI_TalonSRX(getPort("LiftTalonSRX", 5));
+		configSRX(liftMotor);
+		climberMotor = new WPI_TalonSRX(getPort("ClimberTalonSRX", 6));
+		configSRX(climberMotor);
 
 		leftEnc = new Encoder(getPort("1LeftEnc", 0), getPort("2LeftEnc", 1));
 		dtLeftDrive = new WPI_TalonSRX(getPort("LeftTalonSRXDrive", 0));

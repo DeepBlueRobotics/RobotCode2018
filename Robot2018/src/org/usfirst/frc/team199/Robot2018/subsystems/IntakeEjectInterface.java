@@ -10,13 +10,13 @@ public interface IntakeEjectInterface {
 	/**
 	 * returns current motor value
 	 */
-	public double getIntake();
+	public double getIntakeSpeed();
 	
 	/**
 	 * Uses (insert sensor here) to detect 
 	 * a cube in front of the robot.
 	 */
-	public boolean detectCube();
+	public boolean seeCube();
 	
 	/**
 	 * Uses (insert sensor here) to detect if 

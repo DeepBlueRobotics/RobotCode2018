@@ -8,20 +8,15 @@ public interface ClimberInterface {
 	public void initDefaultCommand();
 	
 	/**
-	 * 
+	 * runs the motors
 	 */
-	public void runClimber();
+	public void runClimber(double speed);
 	
 	/**
 	 * attaches the climber hook to the lift.
 	 * Requires that Lift is on the ground
 	 */
 	public void attachToLift();
-	
-	/**
-	 * winches upwards
-	 */
-	public void goUp();
 	
 	/**
 	 * attaches hook to bar and releases it from the lift

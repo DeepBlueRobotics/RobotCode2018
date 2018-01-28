@@ -7,10 +7,17 @@ public interface LiftInterface {
 	 * */
 	public void initDefaultCommand();
 	
+	public enum Position {
+		GROUND,
+		SWITCH,
+		SCALE,
+		BAR
+	}
+	
 	/**
-	 * Uses (insert sensor here) to detect the distance above the ground
+	 * Uses (insert sensor here) to detect the current lift position 
 	 */
-	public double getDistance();
+	public double getHeight();
 	
 	/**
 	 * stops the lift
@@ -20,27 +27,15 @@ public interface LiftInterface {
 	/**
 	 * gets current motor values
 	 */
-	public double getLift();
+	public double getLiftSpeed();
+	
 	
 	/**
-	 * goes to the bottom
+	 * Goes to specified height
+	 * @param position - ground, switch, scale, bar
+	 * @param offset - distance up or down from position
 	 */
-	public void goToGround();
+	public void goToPosition(Position position, double offset);
 	
-	/**
-	 * goes to switch height
-	 */
-	public void goToSwitch();
-	
-	/**
-	 * goes to scale height
-	 * @param offset - the distance up or down from standard scale height
-	 */
-	public void goToScale(double offset);
-	
-	/**
-	 * goes to bar height
-	 */
-	public void goToBar();
 	
 }
