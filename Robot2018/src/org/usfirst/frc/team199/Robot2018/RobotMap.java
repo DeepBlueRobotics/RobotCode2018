@@ -32,6 +32,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * floating around.
  */
 public class RobotMap {
+
+	public static WPI_TalonSRX intakeMotor;
+	public static WPI_TalonSRX liftMotor;
+	public static WPI_TalonSRX climberMotor;
+
 	public static DigitalSource leftEncPort1;
 	public static DigitalSource leftEncPort2;
 	public static Encoder leftEncDist;
@@ -88,6 +93,13 @@ public class RobotMap {
 	}
 
 	public RobotMap() {
+
+		intakeMotor = new WPI_TalonSRX(getPort("IntakeTalonSRX", 4));
+		configSRX(intakeMotor);
+		liftMotor = new WPI_TalonSRX(getPort("LiftTalonSRX", 5));
+		configSRX(liftMotor);
+		climberMotor = new WPI_TalonSRX(getPort("ClimberTalonSRX", 6));
+		configSRX(climberMotor);
 
 		leftEncPort1 = new DigitalInput(getPort("1LeftEnc", 0));
 		leftEncPort2 = new DigitalInput(getPort("2LeftEnc", 1));
@@ -153,4 +165,5 @@ public class RobotMap {
 		}
 		return (int) SmartDashboard.getNumber("Port/" + key, def);
 	}
+
 }
