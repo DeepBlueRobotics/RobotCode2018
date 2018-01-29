@@ -7,6 +7,9 @@
 
 package org.usfirst.frc.team199.Robot2018;
 
+
+import edu.wpi.first.wpilibj.SpeedController;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
@@ -19,6 +22,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -36,7 +40,11 @@ public class RobotMap {
 	// number and the module. For example you with a rangefinder:
 	// public static int rangefinderPort = 1;
 	// public static int rangefinderModule = 1;
-
+	
+	public static WPI_TalonSRX intakeMotor;
+	public static WPI_TalonSRX liftMotor;
+	public static WPI_TalonSRX climberMotor;
+	
 	public static Encoder leftEnc;
 	public static WPI_TalonSRX dtLeftDrive;
 	public static WPI_VictorSPX dtLeftSlave;
@@ -87,6 +95,13 @@ public class RobotMap {
 	}
 
 	public RobotMap() {
+		
+		intakeMotor = new WPI_TalonSRX(getPort("IntakeTalonSRX", 4));
+		configSRX(intakeMotor);
+		liftMotor = new WPI_TalonSRX(getPort("LiftTalonSRX", 5));
+		configSRX(liftMotor);
+		climberMotor = new WPI_TalonSRX(getPort("ClimberTalonSRX", 6));
+		configSRX(climberMotor);
 
 		leftEnc = new Encoder(getPort("1LeftEnc", 0), getPort("2LeftEnc", 1));
 		dtLeftDrive = new WPI_TalonSRX(getPort("LeftTalonSRXDrive", 0));
@@ -161,4 +176,5 @@ public class RobotMap {
 		}
 		return (int) SmartDashboard.getNumber("Port/" + key, def);
 	}
+
 }
