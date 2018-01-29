@@ -3,50 +3,73 @@ package org.usfirst.frc.team199.Robot2018.commands;
 import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
 
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class PIDTurn extends Command {
+public class PIDTurn extends Command implements PIDOutput {
 
 	double target;
 	DrivetrainInterface dt;
+	private PIDController turnController;
 
-	public PIDTurn(double targ, DrivetrainInterface dt) {
+	public PIDTurn(double targ, DrivetrainInterface dt, AHRS ahrs) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		target = targ;
 		this.dt = dt;
 		requires(Robot.dt);
+		turnController = new PIDController(Robot.getConst("TurnkP", 1), Robot.getConst("TurnkI", 0),
+				Robot.getConst("TurnkD", 0), ahrs, this);
 	}
 
 	// Called just before this Command runs the first time
+	@Override
 	protected void initialize() {
 		dt.resetAHRS();
-		dt.setTurnSetpoint(target);
-		dt.enableTurnPid();
+		turnController.disable();
+		turnController.setInputRange(-180, 180);
+		turnController.setOutputRange(-1.0, 1.0);
+		turnController.setContinuous();
+		turnController.setAbsoluteTolerance(Robot.getConst("TurnTolerance", 1));
+		turnController.setSetpoint(target);
+		turnController.enable();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
+	@Override
 	protected void execute() {
-		dt.arcadeDrive(0, dt.getAnglePidOut());
+		// This method is empty bc the moveController runs on a different thread as soon
+		// as it is enabled.
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
+	@Override
 	protected boolean isFinished() {
-		return dt.onTurnTarg();
+		return turnController.onTarget();
 	}
 
 	// Called once after isFinished returns true
+	@Override
 	protected void end() {
-		dt.disableTurnPid();
-		dt.stopDrive();
+		turnController.disable();
+		turnController.free();
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
+	@Override
 	protected void interrupted() {
 		end();
+	}
+
+	@Override
+	public void pidWrite(double output) {
+		dt.arcadeDrive(0, output);
 	}
 }

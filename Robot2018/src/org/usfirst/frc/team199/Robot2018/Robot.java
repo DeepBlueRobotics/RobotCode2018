@@ -5,9 +5,7 @@ import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
 import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
 import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEject;
-import org.usfirst.frc.team199.Robot2018.subsystems.LeftDrive;
 import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
-import org.usfirst.frc.team199.Robot2018.subsystems.RightDrive;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -30,8 +28,6 @@ public class Robot extends TimedRobot {
 	public static Lift lift;
 	public static RobotMap rmap;
 	public static Drivetrain dt;
-	public static LeftDrive ld;
-	public static RightDrive rd;
 	public static Listener listen;
 
 	public static OI oi;
@@ -65,9 +61,6 @@ public class Robot extends TimedRobot {
 		intakeEject = new IntakeEject();
 		lift = new Lift();
 		dt = new Drivetrain();
-		rmap.initPIDControllers();
-		ld = new LeftDrive();
-		rd = new RightDrive();
 		oi = new OI();
 		listen = new Listener();
 		// chooser.addObject("My Auto", new MyAutoCommand());

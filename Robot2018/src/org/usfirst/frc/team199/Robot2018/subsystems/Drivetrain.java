@@ -9,141 +9,37 @@ package org.usfirst.frc.team199.Robot2018.subsystems;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.RobotMap;
+import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
+import org.usfirst.frc.team199.Robot2018.autonomous.VelocityPIDController;
 import org.usfirst.frc.team199.Robot2018.commands.TeleopDrive;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
-public class Drivetrain extends Subsystem implements PIDOutput, DrivetrainInterface {
+public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
-	private final Encoder leftEnc = RobotMap.leftEnc;
-	private final Encoder rightEnc = RobotMap.rightEnc;
+	private final Encoder leftEncDist = RobotMap.leftEncDist;
+	private final Encoder rightEncDist = RobotMap.rightEncDist;
+	private final PIDSourceAverage distEncAvg = RobotMap.distEncAvg;
 	private final SpeedControllerGroup dtLeft = RobotMap.dtLeft;
 	private final SpeedControllerGroup dtRight = RobotMap.dtRight;
 	private final DifferentialDrive robotDrive = RobotMap.robotDrive;
-	private final PIDController turnController = RobotMap.turnController;
-	// private final PIDController moveController = RobotMap.moveController;
-	private final PIDController moveLeftController = RobotMap.moveLeftController;
-	private final PIDController moveRightController = RobotMap.moveRightController;
+	private final VelocityPIDController leftVelocityController = RobotMap.leftVelocityController;
+	private final VelocityPIDController rightVelocityController = RobotMap.rightVelocityController;
 
-	private final AHRS ahrs = RobotMap.ahrs;
-	private final AnalogGyro dtGyro = RobotMap.dtGyro;
+	private final AHRS fancyGyro = RobotMap.fancyGyro;
 	private final DoubleSolenoid dtGear = RobotMap.dtGear;
-
-	private double anglePidOut = 0;
-	private double leftPidOut = 0;
-	private double rightPidOut = 0;
 
 	@Override
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleopDrive());
-	}
-
-	/**
-	 * Updates the PIDControllers' PIDConstants based on SmartDashboard values
-	 */
-	@Override
-	public void updatePidConstants() {
-		turnController.setPID(Robot.getConst("TurnkP", 1), Robot.getConst("TurnkI", 0), Robot.getConst("TurnkD", 0));
-		moveLeftController.setPID(Robot.getConst("MoveLeftkP", 1), Robot.getConst("MoveLeftkI", 0),
-				Robot.getConst("MoveLeftkD", 0));
-		moveRightController.setPID(Robot.getConst("MoveRightkP", 1), Robot.getConst("MoveRightkI", 0),
-				Robot.getConst("MoveRightkD", 0));
-	}
-
-	/**
-	 * Activates the solenoid to push the drivetrain into low or high gear
-	 * 
-	 * @param forw
-	 *            If the solenoid is to be pushed forward or not (backwards)
-	 */
-	@Override
-	public void changeShiftGear(boolean forw) {
-		if (forw ^ Robot.getBool("Drivetrain Gear Shift Backwards", false)) {
-			dtGear.set(DoubleSolenoid.Value.kForward);
-		} else {
-			dtGear.set(DoubleSolenoid.Value.kReverse);
-		}
-	}
-
-	/**
-	 * Stops the solenoid that pushes the drivetrain into low or high gear
-	 */
-	@Override
-	public void turnGearSolenoidOff() {
-		dtGear.set(DoubleSolenoid.Value.kOff);
-	}
-
-	/**
-	 * Resets the AHRS value
-	 */
-	@Override
-	public void resetAHRS() {
-		ahrs.reset();
-	}
-
-	/**
-	 * Runs the left side of the drivetrain at the specified speed
-	 * 
-	 * @param value
-	 *            Value for the motor(s) to run at
-	 */
-	@Override
-	public void setLeftMotor(double value) {
-		dtLeft.set(value);
-	}
-
-	/**
-	 * Tells the left side of the drivetrain to stop running
-	 */
-	private void stopLeftMotor() {
-		dtLeft.stopMotor();
-	}
-
-	/**
-	 * Runs the right side of the drivetrain at the specified speed
-	 * 
-	 * @param value
-	 *            Value for the motor(s) to run at
-	 */
-	@Override
-	public void setRightMotor(double value) {
-		dtRight.set(value);
-	}
-
-	/**
-	 * Tells the right side of the drivetrain to stop running
-	 */
-	private void stopRightMotor() {
-		dtRight.stopMotor();
-	}
-
-	/**
-	 * Tells the drivetrain to stop running
-	 */
-	@Override
-	public void stopDrive() {
-		stopRightMotor();
-		stopLeftMotor();
-	}
-
-	/**
-	 * Resets the encoders' distances to zero
-	 */
-	@Override
-	public void resetEnc() {
-		leftEnc.reset();
-		rightEnc.reset();
 	}
 
 	/**
@@ -190,245 +86,149 @@ public class Drivetrain extends Subsystem implements PIDOutput, DrivetrainInterf
 
 	/**
 	 * Used for getting the speed at which the left side of the drivetrain is
-	 * currently running
+	 * currently set to. Gets data straight from SpeedControllerGroup.
 	 * 
-	 * @return The speed that the left side of the drivetrain is set to
+	 * @return The speed that the left side of the drivetrain is set to [-1, 1]
 	 */
 	@Override
-	public double getDtLeft() {
+	public double getDtLeftSpeed() {
 		return dtLeft.get();
 	}
 
 	/**
 	 * Used for getting the speed at which the right side of the drivetrain is
-	 * currently running
+	 * currently set to. Gets data straight from SpeedControllerGroup.
 	 * 
-	 * @return The speed that the right side of the drivetrain is set to
+	 * @return The speed that the right side of the drivetrain is set to [-1, 1]
 	 */
 	@Override
-	public double getDtRight() {
+	public double getDtRightSpeed() {
 		return dtRight.get();
 	}
 
 	/**
-	 * Used to get the angle that the gyro currently reads
+	 * Updates the PIDControllers' PIDConstants based on SmartDashboard values
+	 */
+	@Override
+	public void updatePidConstants() {
+		leftVelocityController.setPID(Robot.getConst("MoveLeftkP", 1), Robot.getConst("MoveLeftkI", 0),
+				Robot.getConst("MoveLeftkD", 0));
+		rightVelocityController.setPID(Robot.getConst("MoveRightkP", 1), Robot.getConst("MoveRightkI", 0),
+				Robot.getConst("MoveRightkD", 0));
+	}
+
+	/**
+	 * Enable the VelocityPIDControllers used for velocity control on each side of
+	 * the DT
+	 */
+	@Override
+	public void enableVelocityPIDs() {
+		leftVelocityController.enable();
+		rightVelocityController.enable();
+	}
+
+	/**
+	 * Disables the VelocityPIDControllers used for velocity control on each side of
+	 * the DT
+	 */
+	@Override
+	public void disableVelocityPIDs() {
+		leftVelocityController.disable();
+		rightVelocityController.disable();
+	}
+
+	/**
+	 * Resets the AHRS value
+	 */
+	@Override
+	public void resetAHRS() {
+		fancyGyro.reset();
+	}
+
+	/**
+	 * Used to get the yaw angle (Z-axis in degrees) that the ahrs currently reads
 	 * 
-	 * @return The angle that the gyro reads
+	 * @return The angle that the ahrs reads (in degrees)
 	 */
 	@Override
-	public double getGyroAngle() {
-		return dtGyro.getAngle();
+	public double getAHRSAngle() {
+		return fancyGyro.getAngle();
 	}
 
 	/**
-	 * Resets the gyro to 0
+	 * Resets the encoders' distances to zero
 	 */
 	@Override
-	public void resetGyro() {
-		dtGyro.reset();
-	}
-
-	/**
-	 * Disables the turnPID PIDController used for turning
-	 */
-	@Override
-	public void disableTurnPid() {
-		turnController.disable();
-	}
-
-	/**
-	 * Enables the turnPID PIDController used for turning
-	 */
-	@Override
-	public void enableTurnPid() {
-		turnController.enable();
-	}
-
-	/**
-	 * Sets the setPoint of the turnPID PIDController
-	 * 
-	 * @param set
-	 *            The value to set the setPoint at
-	 */
-	@Override
-	public void setTurnSetpoint(double set) {
-		turnController.setSetpoint(set);
-	}
-
-	/**
-	 * Enable the movePID PIDController used for moving
-	 */
-	@Override
-	public void enableMovePid() {
-		moveLeftController.enable();
-		moveRightController.enable();
-	}
-
-	/**
-	 * Disables the movePID PIDController used for moving
-	 */
-	@Override
-	public void disableMovePid() {
-		moveLeftController.disable();
-		moveRightController.disable();
-	}
-
-	/**
-	 * Sets the setPoint of the moveLeftPID PIDController
-	 * 
-	 * @param set
-	 *            The value to set the setPoint at
-	 */
-	@Override
-	public void setMoveSetpointLeft(double set) {
-		moveLeftController.setSetpoint(set);
-	}
-
-	/**
-	 * Sets the setPoint of the moveRightPID PIDController
-	 * 
-	 * @param set
-	 *            The value to set the setPoint at
-	 */
-	@Override
-	public void setMoveSetpointRight(double set) {
-		moveRightController.setSetpoint(set);
+	public void resetDistEncs() {
+		leftEncDist.reset();
+		rightEncDist.reset();
 	}
 
 	/**
 	 * Sets the distancePerPulse property on the left encoder
 	 * 
-	 * @param dist
-	 *            The distance to set the distancePerPulse at
+	 * @param ratio
+	 *            The ratio to set the distancePerPulse to (real dist units/encoder
+	 *            pulses)
 	 */
 	@Override
-	public void setDistancePerPulseLeft(double dist) {
-		leftEnc.setDistancePerPulse(dist);
+	public void setDistancePerPulseLeft(double ratio) {
+		leftEncDist.setDistancePerPulse(ratio);
 	}
 
 	/**
 	 * Sets the distancePerPulse property on the right encoder
 	 * 
-	 * @param dist
-	 *            The distance to set the distancePerPulse at
+	 * @param ratio
+	 *            The ratio to set the distancePerPulse to (real dist units/encoder
+	 *            pulses)
 	 */
 	@Override
-	public void setDistancePerPulseRight(double dist) {
-		rightEnc.setDistancePerPulse(dist);
+	public void setDistancePerPulseRight(double ratio) {
+		rightEncDist.setDistancePerPulse(ratio);
 	}
 
 	/**
-	 * Returns the value that Drivetrain receives due to implementing PIDOutput
+	 * Returns the distance (in real units) that the left encoder reads
 	 * 
-	 * @return The value that is written by PIDControllers
+	 * @return How far the left encoder has traveled in real units since last reset
 	 */
 	@Override
-	public double getAnglePidOut() {
-		return anglePidOut;
+	public double getLeftEncDist() {
+		return leftEncDist.getDistance();
 	}
 
 	/**
-	 * Returns the value that leftdrive should be set to according to PIDControllers
+	 * Returns the distance (in real units) that the right encoder reads
 	 * 
-	 * @return The value that is written by PIDControllers
+	 * @return How far the right encoder has traveled in real units since last reset
 	 */
 	@Override
-	public double getLeftPidOut() {
-		return leftPidOut;
+	public double getRightEncDist() {
+		return rightEncDist.getDistance();
 	}
 
 	/**
-	 * Returns the value that rightdrive should be set to according to
-	 * PIDControllers
+	 * Activates the solenoid to push the drivetrain into high or low gear
 	 * 
-	 * @return The value that is written by PIDControllers
+	 * @param highGear
+	 *            If the solenoid is to be pushed into high gear (true, kForward) or
+	 *            low gear (false, kReverse)
 	 */
 	@Override
-	public double getRightPidOut() {
-		return rightPidOut;
+	public void shiftGears(boolean highGear) {
+		if (highGear ^ Robot.getBool("Drivetrain Gear Shift Low", false)) {
+			dtGear.set(DoubleSolenoid.Value.kForward);
+		} else {
+			dtGear.set(DoubleSolenoid.Value.kReverse);
+		}
 	}
 
 	/**
-	 * Returns the distance that the left encoder reads
-	 * 
-	 * @return How much the left encoder has travelled
-	 */
-	public double getLeftEnc() {
-		return leftEnc.getDistance();
-	}
-
-	/**
-	 * Returns the distance that the right encoder reads
-	 * 
-	 * @return How much the right encoder has travelled
-	 */
-	public double getRightEnc() {
-		return rightEnc.getDistance();
-	}
-	// public boolean onTargetLeft() {
-	// return moveLeftController.onTarget();
-	// }
-	// public boolean onTargetRight() {
-	// return moveRightController.onTarget();
-	// }
-
-	@Override
-	public void pidWrite(double output) {
-		anglePidOut = output;
-	}
-
-	/**
-	 * Sets the leftPidOutput
-	 * 
-	 * @param output
-	 *            The value to set the output to
-	 */
-	public void pidLeftWrite(double output) {
-		leftPidOut = output;
-	}
-
-	/**
-	 * Sets the rightPidOutput
-	 * 
-	 * @param output
-	 *            The value to set the output to
-	 */
-	public void pidRightWrite(double output) {
-		rightPidOut = output;
-	}
-
-	/**
-	 * Returns the average of two numbers
-	 * 
-	 * @param a
-	 *            First number to average
-	 * @param b
-	 *            Second number to average
-	 * @return The arithmetic mean of a and b
-	 */
-	public static double average(double a, double b) {
-		return (a + b) / 2;
-	}
-
-	/**
-	 * Returns whether the turnController PIDController senses that it's on target
-	 * 
-	 * @return Whether the turnController PIDController is on target
+	 * Stops the solenoid that pushes the drivetrain into low or high gear
 	 */
 	@Override
-	public boolean onTurnTarg() {
-		return turnController.onTarget();
+	public void shiftGearSolenoidOff() {
+		dtGear.set(DoubleSolenoid.Value.kOff);
 	}
-
-	/**
-	 * Returns whether the moveLeftController and moveRightController PIDController
-	 * sense that their on target
-	 * 
-	 * @return Whether the moveController PIDControllers are on target
-	 */
-	@Override
-	public boolean onDriveTarg() {
-		return moveLeftController.onTarget() && moveRightController.onTarget();
-	}
-
 }
