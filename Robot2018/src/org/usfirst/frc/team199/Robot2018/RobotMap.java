@@ -114,12 +114,13 @@ public class RobotMap {
 		dtLeft = new SpeedControllerGroup(dtLeftDrive, dtLeftSlave);
 
 		leftVelocityController = new VelocityPIDController(Robot.getConst("MoveLeftkP", 1),
-				Robot.getConst("MoveLeftkI", 0), Robot.getConst("MoveLeftkD", 0), leftEncRate, dtLeft);
+				Robot.getConst("MoveLeftkI", 0), Robot.getConst("MoveLeftkD", 0), 1 / Robot.getConst("MaxSpeed", 17),
+				leftEncRate, dtLeft);
 		leftVelocityController.enable();
 		leftVelocityController.setInputRange(0, Double.MAX_VALUE);
 		leftVelocityController.setOutputRange(-1.0, 1.0);
 		leftVelocityController.setContinuous(false);
-		leftVelocityController.setAbsoluteTolerance(Robot.getConst("ConstMoveToleranceLeft", 2));
+		leftVelocityController.setAbsoluteTolerance(Robot.getConst("MoveToleranceLeft", 2));
 
 		rightEncPort1 = new DigitalInput(getPort("1RightEnc", 2));
 		rightEncPort2 = new DigitalInput(getPort("2RightEnc", 3));
@@ -133,13 +134,14 @@ public class RobotMap {
 		configSPX(dtRightSlave);
 		dtRight = new SpeedControllerGroup(dtRightDrive, dtRightSlave);
 
-		rightVelocityController = new VelocityPIDController(Robot.getConst("ConstMoveRightkP", 1),
-				Robot.getConst("ConstMoveRightkI", 0), Robot.getConst("ConstMoveRightkD", 0), rightEncRate, dtRight);
+		rightVelocityController = new VelocityPIDController(Robot.getConst("MoveRightkP", 1),
+				Robot.getConst("MoveRightkI", 0), Robot.getConst("MoveRightkD", 0), 1 / Robot.getConst("MaxSpeed", 17),
+				rightEncRate, dtRight);
 		rightVelocityController.enable();
 		rightVelocityController.setInputRange(0, Double.MAX_VALUE);
 		rightVelocityController.setOutputRange(-1.0, 1.0);
 		rightVelocityController.setContinuous(false);
-		rightVelocityController.setAbsoluteTolerance(Robot.getConst("ConstMoveToleranceRight", 2));
+		rightVelocityController.setAbsoluteTolerance(Robot.getConst("MoveToleranceRight", 2));
 
 		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
 

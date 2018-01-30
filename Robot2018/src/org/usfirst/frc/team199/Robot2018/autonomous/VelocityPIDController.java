@@ -20,13 +20,16 @@ public class VelocityPIDController extends PIDController implements SpeedControl
 	 *            the integral PID constant
 	 * @param kd
 	 *            the derivative PID constant
+	 * @param kf
+	 *            the feed forward value: should be 1/MaxSpeed
 	 * @param source
 	 *            the sensor (e.g. velocity encoder) you are reading from
 	 * @param output
 	 *            the SpeedController you are telling what to do
 	 */
-	public VelocityPIDController(double kp, double ki, double kd, PIDSource source, SpeedControllerGroup output) {
-		super(kp, ki, kd, source, output);
+	public VelocityPIDController(double kp, double ki, double kd, double kf, PIDSource source,
+			SpeedControllerGroup output) {
+		super(kp, ki, kd, kf, source, output);
 		out = output;
 	}
 

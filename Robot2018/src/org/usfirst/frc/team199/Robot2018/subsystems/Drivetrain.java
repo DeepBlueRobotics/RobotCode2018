@@ -112,9 +112,9 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	@Override
 	public void updatePidConstants() {
 		leftVelocityController.setPID(Robot.getConst("MoveLeftkP", 1), Robot.getConst("MoveLeftkI", 0),
-				Robot.getConst("MoveLeftkD", 0));
+				Robot.getConst("MoveLeftkD", 0), 1 / Robot.getConst("MaxSpeed", 17));
 		rightVelocityController.setPID(Robot.getConst("MoveRightkP", 1), Robot.getConst("MoveRightkI", 0),
-				Robot.getConst("MoveRightkD", 0));
+				Robot.getConst("MoveRightkD", 0), 1 / Robot.getConst("MaxSpeed", 17));
 	}
 
 	/**
