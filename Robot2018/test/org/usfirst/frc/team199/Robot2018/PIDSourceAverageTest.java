@@ -56,4 +56,33 @@ class PIDSourceAverageTest {
 		assertEquals(avg.getPIDSourceType(), PIDSourceType.kRate);
 	}
 
+	@Test
+	void test3() {
+
+		PIDSource lEnc = mock(PIDSource.class);
+		when(lEnc.getPIDSourceType()).thenReturn(PIDSourceType.kDisplacement);
+
+		PIDSource rEnc = mock(PIDSource.class);
+		when(rEnc.getPIDSourceType()).thenReturn(PIDSourceType.kDisplacement);
+
+		PIDSourceAverage avg;
+		try {
+			avg = new PIDSourceAverage(lEnc, rEnc);
+		} catch (IllegalArgumentException e) {
+			avg = new PIDSourceAverage(rEnc, rEnc);
+		}
+		assertEquals(avg.getPIDSourceType(), PIDSourceType.kDisplacement);
+
+		double leftVal = 2.0;
+		double rightVal = 3.0;
+		double avgVal = (leftVal + rightVal) / 2;
+
+		assertEquals(avgVal, 2.5);
+
+		when(lEnc.pidGet()).thenReturn(leftVal);
+		when(rEnc.pidGet()).thenReturn(rightVal);
+
+		assertEquals(avg.pidGet(), avgVal);
+	}
+
 }

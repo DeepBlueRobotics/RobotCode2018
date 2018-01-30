@@ -36,7 +36,8 @@ class VelocityPIDControllerTest {
 		double p = 1;
 		double i = 0.5;
 		double d = 0.0037;
-		VelocityPIDController vPID = new VelocityPIDController(p, i, d, source, out);
+		double f = 1.0 / 17;
+		VelocityPIDController vPID = new VelocityPIDController(p, i, d, f, source, out);
 
 		vPID.set(20);
 		assertEquals(vPID.get(), 20);
@@ -49,7 +50,8 @@ class VelocityPIDControllerTest {
 		double p = 1;
 		double i = 0.5;
 		double d = 0.0037;
-		VelocityPIDController vPID = new VelocityPIDController(p, i, d, source, out);
+		double f = 1.0 / 17;
+		VelocityPIDController vPID = new VelocityPIDController(p, i, d, f, source, out);
 
 		vPID.pidWrite(20);
 		assertEquals(vPID.getSetpoint(), 20);
@@ -62,7 +64,8 @@ class VelocityPIDControllerTest {
 		double p = 1;
 		double i = 0.5;
 		double d = 0.0037;
-		VelocityPIDController vPID = new VelocityPIDController(p, i, d, source, out);
+		double f = 1.0 / 17;
+		VelocityPIDController vPID = new VelocityPIDController(p, i, d, f, source, out);
 
 		vPID.set(20);
 		assertEquals(vPID.getSetpoint(), 20);
