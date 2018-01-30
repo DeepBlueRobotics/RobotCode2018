@@ -14,7 +14,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -41,7 +40,7 @@ public class RobotMap {
 	public static DigitalSource leftEncPort2;
 	public static Encoder leftEncDist;
 	public static Encoder leftEncRate;
-	public static WPI_TalonSRX dtLeftDrive;
+	public static WPI_TalonSRX dtLeftMaster;
 	public static WPI_VictorSPX dtLeftSlave;
 	public static SpeedControllerGroup dtLeft;
 	public static VelocityPIDController leftVelocityController;
@@ -50,7 +49,7 @@ public class RobotMap {
 	public static DigitalSource rightEncPort2;
 	public static Encoder rightEncDist;
 	public static Encoder rightEncRate;
-	public static WPI_TalonSRX dtRightDrive;
+	public static WPI_TalonSRX dtRightMaster;
 	public static WPI_VictorSPX dtRightSlave;
 	public static SpeedControllerGroup dtRight;
 	public static VelocityPIDController rightVelocityController;
@@ -59,7 +58,6 @@ public class RobotMap {
 	public static PIDSourceAverage distEncAvg;
 
 	public static AHRS fancyGyro;
-	public static AnalogGyro dtGyro;
 	public static DoubleSolenoid dtGear;
 
 	/**
@@ -107,11 +105,11 @@ public class RobotMap {
 		leftEncDist.setPIDSourceType(PIDSourceType.kDisplacement);
 		leftEncRate = new Encoder(leftEncPort1, leftEncPort2);
 		leftEncRate.setPIDSourceType(PIDSourceType.kRate);
-		dtLeftDrive = new WPI_TalonSRX(getPort("LeftTalonSRXDrive", 0));
-		configSRX(dtLeftDrive);
+		dtLeftMaster = new WPI_TalonSRX(getPort("LeftTalonSRXMaster", 0));
+		configSRX(dtLeftMaster);
 		dtLeftSlave = new WPI_VictorSPX(getPort("LeftTalonSPXSlave", 1));
 		configSPX(dtLeftSlave);
-		dtLeft = new SpeedControllerGroup(dtLeftDrive, dtLeftSlave);
+		dtLeft = new SpeedControllerGroup(dtLeftMaster, dtLeftSlave);
 
 		leftVelocityController = new VelocityPIDController(Robot.getConst("MoveLeftkP", 1),
 				Robot.getConst("MoveLeftkI", 0), Robot.getConst("MoveLeftkD", 0), 1 / Robot.getConst("MaxSpeed", 17),
@@ -128,11 +126,11 @@ public class RobotMap {
 		rightEncDist.setPIDSourceType(PIDSourceType.kDisplacement);
 		rightEncRate = new Encoder(leftEncPort1, leftEncPort2);
 		rightEncRate.setPIDSourceType(PIDSourceType.kRate);
-		dtRightDrive = new WPI_TalonSRX(getPort("RightTalonSRXDrive", 2));
-		configSRX(dtRightDrive);
+		dtRightMaster = new WPI_TalonSRX(getPort("RightTalonSRXMaster", 2));
+		configSRX(dtRightMaster);
 		dtRightSlave = new WPI_VictorSPX(getPort("RightTalonSPXSlave", 3));
 		configSPX(dtRightSlave);
-		dtRight = new SpeedControllerGroup(dtRightDrive, dtRightSlave);
+		dtRight = new SpeedControllerGroup(dtRightMaster, dtRightSlave);
 
 		rightVelocityController = new VelocityPIDController(Robot.getConst("MoveRightkP", 1),
 				Robot.getConst("MoveRightkI", 0), Robot.getConst("MoveRightkD", 0), 1 / Robot.getConst("MaxSpeed", 17),
@@ -147,7 +145,6 @@ public class RobotMap {
 
 		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
 		fancyGyro = new AHRS(SerialPort.Port.kMXP);
-		dtGyro = new AnalogGyro(getPort("Gyro", 0));
 		dtGear = new DoubleSolenoid(getPort("1dtGearSolenoid", 0), getPort("2dtGearSolenoid", 1));
 	}
 
