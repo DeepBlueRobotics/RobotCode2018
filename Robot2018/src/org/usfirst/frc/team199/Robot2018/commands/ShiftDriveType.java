@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- *
+ * Toggles between arcade and tank drive.
  */
 public class ShiftDriveType extends InstantCommand {
 
@@ -17,6 +17,7 @@ public class ShiftDriveType extends InstantCommand {
 	}
 
 	// Called once when the command executes
+	@Override
 	protected void initialize() {
 		SmartDashboard.putBoolean("Bool/Arcade Drive", !Robot.getBool("Arcade Drive", true));
 	}

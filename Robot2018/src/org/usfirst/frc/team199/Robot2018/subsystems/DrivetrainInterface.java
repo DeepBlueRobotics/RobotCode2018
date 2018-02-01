@@ -1,54 +1,8 @@
 package org.usfirst.frc.team199.Robot2018.subsystems;
 
 public interface DrivetrainInterface {
-	/**
-	 * Updates the PIDControllers' PIDConstants based on SmartDashboard values
-	 */
-	public void updatePidConstants();
 
-	/**
-	 * Activates the solenoid to push the drivetrain into low or high gear
-	 * 
-	 * @param forw
-	 *            If the solenoid is to be pushed forward or not (backwards)
-	 */
-	public void changeShiftGear(boolean forw);
-
-	/**
-	 * Stops the solenoid that pushes the drivetrain into low or high gear
-	 */
-	public void turnGearSolenoidOff();
-
-	/**
-	 * Resets the AHRS value
-	 */
-	public void resetAHRS();
-
-	/**
-	 * Runs the left side of the drivetrain at the specified speed
-	 * 
-	 * @param value
-	 *            Value for the motor(s) to run at
-	 */
-	public void setLeftMotor(double value);
-
-	/**
-	 * Runs the right side of the drivetrain at the specified speed
-	 * 
-	 * @param value
-	 *            Value for the motor(s) to run at
-	 */
-	public void setRightMotor(double value);
-
-	/**
-	 * Tells the drivetrain to stop running
-	 */
-	public void stopDrive();
-
-	/**
-	 * Resets the encoders' distances to zero
-	 */
-	public void resetEnc();
+	public void initDefaultCommand();
 
 	/**
 	 * Drives based on joystick input and SmartDashboard values
@@ -77,125 +31,97 @@ public interface DrivetrainInterface {
 
 	/**
 	 * Used for getting the speed at which the left side of the drivetrain is
-	 * currently running
+	 * currently set to. Gets data straight from SpeedControllerGroup.
 	 * 
-	 * @return The speed that the left side of the drivetrain is set to
+	 * @return The speed that the left side of the drivetrain is set to [-1, 1]
 	 */
-	public double getDtLeft();
+	public double getDtLeftSpeed();
 
 	/**
 	 * Used for getting the speed at which the right side of the drivetrain is
-	 * currently running
+	 * currently set to. Gets data straight from SpeedControllerGroup.
 	 * 
-	 * @return The speed that the right side of the drivetrain is set to
+	 * @return The speed that the right side of the drivetrain is set to [-1, 1]
 	 */
-	public double getDtRight();
+	public double getDtRightSpeed();
 
 	/**
-	 * Used to get the angle that the gyro currently reads
+	 * Updates the PIDControllers' PIDConstants based on SmartDashboard values
+	 */
+	public void updatePidConstants();
+
+	/**
+	 * Enable the VelocityPIDControllers used for velocity control on each side of
+	 * the DT
+	 */
+	public void enableVelocityPIDs();
+
+	/**
+	 * Disables the VelocityPIDControllers used for velocity control on each side of
+	 * the DT
+	 */
+	public void disableVelocityPIDs();
+
+	/**
+	 * Resets the AHRS value
+	 */
+	public void resetAHRS();
+
+	/**
+	 * Used to get the yaw angle (Z-axis in degrees) that the ahrs currently reads
 	 * 
-	 * @return The angle that the gyro reads
+	 * @return The angle that the ahrs reads (in degrees)
 	 */
-	public double getGyroAngle();
+	public double getAHRSAngle();
 
 	/**
-	 * Resets the gyro to 0
+	 * Resets the encoders' distances to zero
 	 */
-	public void resetGyro();
-
-	/**
-	 * Disables the turnPID PIDController used for turning
-	 */
-	public void disableTurnPid();
-
-	/**
-	 * Enables the turnPID PIDController used for turning
-	 */
-	public void enableTurnPid();
-
-	/**
-	 * Sets the setPoint of the turnPID PIDController
-	 * 
-	 * @param set
-	 *            The value to set the setPoint at
-	 */
-	public void setTurnSetpoint(double set);
-
-	/**
-	 * Enable the movePID PIDController used for moving
-	 */
-	public void enableMovePid();
-
-	/**
-	 * Disables the movePID PIDController used for moving
-	 */
-	public void disableMovePid();
-
-	/**
-	 * Sets the setPoint of the moveLeftPID PIDController
-	 * 
-	 * @param set
-	 *            The value to set the setPoint at
-	 */
-	public void setMoveSetpointLeft(double set);
-
-	/**
-	 * Sets the setPoint of the moveRightPID PIDController
-	 * 
-	 * @param set
-	 *            The value to set the setPoint at
-	 */
-	public void setMoveSetpointRight(double set);
+	public void resetDistEncs();
 
 	/**
 	 * Sets the distancePerPulse property on the left encoder
 	 * 
-	 * @param dist
-	 *            The distance to set the distancePerPulse at
+	 * @param ratio
+	 *            The ratio to set the distancePerPulse to (real dist units/encoder
+	 *            pulses)
 	 */
-	public void setDistancePerPulseLeft(double dist);
+	public void setDistancePerPulseLeft(double ratio);
 
 	/**
 	 * Sets the distancePerPulse property on the right encoder
 	 * 
-	 * @param dist
-	 *            The distance to set the distancePerPulse at
+	 * @param ratio
+	 *            The ratio to set the distancePerPulse to (real dist units/encoder
+	 *            pulses)
 	 */
-	public void setDistancePerPulseRight(double dist);
+	public void setDistancePerPulseRight(double ratio);
 
 	/**
-	 * Returns the value that Drivetrain receives due to implementing PIDOutput
+	 * Returns the distance (in real units) that the left encoder reads
 	 * 
-	 * @return The value that is written by PIDControllers
+	 * @return How far the left encoder has traveled in real units since last reset
 	 */
-	public double getAnglePidOut();
+	public double getLeftEncDist();
 
 	/**
-	 * Returns the value that leftdrive should be set to according to PIDControllers
+	 * Returns the distance (in real units) that the right encoder reads
 	 * 
-	 * @return The value that is written by PIDControllers
+	 * @return How far the right encoder has traveled in real units since last reset
 	 */
-	public double getLeftPidOut();
+	public double getRightEncDist();
 
 	/**
-	 * Returns the value that rightdrive should be set to according to
-	 * PIDControllers
+	 * Activates the solenoid to push the drivetrain into high or low gear
 	 * 
-	 * @return The value that is written by PIDControllers
+	 * @param highGear
+	 *            If the solenoid is to be pushed into high gear (true, kForward) or
+	 *            low gear (false, kReverse)
 	 */
-	public double getRightPidOut();
+	public void shiftGears(boolean highGear);
 
 	/**
-	 * Returns whether the turnController PIDController senses that it's on target
-	 * 
-	 * @return Whether the turnController PIDController is on target
+	 * Stops the solenoid that pushes the drivetrain into low or high gear
 	 */
-	public boolean onTurnTarg();
-
-	/**
-	 * Returns whether the moveController PIDController senses that it's on target
-	 * 
-	 * @return Whether the moveController PIDController is on target
-	 */
-	public boolean onDriveTarg();
+	public void shiftGearSolenoidOff();
 }
