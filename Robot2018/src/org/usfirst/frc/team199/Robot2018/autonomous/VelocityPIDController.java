@@ -37,7 +37,7 @@ public class VelocityPIDController extends PIDController implements SpeedControl
 	 * Sets the target speed
 	 * 
 	 * @param speed
-	 *            the target speed [-1, 1]
+	 *            the target speed in inches/second
 	 */
 	@Override
 	public void pidWrite(double output) {
@@ -48,7 +48,7 @@ public class VelocityPIDController extends PIDController implements SpeedControl
 	 * Sets the target speed
 	 * 
 	 * @param speed
-	 *            the target speed [-1, 1]
+	 *            the target speed in inches/second
 	 */
 	@Override
 	public void set(double speed) {
@@ -68,24 +68,29 @@ public class VelocityPIDController extends PIDController implements SpeedControl
 	}
 
 	/**
+	 * Invert this side of the DT (flip forwards and backwards).
 	 * 
-	 * */
+	 * @param isInverted
+	 *            invert this side of the DT or not
+	 */
 	@Override
 	public void setInverted(boolean isInverted) {
 		out.setInverted(isInverted);
 	}
 
 	/**
+	 * Get whether or not this side of the DT is inverted.
 	 * 
-	 * */
+	 * @return is this side of the DT inverted or not
+	 */
 	@Override
 	public boolean getInverted() {
 		return out.getInverted();
 	}
 
 	/**
-	 * 
-	 * */
+	 * Set the output to zero.
+	 */
 	@Override
 	public void stopMotor() {
 		out.stopMotor();
