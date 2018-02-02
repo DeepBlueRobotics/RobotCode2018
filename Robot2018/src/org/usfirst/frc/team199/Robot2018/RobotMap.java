@@ -113,9 +113,10 @@ public class RobotMap {
 
 		leftVelocityController = new VelocityPIDController(Robot.getConst("VelocityLeftkP", 1),
 				Robot.getConst("VelocityLeftkI", 0), Robot.getConst("VelocityLeftkD", 0),
-				1 / Robot.getConst("MaxSpeed", 204), leftEncRate, dtLeft);
+				1 / Robot.getConst("Max Low Speed", 84), leftEncRate, dtLeft);
 		leftVelocityController.enable();
-		leftVelocityController.setInputRange(-Robot.getConst("Max Speed", 204), Robot.getConst("Max Speed", 204));
+		leftVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
+				Robot.getConst("Max High Speed", 204));
 		leftVelocityController.setOutputRange(-1.0, 1.0);
 		leftVelocityController.setContinuous(false);
 		leftVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceLeft", 2));
@@ -134,15 +135,16 @@ public class RobotMap {
 
 		rightVelocityController = new VelocityPIDController(Robot.getConst("VelocityRightkP", 1),
 				Robot.getConst("VelocityRightkI", 0), Robot.getConst("VelocityRightkD", 0),
-				1 / Robot.getConst("MaxSpeed", 204), rightEncRate, dtRight);
+				1 / Robot.getConst("Max Low Speed", 84), rightEncRate, dtRight);
 		rightVelocityController.enable();
-		rightVelocityController.setInputRange(-Robot.getConst("Max Speed", 204), Robot.getConst("Max Speed", 204));
+		rightVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
+				Robot.getConst("Max High Speed", 204));
 		rightVelocityController.setOutputRange(-1.0, 1.0);
 		rightVelocityController.setContinuous(false);
 		rightVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceRight", 2));
 
 		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
-		robotDrive.setMaxOutput(Robot.getConst("Max Speed", 204));
+		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
 
 		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
 		fancyGyro = new AHRS(SerialPort.Port.kMXP);

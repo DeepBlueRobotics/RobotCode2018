@@ -124,4 +124,22 @@ public interface DrivetrainInterface {
 	 * Stops the solenoid that pushes the drivetrain into low or high gear
 	 */
 	public void shiftGearSolenoidOff();
+
+	/**
+	 * Reset the kf constants for both VelocityPIDControllers based on current DT
+	 * gearing (high or low gear).
+	 * 
+	 * @param newKF
+	 *            the new kF constant based on high and low gear max speeds; should
+	 *            be 1 / max speed
+	 * @return the new kF value as 1 / correct max speed
+	 */
+	public double resetVelocityPIDkFConsts();
+
+	/**
+	 * Gets the current max speed of the DT based on gearing (high or low gear)
+	 * 
+	 * @return the current max speed of the DT in inches/second
+	 */
+	public double getCurrentMaxSpeed();
 }

@@ -26,7 +26,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		requires(Robot.dt);
 		// calculates the maximum turning speed in degrees/sec based on the max linear
 		// speed in inches/s and the distance (inches) between sides of the DT
-		double maxTurnSpeed = Robot.getConst("Max Speed", 204) * 360
+		double maxTurnSpeed = dt.getCurrentMaxSpeed() * 360
 				/ (Math.PI * Robot.getConst("Distance Between Wheels", 26.25));
 		double kf = 1 / (maxTurnSpeed * Robot.getConst("Default PID Update Time", 0.05));
 		turnController = new PIDController(Robot.getConst("TurnkP", 1), Robot.getConst("TurnkI", 0),

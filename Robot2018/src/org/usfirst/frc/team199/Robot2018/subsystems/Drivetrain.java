@@ -111,10 +111,11 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void updatePidConstants() {
-		leftVelocityController.setPID(Robot.getConst("MoveLeftkP", 1), Robot.getConst("MoveLeftkI", 0),
-				Robot.getConst("MoveLeftkD", 0), 1 / Robot.getConst("MaxSpeed", 17));
-		rightVelocityController.setPID(Robot.getConst("MoveRightkP", 1), Robot.getConst("MoveRightkI", 0),
-				Robot.getConst("MoveRightkD", 0), 1 / Robot.getConst("MaxSpeed", 17));
+		leftVelocityController.setPID(Robot.getConst("VelocityLeftkP", 1), Robot.getConst("VelocityLeftkI", 0),
+				Robot.getConst("VelocityLeftkD", 0));
+		rightVelocityController.setPID(Robot.getConst("VelocityRightkP", 1), Robot.getConst("VelocityRightkI", 0),
+				Robot.getConst("VelocityRightkD", 0));
+		resetVelocityPIDkFConsts();
 	}
 
 	/**
@@ -209,7 +210,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	}
 
 	/**
-	 * Activates the solenoid to push the drivetrain into high or low gear
+	 * Activates the solenoid to push the drivetrain into high or low gear.
 	 * 
 	 * @param highGear
 	 *            If the solenoid is to be pushed into high gear (true, kForward) or
@@ -230,5 +231,36 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	@Override
 	public void shiftGearSolenoidOff() {
 		dtGear.set(DoubleSolenoid.Value.kOff);
+	}
+
+	/**
+	 * Reset the kf constants for both VelocityPIDControllers based on current DT
+	 * gearing (high or low gear).
+	 * 
+	 * @param newKF
+	 *            the new kF constant based on high and low gear max speeds; should
+	 *            be 1 / max speed
+	 * @return the new kF value as 1 / correct max speed
+	 */
+	@Override
+	public double resetVelocityPIDkFConsts() {
+		double newKF = 1 / getCurrentMaxSpeed();
+		leftVelocityController.setF(newKF);
+		rightVelocityController.setF(newKF);
+		return newKF;
+	}
+
+	/**
+	 * Gets the current max speed of the DT based on gearing (high or low gear)
+	 * 
+	 * @return the current max speed of the DT in inches/second
+	 */
+	@Override
+	public double getCurrentMaxSpeed() {
+		if (Robot.getBool("High Gear", true)) {
+			return Robot.getConst("Max High Speed", 204);
+		} else {
+			return Robot.getConst("Max Low Speed", 84);
+		}
 	}
 }
