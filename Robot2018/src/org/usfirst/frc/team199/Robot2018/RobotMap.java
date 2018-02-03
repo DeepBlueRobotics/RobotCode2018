@@ -114,10 +114,9 @@ public class RobotMap {
 		configSPX(dtLeftSlave);
 		dtLeft = new SpeedControllerGroup(dtLeftMaster, dtLeftSlave);
 
-		leftVelocityController = new VelocityPIDController(Robot.getConst("VelocityLeftkP", 1),
+		leftVelocityController = new VelocityPIDController(Robot.getConst("VelocityLeftkP", 0),
 				Robot.getConst("VelocityLeftkI", 0), Robot.getConst("VelocityLeftkD", 0),
-				1 / Robot.getConst("Max Low Speed", 84), leftEncRate, dtLeft);
-//		leftVelocityController.enable();
+				/*1 / Robot.getConst("Max Low Speed", 84)*/ Robot.getConst("VelocityLeftkF", 1/84.0), leftEncRate, dtLeft);
 		leftVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
 				Robot.getConst("Max High Speed", 204));
 		leftVelocityController.setOutputRange(-1.0, 1.0);
@@ -138,22 +137,20 @@ public class RobotMap {
 		dtRightSlave = new WPI_VictorSPX(getPort("RightVictorSPXSlave", 3));
 		configSPX(dtRightSlave);
 		dtRight = new SpeedControllerGroup(dtRightMaster, dtRightSlave);
-//		dtRight.setInverted(true);
 
-		rightVelocityController = new VelocityPIDController(Robot.getConst("VelocityRightkP", 1),
+		rightVelocityController = new VelocityPIDController(Robot.getConst("VelocityRightkP", 0),
 				Robot.getConst("VelocityRightkI", 0), Robot.getConst("VelocityRightkD", 0),
-				1 / Robot.getConst("Max Low Speed", 84), rightEncRate, dtRight);
-//		rightVelocityController.enable();
+				/*1 / Robot.getConst("Max Low Speed", 84)*/ Robot.getConst("VelocityRightkF", 1/84.0), rightEncRate, dtRight);
 		rightVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
 				Robot.getConst("Max High Speed", 204));
 		rightVelocityController.setOutputRange(-1.0, 1.0);
 		rightVelocityController.setContinuous(false);
 		rightVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceRight", 2));
 
-//		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
-		robotDrive = new DifferentialDrive(dtLeft, dtRight);
+		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
+//		robotDrive = new DifferentialDrive(dtLeft, dtRight);
 
-//		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
+		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
 
 		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
 		fancyGyro = new AHRS(SerialPort.Port.kMXP);
