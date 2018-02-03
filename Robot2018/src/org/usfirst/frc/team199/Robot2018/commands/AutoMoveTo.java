@@ -1,6 +1,8 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
+import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
+import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
 
 //import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
 
@@ -15,9 +17,25 @@ public class AutoMoveTo extends CommandGroup {
         //requires(Drivetrain);
     	double rotation;
     	double[] point;
+    	String parentheseless;
+    	String[] pointparts;
     	for (String arg : args) {
     		if (AutoUtils.isDouble(arg)) {
     			rotation = Double.valueOf(arg);
+    			addSequential(new PIDTurn(rotation - AutoUtils.getRot(), Robot.dt, Robot.dt.getGyro()));
+    			AutoUtils.setRot(rotation);
+    		} else if (AutoUtils.isPoint(arg)) {
+    			parentheseless = arg.substring(1, arg.length() - 1);
+    			pointparts = parentheseless.split(",");
+    			point[0] = Double.parseDouble(pointparts[0]);
+    			point[1] = Double.parseDouble(pointparts[1]);
+    			addSequential(new PIDTurn(Math.toDegrees(Math.atan((point[0] - AutoUtils.getX())/(point[1] - AutoUtils.getY())) - AutoUtils.getRot()), Robot.dt, Robot.dt.getGyro()));
+    			addSequential(new PIDMove(Math.sqrt(((point[0] - AutoUtils.getX()) * (point[0] - AutoUtils.getX()) + ((point[1] - AutoUtils.getY()) * (point[1] - AutoUtils.getY())))), Robot.dt, new PIDSourceAverage(null, null)));
+    			AutoUtils.setX(point[0]);
+    			AutoUtils.setY(point[1]);
+    			AutoUtils.setRot(Math.toDegrees(Math.atan((point[0] - AutoUtils.getX())/(point[1] - AutoUtils.getY()))));
+    		} else {	
+    			throw new IllegalArgumentException();
     		}
     	}
     	

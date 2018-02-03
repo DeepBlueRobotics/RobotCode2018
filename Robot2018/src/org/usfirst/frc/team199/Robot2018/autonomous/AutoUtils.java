@@ -211,7 +211,7 @@ public class AutoUtils {
 	 * @param s the argument
 	 * @return if the argument is a point
 	 */
-	private static boolean isPoint (String s) {
+	public static boolean isPoint (String s) {
 		// checks if it starts and ends with parentheses
 		if (!s.startsWith("(") || !s.endsWith(")"))
 			return false;
