@@ -170,5 +170,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+//		Robot.dt.setLeft(0.2);
+		Robot.dt.setRight(0.2);
 	}
 }

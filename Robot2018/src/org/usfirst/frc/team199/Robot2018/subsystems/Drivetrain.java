@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	// Put methods for controlling this subsystem
@@ -27,9 +28,11 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 
 	private final Encoder leftEncDist = RobotMap.leftEncDist;
 	private final Encoder rightEncDist = RobotMap.rightEncDist;
+	private final Encoder leftEncRate = RobotMap.leftEncRate;
+	private final Encoder rightEncRate = RobotMap.rightEncRate;
 	private final PIDSourceAverage distEncAvg = RobotMap.distEncAvg;
-	private final SpeedControllerGroup dtLeft = RobotMap.dtLeft;
-	private final SpeedControllerGroup dtRight = RobotMap.dtRight;
+	public final SpeedControllerGroup dtLeft = RobotMap.dtLeft;
+	public final SpeedControllerGroup dtRight = RobotMap.dtRight;
 	private final DifferentialDrive robotDrive = RobotMap.robotDrive;
 	private final VelocityPIDController leftVelocityController = RobotMap.leftVelocityController;
 	private final VelocityPIDController rightVelocityController = RobotMap.rightVelocityController;
@@ -41,6 +44,14 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleopDrive());
 	}
+	
+	public void setLeft(double spd) {
+		dtLeft.set(spd);
+	}
+	
+	public void setRight(double spd) {
+		dtRight.set(spd);
+	}
 
 	/**
 	 * Drives based on joystick input and SmartDashboard values
@@ -49,13 +60,21 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	public void teleopDrive() {
 		if (Robot.getBool("Arcade Drive", true)) {
 			if (Robot.getBool("Arcade Drive Default Setup", true)) {
-				Robot.dt.arcadeDrive(Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getX());
+				Robot.dt.arcadeDrive(-Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getX());
 			} else {
-				Robot.dt.arcadeDrive(Robot.oi.rightJoy.getY(), Robot.oi.leftJoy.getX());
+				Robot.dt.arcadeDrive(-Robot.oi.rightJoy.getY(), Robot.oi.leftJoy.getX());
 			}
 		} else {
-			Robot.dt.tankDrive(Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getY());
+			Robot.dt.tankDrive(-Robot.oi.leftJoy.getY(), -Robot.oi.rightJoy.getY());
 		}
+		SmartDashboard.putNumber("Drivetrain/Left VPID Targ", leftVelocityController.getSetpoint());
+		SmartDashboard.putNumber("Drivetrain/Right VPID Targ", rightVelocityController.getSetpoint());
+		SmartDashboard.putNumber("Drivetrain/Current Max Speed", getCurrentMaxSpeed());
+		SmartDashboard.putNumber("Drivetrain/Left Enc Dist", leftEncDist.getDistance());
+		SmartDashboard.putNumber("Drivetrain/Left Enc Rate", leftEncRate.getRate());
+		SmartDashboard.putNumber("Drivetrain/Right Enc Dist", rightEncDist.getDistance());
+		SmartDashboard.putNumber("Drivetrain/Right Enc Rate", rightEncRate.getRate());
+		SmartDashboard.putNumber("Drivetrain/Enc Avg Dist", distEncAvg.pidGet());
 	}
 
 	/**
@@ -248,6 +267,12 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		leftVelocityController.setF(newKF);
 		rightVelocityController.setF(newKF);
 		return newKF;
+	}
+	
+	public double resetVPIDInputRanges() {
+		double currentMaxSpd = getCurrentMaxSpeed();
+		leftVelocityController.setInputRange(-currentMaxSpd, currentMaxSpd);
+		return currentMaxSpd;
 	}
 
 	/**

@@ -19,7 +19,7 @@ public class ShiftLowGear extends InstantCommand {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		Robot.dt.shiftGears(false);
+//		Robot.dt.shiftGears(false);
 		SmartDashboard.putBoolean("High Gear", false);
 		Robot.dt.resetVelocityPIDkFConsts();
 	}
