@@ -23,15 +23,18 @@ public class PIDMove extends Command implements PIDOutput {
 		target = targ;
 		this.dt = dt;
 		requires(Robot.dt);
+		double kf = 1 / (dt.getCurrentMaxSpeed() * Robot.getConst("Default PID Update Time", 0.05));
 		moveController = new PIDController(Robot.getConst("MovekP", 1), Robot.getConst("MovekI", 0),
-				Robot.getConst("MovekD", 0), avg, this);
+				Robot.getConst("MovekD", 0), kf, avg, this);
 	}
 
 	// Called just before this Command runs the first time
 	@Override
 	public void initialize() {
 		dt.resetDistEncs();
-		moveController.setInputRange(0, Double.MAX_VALUE);
+		// input is in inches
+		moveController.setInputRange(-Robot.getConst("Max High Speed", 204), Robot.getConst("Max High Speed", 204));
+		// output in "motor units" (arcade and tank only accept values [-1, 1]
 		moveController.setOutputRange(-1.0, 1.0);
 		moveController.setContinuous(false);
 		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 2));
