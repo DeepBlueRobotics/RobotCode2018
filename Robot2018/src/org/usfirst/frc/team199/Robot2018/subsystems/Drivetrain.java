@@ -232,15 +232,13 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	public void shiftGearSolenoidOff() {
 		dtGear.set(DoubleSolenoid.Value.kOff);
 	}
-<<<<<<< HEAD
 	/**
 	 * Returns the gyroscope
 	 * @return the gyroscope
 	 */
 	public AHRS getGyro() {
 		return fancyGyro;
-=======
-
+	}
 	/**
 	 * Reset the kf constants for both VelocityPIDControllers based on current DT
 	 * gearing (high or low gear).
@@ -270,6 +268,5 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		} else {
 			return Robot.getConst("Max Low Speed", 84);
 		}
->>>>>>> upstream/master
 	}
 }
