@@ -1,0 +1,389 @@
+# Naming Conventions
+# -------------------
+#  1. Robot's start position. R = right, C = center, L = left.
+#  2. Switch information. R = going for the right plate, L = going for the left plate, x = not going for switch
+#  3. Scale information. R = going for the right plate, L = going for the left plate, x = not going for scale
+#  4. Exchange. E = going for the exchange, x = not going for exchange
+
+# 3.3(l) x 2.9(w)
+
+#Cross Auto Line
+Rxxx: 
+	moveto (0, 120) #Drive past auto line 
+
+#-------------------------------------------------
+
+#Switch
+RRxx:
+	moveto (0, 128.4) (-42.6, 128.4) -90 #Drive directly forward to switch and then ram into switch  
+	switch
+
+RLxx:
+	moveto (0, 188.4) (-210.6, 188.4) (-210.6, 128.4) (-186.6, 128.4) 90 #Curve around switch and then "ram" into switch
+	switch
+
+#-------------------------------------------------
+
+#Scale
+RxRx:
+	moveto (0, 284.4) (-24.6, 284.4) -90 #Drive directly forward and place at initial horizontal to scale
+	scale
+
+RxLx:
+	moveto (0, 188.4) (-246.6, 188.4) (-246.6, 284.4) (-192.6, 284.4) 90 #Curve around switch and drive to scale
+	scale
+
+#-------------------------------------------------
+
+#Exchange
+RxxE
+	moveto (0, 188.4) (-210.6, 188.4) (-210.6, 44.4) (-123.6, 44.4) (-123.6, -39.6) 180 #Curve around switch for baseline #then go to exchange
+	exchange
+
+#-------------------------------------------------
+
+#Switch and Scale
+RRRx:
+	moveto (0, 128.4) (-41.4, 128.4) 90 #Drive directly forward then turn into switch
+	switch
+	moveto (0, 128.4) #Back out from switch
+	moveto (0, 80.4) (-9, 80.4) #Drive toward cubes
+	intake
+	moveto (0, 80.4) #Back out from cubes
+	moveto (0, 284.4) (-24.6, 284.4) -90 #Drive toward scale
+	scale
+
+RRLx:
+	moveto (0, 128.4) (-41.4, 128.4) 90 #Drive directly forward then turn into switch
+	switch
+	moveto (0, 128.4) #Back out from switch
+	moveto (0, 80.4) (-9, 80.4) -90 #Drive toward cubes
+	intake
+	moveto (0, 80.4) #Back out from cubes
+	moveto (0, 188.4) (-246.6, 188.4) (-246.6, 284.4) (-192.6, 284.4) 90 #Curve around switch + place at init distance to scale
+	scale
+
+RLRx:
+	moveto (0, 284.4) (-24.6, 284.4) -90 #Drive directly forward and place at initial horizontal to scale
+	scale
+	moveto (0, 284.4) #Back out from switch
+	moveto (0, 80.4) (-108, 80.4) -90 #Drive toward cubes
+	intake
+	moveto (0, 80.4) #Back out from cubes
+	moveto (0, 188.4) (-210.6,188.4) (-210.6, 128.4) (-186.6, 128.4) #Drive toward switch
+	switch
+
+RLLx:
+	moveto (0, 188.4) (-210.6,188.4) (-210.6, 128.4) (-186.6, 128.4) -90 #Curve around switch and then "ram" into switch
+	switch
+	moveto (-246.6, 128.4) #Back out from switch
+	moveto (-246.6, 80.4) (-144, 80.4) #Drive toward cubes
+	intake
+	moveto (-246.6, 80.4) #Back out from cubes
+	moveto (-246.6, 284.4) (-192.6, 284.4) 90 #Curve around switch + place at init distance to scale
+	scale
+
+#-------------------------------------------------
+
+#Switch and Exchange
+RRxE:
+	moveto (0, 128.4) (-41.4, 128.4) 90 #Drive directly forward then turn into switch
+	switch
+	moveto (-192, 128.4) #Back out from switch
+	moveto (-192, 80.4) (-144, 80.4) #Drive toward cubes
+	#intake
+	moveto (0, 80.4) #Back out from cubes
+	moveto (0, 188.4) (-210.6, 188.4) (-210.6, 44.4) (-123.6, 44.4) (-123.6, -39.6) 180 #Curve around switch for baseline #then go to
+	exchange
+
+RLxE:
+	moveto (0, 188.4) (-210.6,188.4) (-210.6, 128.4) (-186.6, 128.4) 180 #Curve around switch and then "ram" into switch
+	switch
+	moveto (-246.6, 128.4) #Back out from switch
+	moveto (-246.6, 80.4) (-12, 80.4) #Drive toward cubes
+	#intake
+	moveto (-246.6, 80.4) #Back out from cubes
+	moveto (-246.6, 44.4) (-123.6, 44.4) (-123.6, -39.6) #Drive toward exchange
+	exchange
+
+# Naming Conventions
+# -------------------
+#  1. Robot's start position. R = right, C = center, L = left.
+#  2. Switch information. R = going for the right plate, L = going for the left plate, x = not going for switch
+#  3. Scale information. R = going for the right plate, L = going for the left plate, x = not going for scale
+#  4. Exchange. E = going for the exchange, x = not going for exchange
+
+# 3.3(l) x 2.9(w)
+
+#Cross Auto Line
+Lxxx: 
+	moveto (0, 120) #Drive past auto line 
+
+#-------------------------------------------------
+
+#Switch
+LLxx:
+	moveto (0, 129.8) (42.6, 129.8) -90 #Drive directly forward to switch and then ram into switch  
+	switch
+
+LRxx:
+	moveto (0, 188.4) (210.6,188.4) (210.6, 129.8) (186.6, 129.8) 90 #Curve around switch and then "ram" into switch
+	switch
+
+#-------------------------------------------------
+
+#Scale
+LxLx:
+	moveto (0, 284.4) (24.6, 284.4) -90 #Drive directly forward and place at initial horizontal to scale
+	scale
+
+LxRx:
+	moveto (0, 188.4) (246.6, 188.4) (246.6, 284.4) (16.05, 284.4) 90 #Curve around switch + place at init distance to scale
+	scale
+
+#-------------------------------------------------
+
+#Exchange
+LxxE
+	moveto (0, 188.4) (210.6, 188.4) (210.6, 3.7) (124.8, 3.7) (124.8, -3.3) 180 #Curve around switch for baseline then go to exchange
+	exchange
+
+#-------------------------------------------------
+
+#Switch and Scale
+LRRx:
+	moveto (0, 188.4) (210.6,188.4) (210.6, 129.8) (186.6, 129.8) -90 #Curve around switch and then "ram" into switch
+	switch
+	moveto (246.6, 129.8) #Back out from switch
+	moveto (246.6, 80.4) (12, 80.4) #Drive toward cubes
+	intake
+	moveto (246.6, 80.4) #Back out from cubes
+	moveto (246.6, 284.4) (16.05, 284.4) 90 #Curve around switch + place at init distance to scale
+	scale
+
+LRLx:
+	moveto (0, 284.4) (24.6, 284.4) -90 #Drive directly forward and place at initial horizontal to scale
+	scale
+	moveto (0, 284.4) #Back out from switch
+	moveto (0, 80.4) (108, 80.4) -90 #Drive toward cubes
+	intake
+	moveto (0, 80.4) #Back out from cubes
+	moveto (0, 188.4) (210.6,188.4) (210.6, 129.8) (186.6, 129.8) #Drive toward switch
+	switch
+
+LLRx:
+	moveto (0, 129.8) (42.6, 129.8) 90 #Drive directly forward then turn into switch
+	switch
+	moveto (0, 129.8) #Back out from switch
+	moveto (0, 80.4) (108, 80.4) -90 #Drive toward cubes
+	intake
+	moveto (0, 80.4) #Back out from cubes
+	moveto (0, 188.4) (246.6, 188.4) (246.6, 284.4) (192.6, 284.4) 90 #Curve around switch and drive to scale
+	scale
+
+LLLx:
+	moveto (0, 129.8) (42.6, 129.8) 90 #Drive directly forward then turn into switch
+	switch
+	moveto (0, 129.8) #Back out from switch
+	moveto (0, 80.4) (108, 80.4) #Drive toward cubes
+	intake
+	moveto (0, 80.4) #Back out from cubes
+	moveto (0, 284.4) (24.6, 284.4) -90 #Drive toward scale
+	scale
+
+#-------------------------------------------------
+
+#Switch and Exchange
+LRxE:
+	moveto (0, 188.4) (210.6,188.4) (210.6, 129.8) (186.6, 129.8) 180 #Curve around switch and then "ram" into switch
+	switch
+	moveto (246.6, 129.8) #Back out from switch
+	moveto (246.6, 80.4) (12, 80.4) #Drive toward cubes
+	intake
+	moveto (246.6, 80.4) #Back out from cubes
+	moveto (246.6, 3.7) (124.8, 3.7) (124.8, -39.6) #Drive toward exchange
+	exchange
+
+LLxE:
+	moveto (0, 129.8) (42.6, 129.8) 90 #Drive directly forward then turn into switch
+	switch
+	moveto (17, 129.8) #Back out from switch
+	moveto (17, 80.4) (12, 80.4) #Drive toward cubes
+	intake
+	moveto (0, 80.4) #Back out from cubes
+	moveto (0, 188.4) (210.6, 188.4) (210.6, 44.4) (124.8, 44.4) (124.8, -39.6) 180 #Go to exchange
+	exchange
+
+# moveto
+# turn
+# move
+# switch
+# scale
+# exchange
+# wait
+# intake
+# jump
+# end
+
+
+
+# 1. Robot's start position. R = right, C = center, L = left.
+# 2. Switch information. R = going for the right plate, L = going for the left plate, x = not going for # switch
+# 3. Scale information. R = going for the right plate, L = going for the left plate, x = not going for # scale
+# 4. Exchange. E = going for the exchange, x = not going for exchange
+
+
+# Location of Robot: rightmost next to exchange 
+
+# Cross Auto Line 
+Cxxx: 
+moveto (48,80.375)  #cross baseline
+
+
+# Switch
+CRxx:
+moveto (0,60) 90 #5 feet forward, turn 90
+moveto (48,60) -90 #4 feet right,turn -90
+moveto(48,104.375) #7 feet forward until against switch enclosure, compensating for robot length
+switch #deploy switch 
+
+CLxx:
+moveto (0,60) -90 #5 feet forward, turn -90
+moveto (-48,60) 90 #4 feet left,turn 90
+moveto(-48,104.375) #7 feet forward until against switch enclosure,compensating for robot length
+switch #deploy switch 
+
+
+# Scale
+CxRx:
+moveto (0,60) 90 #5 feet forward, turn 90
+moveto (114,60) -90 #9.5 feet right, turn -90
+move 224.375 #22 feet forward, compensating for robot length
+turn -90 #turn to face the switch
+scale #deploy scale
+
+
+CxLx:
+moveto (0,60) -90 #5 feet forward, turn -90
+moveto (-90,60) 90 #7.5 feet left, turn 90
+move 224.375 #22 feet forward, compensating for robot length
+turn 90 #turn to face the switch
+scale #deploy scale
+
+
+# Switch and Scale
+CRLx:
+moveto (0,60) 90 #5 feet forward, turn 90
+moveto (48,60) -90 #4 feet right,turn -90
+moveto(48,104.375) #7 feet forward until against switch enclosure
+switch #deploy switch 
+move -39 #move 39 inches back
+turn -90 #turn -90 degrees
+move 48 #move 4 feet forward
+intake #intake
+turn -90 #turn -90
+move 45 # move 45 in. forward 
+turn -90 #turn 90
+moveto (-90,60) 90 #7.5 feet left, turn 90
+move 264 #22 feet forward
+turn 90 #turn to face the switch
+scale #deploy scale2
+ 
+
+
+CRRx:
+moveto (0,60) 90 #5 feet forward, turn 90
+moveto (48,60) -90 #4 feet right,turn -90
+moveto(48,104.375) #7 feet forward until against switch enclosure
+switch #deploy switch 
+move -39 #move 39 inches back
+turn -90 #turn -90 degrees
+move 48 #move 4 feet forward
+intake
+turn -90 #turn -90nyu
+move 45 # move 45 in. forward 
+turn -90 #turn -90 degrees
+moveto (114, 60) -90 #9.5 feet right, turn -90
+move 264 #22 feet forward
+turn -90 #turn to face the switch
+scale #deploy scale
+
+
+
+CLRx:
+moveto (0,60) -90 #5 feet forward, turn -90
+moveto (-48,60) 90 #4 feet left,turn 90
+moveto(-48,104.375) #7 feet forward until against switch enclosure
+switch #deploy switch 
+move -39 #move 39 inches back
+turn -90 #turn -90 degrees
+move 48 #move 4 feet forward
+intake #intake
+turn 90 #turn 90
+move 45 # move 45 in. forward 
+turn 90 #turn 90 degrees
+moveto (114, 60) -90 #9.5 feet right, turn -90
+move 264 #22 feet forward
+turn -90 #turn to face the switch
+scale #deploy scale
+
+
+CLLx:
+moveto (0,60) -90 #5 feet forward, turn -90
+moveto (-48,60) 90 #4 feet left,turn 90
+moveto(-48,104.375) #7 feet forward until against switch enclosure
+switch #deploy switch 
+move -39 #move 39 inches back
+turn 90 #turn 90 degrees
+move 48 #move 4 feet forward
+intake #intake
+turn 90 #turn -90
+move 45 # move 45 in. forward 
+turn 90 #turn 90
+moveto (-90,60) -90 #7.5 feet right, turn -90
+move 264 #22 feet forward
+turn 90 #turn to face the switch
+scale #deploy scale2
+
+
+
+
+# Switch and Exchange
+CRxE:
+moveto (0,60) 90 #5 feet forward, turn 90
+moveto (48,60) -90 #4 feet right,turn -90
+moveto(48,104.375) #7 feet forward until against switch enclosure, compensating for robot length
+switch #deploy switch 
+move -24 # 2 feet back
+turn -90
+move 12 # 1 ft forward
+intake
+turn -90
+move 72 #move 6 feet forwards
+turn 90 
+move 60 #move 5 feet forward
+turn -90 #turn to face the exchange
+exchange
+
+CLxE:
+moveto (0,60) -90 #5 feet forward, turn -90
+moveto (-48,60) 90 #3 feet left,turn 90
+moveto(-48,104.375) #7 feet forward until against switch enclosure,compensating for robot length
+switch #deploy switch
+move -24
+turn 90
+move 24
+intake
+turn 90
+move -84 #move 7 feet back
+turn 180 #turn 180 degrees to face the exchange
+exchange
+
+# Exchange
+CxxE:
+moveto (0,60) -90 #5 feet forward, turn -90
+moveto (-48,60) 90 #3 feet left,turn 90
+moveto(-48,104.375) #7 feet forward until against switch enclosure,compensating for robot length
+move -96 #move 8 feet back
+turn 180 #turn 180 degrees to face the exchange
+exchange
