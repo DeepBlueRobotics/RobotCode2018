@@ -16,7 +16,7 @@ public class AutoMoveTo extends CommandGroup {
     public AutoMoveTo(String[] args) {
         //requires(Drivetrain);
     	double rotation;
-    	double[] point;
+    	double[] point = new double[2];
     	String parentheseless;
     	String[] pointparts;
     	for (String arg : args) {
