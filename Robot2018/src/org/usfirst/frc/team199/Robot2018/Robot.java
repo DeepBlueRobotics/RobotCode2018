@@ -1,3 +1,9 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
 
 package org.usfirst.frc.team199.Robot2018;
 
@@ -41,13 +47,13 @@ public class Robot extends TimedRobot {
 	public static Listener listen;
 
 	public static OI oi;
-	
+
 	public static Map<String, ArrayList<String[]>> autoScripts;
 
 	Command autonomousCommand;
 	SendableChooser<Position> posChooser = new SendableChooser<Position>();
 	Map<String, SendableChooser<Strategy>> stratChoosers = new HashMap<String, SendableChooser<Strategy>>();
-	String[] fmsPossibilities = {"LL", "LR", "RL", "RR"};
+	String[] fmsPossibilities = { "LL", "LR", "RL", "RR" };
 
 	public static double getConst(String key, double def) {
 		if (!SmartDashboard.containsKey("Const/" + key)) {
@@ -64,8 +70,8 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This function is run when the robot is first started up and should be used
-	 * for any initialization code.
+	 * This function is run when the robot is first started up and should be
+	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
@@ -76,13 +82,13 @@ public class Robot extends TimedRobot {
 		lift = new Lift();
 		dt = new Drivetrain();
 		oi = new OI();
-		
+
 		// auto position chooser
 		for (Position p : Position.values()) {
 			posChooser.addObject(p.getSDName(), p);
 		}
 		SmartDashboard.putData("Starting Position", posChooser);
-		
+
 		// auto strategy choosers
 		for (String input : fmsPossibilities) {
 			SendableChooser<Strategy> chooser = new SendableChooser<Strategy>();
@@ -92,20 +98,21 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putData(input, chooser);
 			stratChoosers.put(input, chooser);
 		}
-		
+
 		// auto delay chooser
 		SmartDashboard.putNumber("Auto Delay", 0);
-		
-		// parse scripts from Preferences, which maintains values throughout reboots
+
+		// parse scripts from Preferences, which maintains values throughout
+		// reboots
 		autoScripts = AutoUtils.parseScriptFile(Preferences.getInstance().getString("autoscripts", ""));
 
 		listen = new Listener();
 	}
 
 	/**
-	 * This function is called once each time the robot enters Disabled mode. You
-	 * can use it to reset any subsystem information you want to clear when the
-	 * robot is disabled.
+	 * This function is called once each time the robot enters Disabled mode.
+	 * You can use it to reset any subsystem information you want to clear when
+	 * the robot is disabled.
 	 */
 	@Override
 	public void disabledInit() {
@@ -118,7 +125,7 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This function is called once during the start of autonomous in order to 
+	 * This function is called once during the start of autonomous in order to
 	 * grab values from SmartDashboard and the FMS and call the Autonomous
 	 * command with those values.
 	 */
@@ -127,14 +134,14 @@ public class Robot extends TimedRobot {
 		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
 		Position startPos = posChooser.getSelected();
 		double autoDelay = SmartDashboard.getNumber("Auto Delay", 0);
-		
+
 		Map<String, Strategy> strategies = new HashMap<String, Strategy>();
 		for (Map.Entry<String, SendableChooser<Strategy>> entry : stratChoosers.entrySet()) {
-		    String key = entry.getKey();
-		    SendableChooser<Strategy> chooser = entry.getValue();
-		    strategies.put(key, chooser.getSelected());
+			String key = entry.getKey();
+			SendableChooser<Strategy> chooser = entry.getValue();
+			strategies.put(key, chooser.getSelected());
 		}
-		
+
 		Autonomous auto = new Autonomous(startPos, strategies, autoDelay, fmsInput, false);
 		auto.start();
 	}
