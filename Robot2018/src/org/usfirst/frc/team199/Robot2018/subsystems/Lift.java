@@ -56,7 +56,13 @@ public class Lift extends Subsystem implements LiftInterface {
 	public void goToPosition(Position position, double offset) {
 		
 	}
-	
+	/**
+	 * Runs lift motor at specified speed
+	 * @param speed - desired speed to run at
+	 */
+	public void runMotor(double output) {
+		liftMotor.set(output);
+	}
 	
 }
 
