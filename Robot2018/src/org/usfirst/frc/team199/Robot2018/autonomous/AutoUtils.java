@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AutoUtils {
-	
+	private static double currX;
+	private static double currY;
+	private static double currRotation;
 	/**
 	 * Parses the inputted script file into a map of scripts
 	 * 
@@ -74,6 +76,36 @@ public class AutoUtils {
 		return autoScripts;
 	}
 	
+	/*
+	 * All of these are getters and setters for the robot's position and orientation
+	 */
+	public static double getX() {
+		return currX;
+	}
+	public static double getY() {
+		return currY;
+	}
+	public static double getRot() {
+		return currRotation;
+	}
+	public static void setX(double x) {
+		currX = x;
+	}
+	public static void setY(double y) {
+		currY = y;
+	}
+	public static void setRot(double rot) {
+		currRotation = rot;
+	}
+	public static void changeX(double x) {
+		currX += x;
+	}
+	public static void changeY(double y) {
+		currY += y;
+	}
+	public static void changeRot(double rot) {
+		currRotation += rot;
+	}
 	
 	/**
 	 * Validates the command inputted to see if it's AAA compliant
@@ -210,7 +242,7 @@ public class AutoUtils {
 	 * @param s the argument
 	 * @return if the argument is a double
 	 */
-	private static boolean isDouble (String s) {
+	public static boolean isDouble (String s) {
 		try {
 			Double.parseDouble(s);
 		} catch (Exception e) {
