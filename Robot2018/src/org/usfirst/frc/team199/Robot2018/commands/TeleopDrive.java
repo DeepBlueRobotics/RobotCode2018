@@ -28,7 +28,8 @@ public class TeleopDrive extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.dt.teleopDrive();
+		Robot.dt.twoWheelPIDDriveLeft(Robot.oi.leftJoy.getY());
+		Robot.dt.twoWheelPIDDriveRight(Robot.oi.rightJoy.getY());
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
