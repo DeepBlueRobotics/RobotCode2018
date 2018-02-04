@@ -24,43 +24,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-	//// CREATING BUTTONS
-	// One type of button is a joystick button which is any button on a
-	//// joystick.
-	// You create one by telling it which joystick it's on and which button
-	// number it is.
-	// Joystick stick = new Joystick(port);
-	// Button button = new JoystickButton(stick, buttonNumber);
-
-	// There are a few additional built in buttons you can use. Additionally,
-	// by subclassing Button you can create custom triggers and bind those to
-	// commands the same as any other Button.
-
-	//// TRIGGERING COMMANDS WITH BUTTONS
-	// Once you have a button, it's trivial to bind it to a button in one of
-	// three ways:
-
-	// Start the command when the button is pressed and let it run the command
-	// until it is finished as determined by it's isFinished method.
-	// button.whenPressed(new ExampleCommand());
-
-	// Run the command while the button is being held down and interrupt it once
-	// the button is released.
-	// button.whileHeld(new ExampleCommand());
-
-	// Start the command when the button is released and let it run the command
-	// until it is finished as determined by it's isFinished method.
-	// button.whenReleased(new ExampleCommand());
 
 	public Joystick leftJoy;
-	private JoystickButton shiftLowGear;
-	private JoystickButton shiftHighGear;
-	private JoystickButton shiftDriveType;
-	private JoystickButton PIDMove;
-	private JoystickButton PIDTurn;
+	private JoystickButton shiftLowGearButton;
+	private JoystickButton shiftHighGearButton;
+	private JoystickButton shiftDriveTypeButton;
+	private JoystickButton PIDMoveButton;
+	private JoystickButton PIDTurnButton;
 	public Joystick rightJoy;
-	private JoystickButton updatePidConstants;
-	private JoystickButton updateEncoderDPP;
+	private JoystickButton updatePIDConstantsButton;
+	private JoystickButton updateEncoderDPPButton;
 	public Joystick manipulator;
 
 	public int getButton(String key, int def) {
@@ -72,22 +45,22 @@ public class OI {
 
 	public OI() {
 		leftJoy = new Joystick(0);
-		shiftLowGear = new JoystickButton(leftJoy, getButton("Shift Low Gear", 3));
-		shiftLowGear.whenPressed(new ShiftLowGear());
-		shiftHighGear = new JoystickButton(leftJoy, getButton("Shift High Gear", 5));
-		shiftHighGear.whenPressed(new ShiftHighGear());
-		shiftDriveType = new JoystickButton(leftJoy, getButton("Shift Drive Type", 2));
-		shiftDriveType.whenPressed(new ShiftDriveType());
-		PIDMove = new JoystickButton(leftJoy, getButton("PID Move", 7));
-		PIDMove.whenPressed(new PIDMove(40, Robot.dt));
-		PIDTurn = new JoystickButton(leftJoy, getButton("PID Turn", 8));
-		PIDTurn.whenPressed(new PIDTurn(30, Robot.dt));
+		shiftLowGearButton = new JoystickButton(leftJoy, getButton("Shift Low Gear", 3));
+		shiftLowGearButton.whenPressed(new ShiftLowGear());
+		shiftHighGearButton = new JoystickButton(leftJoy, getButton("Shift High Gear", 5));
+		shiftHighGearButton.whenPressed(new ShiftHighGear());
+		shiftDriveTypeButton = new JoystickButton(leftJoy, getButton("Shift Drive Type", 2));
+		shiftDriveTypeButton.whenPressed(new ShiftDriveType());
+		PIDMoveButton = new JoystickButton(leftJoy, getButton("PID Move", 7));
+		PIDMoveButton.whenPressed(new PIDMove(40, Robot.dt, RobotMap.distEncAvg));
+		PIDTurnButton = new JoystickButton(leftJoy, getButton("PID Turn", 8));
+		PIDTurnButton.whenPressed(new PIDTurn(30, Robot.dt, RobotMap.fancyGyro));
 
 		rightJoy = new Joystick(1);
-		updatePidConstants = new JoystickButton(rightJoy, getButton("Get PID Constants", 8));
-		updatePidConstants.whenPressed(new UpdatePIDConstants());
-		updateEncoderDPP = new JoystickButton(rightJoy, getButton("Get Encoder Dist Per Pulse", 9));
-		updateEncoderDPP.whenPressed(new SetDistancePerPulse());
+		updatePIDConstantsButton = new JoystickButton(rightJoy, getButton("Get PID Constants", 8));
+		updatePIDConstantsButton.whenPressed(new UpdatePIDConstants());
+		updateEncoderDPPButton = new JoystickButton(rightJoy, getButton("Get Encoder Dist Per Pulse", 9));
+		updateEncoderDPPButton.whenPressed(new SetDistancePerPulse());
 
 		manipulator = new Joystick(2);
 	}

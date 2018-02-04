@@ -7,14 +7,18 @@
 
 package org.usfirst.frc.team199.Robot2018;
 
+import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
+import org.usfirst.frc.team199.Robot2018.autonomous.VelocityPIDController;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -27,33 +31,33 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * floating around.
  */
 public class RobotMap {
-	// For example to map the left and right motors, you could define the
-	// following variables to use with your drivetrain subsystem.
-	// public static int leftMotor = 1;
-	// public static int rightMotor = 2;
 
-	// If you are using multiple modules, make sure to define both the port
-	// number and the module. For example you with a rangefinder:
-	// public static int rangefinderPort = 1;
-	// public static int rangefinderModule = 1;
+	public static WPI_TalonSRX intakeMotor;
+	public static WPI_TalonSRX liftMotor;
+	public static WPI_TalonSRX climberMotor;
 
-	public static Encoder leftEnc;
-	public static WPI_TalonSRX dtLeftDrive;
+	public static DigitalSource leftEncPort1;
+	public static DigitalSource leftEncPort2;
+	public static Encoder leftEncDist;
+	public static Encoder leftEncRate;
+	public static WPI_TalonSRX dtLeftMaster;
 	public static WPI_VictorSPX dtLeftSlave;
 	public static SpeedControllerGroup dtLeft;
+	public static VelocityPIDController leftVelocityController;
 
-	public static Encoder rightEnc;
-	public static WPI_TalonSRX dtRightDrive;
+	public static DigitalSource rightEncPort1;
+	public static DigitalSource rightEncPort2;
+	public static Encoder rightEncDist;
+	public static Encoder rightEncRate;
+	public static WPI_TalonSRX dtRightMaster;
 	public static WPI_VictorSPX dtRightSlave;
 	public static SpeedControllerGroup dtRight;
-	public static DifferentialDrive robotDrive;
-	public static PIDController turnController;
-	// public static PIDController moveController;
-	public static PIDController moveLeftController;
-	public static PIDController moveRightController;
+	public static VelocityPIDController rightVelocityController;
 
-	public static AHRS ahrs;
-	public static AnalogGyro dtGyro;
+	public static DifferentialDrive robotDrive;
+	public static PIDSourceAverage distEncAvg;
+
+	public static AHRS fancyGyro;
 	public static DoubleSolenoid dtGear;
 
 	/**
@@ -87,66 +91,67 @@ public class RobotMap {
 	}
 
 	public RobotMap() {
+
+//		intakeMotor = new WPI_TalonSRX(getPort("IntakeTalonSRX", 4));
+//		configSRX(intakeMotor);
+//		liftMotor = new WPI_TalonSRX(getPort("LiftTalonSRX", 5));
+//		configSRX(liftMotor);
+//		climberMotor = new WPI_TalonSRX(getPort("ClimberTalonSRX", 6));
+//		configSRX(climberMotor);
+
+		leftEncPort1 = new DigitalInput(getPort("1LeftEnc", 1));
+		leftEncPort2 = new DigitalInput(getPort("2LeftEnc", 0));
+		leftEncDist = new Encoder(leftEncPort1, leftEncPort2);
+		leftEncDist.setPIDSourceType(PIDSourceType.kDisplacement);
+		leftEncRate = new Encoder(leftEncPort1, leftEncPort2);
+		leftEncRate.setPIDSourceType(PIDSourceType.kRate);
+		leftEncDist.setDistancePerPulse(Robot.getConst("Distance Per Pulse Left", 0.184));
+		leftEncRate.setDistancePerPulse(Robot.getConst("Distance Per Pulse Left", 0.184));
 		
-		ahrs = new AHRS(SerialPort.Port.kMXP);
-		dtGyro = new AnalogGyro(getPort("Gyro", 0));
-		//dtGear = new DoubleSolenoid(getPort("1dtGearSolenoid", 0), getPort("2dtGearSolenoid", 1));
-		
-		leftEnc = new Encoder(getPort("1LeftEnc", 0), getPort("2LeftEnc", 1));
-		dtLeftDrive = new WPI_TalonSRX(2);
-				//getPort("LeftTalonSRXDrive", 2));
-		configSRX(dtLeftDrive);
-		dtLeftSlave = new WPI_VictorSPX(0);
-				//getPort("LeftVictorSPXSlave", 0));
+		dtLeftMaster = new WPI_TalonSRX(getPort("LeftTalonSRXMaster", 2));
+		configSRX(dtLeftMaster);
+		dtLeftSlave = new WPI_VictorSPX(getPort("LeftVictorSPXSlave", 0));
 		configSPX(dtLeftSlave);
-		dtLeft = new SpeedControllerGroup(dtLeftDrive, dtLeftSlave);
+		dtLeft = new SpeedControllerGroup(dtLeftMaster, dtLeftSlave);
 
-		rightEnc = new Encoder(getPort("1RightEnc", 2), getPort("2RightEnc", 3));
-		dtRightDrive = new WPI_TalonSRX(1);
-				//getPort("RightTalonSRXDrive", 1));
-		configSRX(dtRightDrive);
-		dtRightSlave = new WPI_VictorSPX(3);
-				//getPort("RightVictorSPXSlave", 3));
+		leftVelocityController = new VelocityPIDController(Robot.getConst("VelocityLeftkP", 0),
+				Robot.getConst("VelocityLeftkI", 0), Robot.getConst("VelocityLeftkD", 0),
+				1 / Robot.getConst("Max Low Speed", 84), leftEncRate, dtLeft);
+		leftVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
+				Robot.getConst("Max High Speed", 204));
+		leftVelocityController.setOutputRange(-1.0, 1.0);
+		leftVelocityController.setContinuous(false);
+		leftVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceLeft", 2));
+
+		rightEncPort1 = new DigitalInput(getPort("1RightEnc", 3));
+		rightEncPort2 = new DigitalInput(getPort("2RightEnc", 2));
+		rightEncDist = new Encoder(rightEncPort1, rightEncPort2);
+		rightEncDist.setPIDSourceType(PIDSourceType.kDisplacement);
+		rightEncRate = new Encoder(rightEncPort1, rightEncPort2);
+		rightEncRate.setPIDSourceType(PIDSourceType.kRate);
+		rightEncDist.setDistancePerPulse(Robot.getConst("Distance Per Pulse Right", 0.184));
+		rightEncRate.setDistancePerPulse(Robot.getConst("Distance Per Pulse Right", 0.184));
+		
+		dtRightMaster = new WPI_TalonSRX(getPort("RightTalonSRXMaster", 1));
+		configSRX(dtRightMaster);
+		dtRightSlave = new WPI_VictorSPX(getPort("RightVictorSPXSlave", 3));
 		configSPX(dtRightSlave);
-		dtRight = new SpeedControllerGroup(dtRightDrive, dtRightSlave);
-
-		robotDrive = new DifferentialDrive(dtLeft, dtRight);
+		dtRight = new SpeedControllerGroup(dtRightMaster, dtRightSlave);
 		
-		// moveController = new PIDController(Robot.getConst("MovekP", 1),
-		// Robot.getConst("MovekI", 0),
-		// Robot.getConst("MovekD", 0), Robot.dt, Robot.dt);
-		// moveController.disable();
-		// moveController.setInputRange(0, Double.MAX_VALUE);
-		// moveController.setOutputRange(-1.0, 1.0);
-		// moveController.setContinuous(false);
-		// moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 2));
+		rightVelocityController = new VelocityPIDController(Robot.getConst("VelocityRightkP", 0),
+				Robot.getConst("VelocityRightkI", 0), Robot.getConst("VelocityRightkD", 0),
+				1 / Robot.getConst("Max Low Speed", 84), rightEncRate, dtRight);
+		rightVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
+				Robot.getConst("Max High Speed", 204));
+		rightVelocityController.setOutputRange(-1.0, 1.0);
+		rightVelocityController.setContinuous(false);
+		rightVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceRight", 2));
 
-	}
-	
-	/** Initializes pid controllers seperately from robotMap because the required parameters have not been initialized yet.*/
-	public void initPIDControllers() {
-		turnController = new PIDController(Robot.getConst("TurnkP", 1), Robot.getConst("TurnkI", 0),
-				Robot.getConst("TurnkD", 0), ahrs, Robot.dt);
-		turnController.disable();
-		turnController.setInputRange(-180, 180);
-		turnController.setOutputRange(-1.0, 1.0);
-		turnController.setContinuous();
-		turnController.setAbsoluteTolerance(Robot.getConst("TurnTolerance", 1));
-		
-		moveLeftController = new PIDController(Robot.getConst("MoveLeftkP", 1), Robot.getConst("MoveLeftkI", 0),
-				Robot.getConst("MoveLeftkD", 0), Robot.ld, Robot.ld);
-		moveLeftController.disable();
-		moveLeftController.setInputRange(0, Double.MAX_VALUE);
-		moveLeftController.setOutputRange(-1.0, 1.0);
-		moveLeftController.setContinuous(false);
-		moveLeftController.setAbsoluteTolerance(Robot.getConst("ConstMoveToleranceLeft", 2));
-		moveRightController = new PIDController(Robot.getConst("ConstMoveRightkP", 1),
-				Robot.getConst("ConstMoveRightkI", 0), Robot.getConst("ConstMoveRightkD", 0), Robot.rd, Robot.rd);
-		moveRightController.disable();
-		moveRightController.setInputRange(0, Double.MAX_VALUE);
-		moveRightController.setOutputRange(-1.0, 1.0);
-		moveRightController.setContinuous(false);
-		moveRightController.setAbsoluteTolerance(Robot.getConst("ConstMoveToleranceRight", 2));
+		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
+		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
+		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
+		fancyGyro = new AHRS(SerialPort.Port.kMXP);
+		// dtGear = new DoubleSolenoid(getPort("1dtGearSolenoid", 0), getPort("2dtGearSolenoid", 1));
 	}
 
 	/**
@@ -165,4 +170,5 @@ public class RobotMap {
 		}
 		return (int) SmartDashboard.getNumber("Port/" + key, def);
 	}
+
 }
