@@ -97,7 +97,7 @@ public class RobotMap {
 				//getPort("LeftTalonSRXDrive", 2));
 		configSRX(dtLeftDrive);
 		dtLeftSlave = new WPI_VictorSPX(0);
-				//getPort("LeftTalonSPXSlave", 0));
+				//getPort("LeftVictorSPXSlave", 0));
 		configSPX(dtLeftSlave);
 		dtLeft = new SpeedControllerGroup(dtLeftDrive, dtLeftSlave);
 
@@ -106,7 +106,7 @@ public class RobotMap {
 				//getPort("RightTalonSRXDrive", 1));
 		configSRX(dtRightDrive);
 		dtRightSlave = new WPI_VictorSPX(3);
-				//getPort("RightTalonSPXSlave", 3));
+				//getPort("RightVictorSPXSlave", 3));
 		configSPX(dtRightSlave);
 		dtRight = new SpeedControllerGroup(dtRightDrive, dtRightSlave);
 

@@ -158,7 +158,7 @@ public class Drivetrain extends Subsystem implements PIDOutput, DrivetrainInterf
 				Robot.dt.arcadeDrive(-Robot.oi.rightJoy.getY(), Robot.oi.leftJoy.getX());
 			}
 		} else {
-			Robot.dt.tankDrive(-Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getY());
+			Robot.dt.tankDrive(-Robot.oi.leftJoy.getY(), -Robot.oi.rightJoy.getY());
 		}
 	}
 
