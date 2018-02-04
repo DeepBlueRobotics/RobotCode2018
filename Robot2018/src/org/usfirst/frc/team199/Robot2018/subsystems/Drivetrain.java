@@ -266,12 +266,14 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		double newKF = 1 / getCurrentMaxSpeed();
 		leftVelocityController.setF(newKF);
 		rightVelocityController.setF(newKF);
+		SmartDashboard.putNumber("VPID kF", newKF);
 		return newKF;
 	}
 	
 	public double resetVPIDInputRanges() {
 		double currentMaxSpd = getCurrentMaxSpeed();
 		leftVelocityController.setInputRange(-currentMaxSpd, currentMaxSpd);
+		rightVelocityController.setInputRange(-currentMaxSpd, currentMaxSpd);
 		return currentMaxSpd;
 	}
 
