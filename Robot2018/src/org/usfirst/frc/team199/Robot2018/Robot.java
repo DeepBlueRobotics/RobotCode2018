@@ -165,12 +165,23 @@ public class Robot extends TimedRobot {
 		Scheduler.getInstance().run();
 	}
 
+	boolean firstTime = true;
 	/**
 	 * This function is called periodically during test mode
 	 */
 	@Override
 	public void testPeriodic() {
-//		Robot.dt.setLeft(0.2);
-		Robot.dt.setRight(0.2);
+		if(firstTime) {
+			Robot.dt.enableVelocityPIDs();
+			firstTime = false;
+		}
+		Robot.dt.setVPIDs(Robot.getConst("VPID Test Set", 0.5));
+		SmartDashboard.putNumber("Drivetrain/Left VPID Targ", Robot.dt.getLeftVPIDSetpoint());
+		SmartDashboard.putNumber("Drivetrain/Right VPID Targ", Robot.dt.getRightVPIDSetpoint());
+		SmartDashboard.putNumber("Left VPID Error", Robot.dt.getLeftVPIDerror());
+		SmartDashboard.putNumber("Right VPID Error", Robot.dt.getRightVPIDerror());
+		SmartDashboard.putNumber("Left Enc Rate", Robot.dt.getLeftEncRate());
+		SmartDashboard.putNumber("Right Enc Rate", Robot.dt.getRightEncRate());
+		
 	}
 }

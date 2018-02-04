@@ -52,6 +52,38 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	public void setRight(double spd) {
 		dtRight.set(spd);
 	}
+	
+	/**
+	 * Use for testing only (i.e. when not going through robotDrive)
+	 * */
+	public void setVPIDs(double realSpd) {
+		leftVelocityController.set(realSpd);
+		rightVelocityController.set(-realSpd);
+	}
+	
+	public double getLeftVPIDerror() {
+		return leftVelocityController.getError();
+	}
+
+	public double getRightVPIDerror() {
+		return rightVelocityController.getError();
+	}
+	
+	public double getLeftVPIDSetpoint() {
+		return leftVelocityController.get();
+	}
+
+	public double getRightVPIDSetpoint() {
+		return rightVelocityController.get();
+	}
+	
+	public double getLeftEncRate() {
+		return leftEncRate.getRate();
+	}
+	
+	public double getRightEncRate() {
+		return rightEncRate.getRate();
+	}
 
 	/**
 	 * Drives based on joystick input and SmartDashboard values
