@@ -9,6 +9,7 @@ import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Position;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Strategy;
+import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
 import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
@@ -41,13 +42,13 @@ public class Robot extends TimedRobot {
 	public static Listener listen;
 
 	public static OI oi;
-	
+
 	public static Map<String, ArrayList<String[]>> autoScripts;
 
 	Command autonomousCommand;
 	SendableChooser<Position> posChooser = new SendableChooser<Position>();
 	Map<String, SendableChooser<Strategy>> stratChoosers = new HashMap<String, SendableChooser<Strategy>>();
-	String[] fmsPossibilities = {"LL", "LR", "RL", "RR"};
+	String[] fmsPossibilities = { "LL", "LR", "RL", "RR" };
 
 	public static double getConst(String key, double def) {
 		if (!SmartDashboard.containsKey("Const/" + key)) {
@@ -76,13 +77,13 @@ public class Robot extends TimedRobot {
 		lift = new Lift();
 		dt = new Drivetrain();
 		oi = new OI();
-		
+
 		// auto position chooser
 		for (Position p : Position.values()) {
 			posChooser.addObject(p.getSDName(), p);
 		}
 		SmartDashboard.putData("Starting Position", posChooser);
-		
+
 		// auto strategy choosers
 		for (String input : fmsPossibilities) {
 			SendableChooser<Strategy> chooser = new SendableChooser<Strategy>();
@@ -92,10 +93,10 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putData(input, chooser);
 			stratChoosers.put(input, chooser);
 		}
-		
+
 		// auto delay chooser
 		SmartDashboard.putNumber("Auto Delay", 0);
-		
+
 		// parse scripts from Preferences, which maintains values throughout reboots
 		autoScripts = AutoUtils.parseScriptFile(Preferences.getInstance().getString("autoscripts", ""));
 
@@ -118,23 +119,24 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This function is called once during the start of autonomous in order to 
-	 * grab values from SmartDashboard and the FMS and call the Autonomous
-	 * command with those values.
+	 * This function is called once during the start of autonomous in order to grab
+	 * values from SmartDashboard and the FMS and call the Autonomous command with
+	 * those values.
 	 */
 	@Override
 	public void autonomousInit() {
+		Scheduler.getInstance().add(new ShiftLowGear());
 		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
 		Position startPos = posChooser.getSelected();
 		double autoDelay = SmartDashboard.getNumber("Auto Delay", 0);
-		
+
 		Map<String, Strategy> strategies = new HashMap<String, Strategy>();
 		for (Map.Entry<String, SendableChooser<Strategy>> entry : stratChoosers.entrySet()) {
-		    String key = entry.getKey();
-		    SendableChooser<Strategy> chooser = entry.getValue();
-		    strategies.put(key, chooser.getSelected());
+			String key = entry.getKey();
+			SendableChooser<Strategy> chooser = entry.getValue();
+			strategies.put(key, chooser.getSelected());
 		}
-		
+
 		Autonomous auto = new Autonomous(startPos, strategies, autoDelay, fmsInput, false);
 		auto.start();
 	}
