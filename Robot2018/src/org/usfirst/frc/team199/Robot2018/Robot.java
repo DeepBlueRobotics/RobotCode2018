@@ -171,10 +171,10 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		if(firstTime) {
-			Robot.dt.enableVelocityPIDs();
-			firstTime = false;
-		}
+//		if(firstTime) {
+//			Robot.dt.enableVelocityPIDs();
+//			firstTime = false;
+//		}
 		Robot.dt.setVPIDs(Robot.getConst("VPID Test Set", 0.5));
 		SmartDashboard.putNumber("Drivetrain/Left VPID Targ", Robot.dt.getLeftVPIDSetpoint());
 		SmartDashboard.putNumber("Drivetrain/Right VPID Targ", Robot.dt.getRightVPIDSetpoint());
