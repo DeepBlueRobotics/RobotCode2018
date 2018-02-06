@@ -112,4 +112,26 @@ class AutoMoveToTest {
 		assertEquals(12, AutoUtils.getX());
 		assertEquals(12, AutoUtils.getY());
 	}
+
+	@Test
+	void testForward() {
+		String[] args = {"(0,12)"};
+		
+		AutoUtils.setRot(0);
+		AutoUtils.setX(0);
+		AutoUtils.setY(0);
+		
+		PIDSource pidGyroSrc = mock(PIDSource.class);
+		when(pidGyroSrc.getPIDSourceType()).thenReturn(PIDSourceType.kDisplacement);
+		DrivetrainInterface dt = mock(DrivetrainInterface.class);
+		when(dt.getGyro()).thenReturn(pidGyroSrc);		
+		SmartDashboardInterface sd = mock(SmartDashboardInterface.class);
+		PIDSource pidMoveSrc = mock(PIDSource.class);
+		
+		AutoMoveTo testAMT = new AutoMoveTo(args, dt, sd, pidMoveSrc);
+		
+		assertEquals(0, AutoUtils.getRot());
+		assertEquals(0, AutoUtils.getX());
+		assertEquals(12, AutoUtils.getY());
+	}
 }
