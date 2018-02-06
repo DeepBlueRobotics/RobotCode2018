@@ -23,13 +23,13 @@ public class RunScript extends CommandGroup {
     			
     			switch (cmdName) {
 	    			case "moveto":
-	    				addSequential(new AutoMoveTo(cmdArgs.split(" ")));
+	    				addSequential(new AutoMoveTo(cmdArgs.split(" "), Robot.dt, Robot.sd, new PIDSourceAverage(null, null)));
 	    				break;
 	    			case "turn":
-	    				addSequential(new PIDTurn(Double.parseDouble(cmdArgs), Robot.dt, Robot.dt.getGyro()));
+	    				addSequential(new PIDTurn(Double.parseDouble(cmdArgs), Robot.dt, Robot.dt.getGyro(), Robot.sd));
 	    				break;
 	    			case "move":
-	    				addSequential(new PIDMove(Double.parseDouble(cmdArgs), Robot.dt, new PIDSourceAverage(null, null))));
+	    				addSequential(new PIDMove(Double.parseDouble(cmdArgs), Robot.dt, Robot.sd, new PIDSourceAverage(null, null)));
 	    				break;
 	    			case "switch":
 	    				addSequential(new EjectToSwitch());

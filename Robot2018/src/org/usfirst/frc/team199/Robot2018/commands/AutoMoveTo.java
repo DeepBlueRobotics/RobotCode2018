@@ -1,8 +1,11 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
-import org.usfirst.frc.team199.Robot2018.Robot;
+import edu.wpi.first.wpilibj.PIDSource;
+
+import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
 import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
+import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
 
 //import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
 
@@ -13,24 +16,25 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class AutoMoveTo extends CommandGroup {
 	
-    public AutoMoveTo(String[] args) {
+    public AutoMoveTo(String[] args, DrivetrainInterface dt, 
+    		SmartDashboardInterface sd, PIDSource pidMoveSrc) {
         //requires(Drivetrain);
     	double rotation;
-    	double[] point;
+    	double[] point = {0,0};
     	String parentheseless;
     	String[] pointparts;
     	for (String arg : args) {
     		if (AutoUtils.isDouble(arg)) {
     			rotation = Double.valueOf(arg);
-    			addSequential(new PIDTurn(rotation - AutoUtils.getRot(), Robot.dt, Robot.dt.getGyro()));
+    			addSequential(new PIDTurn(rotation - AutoUtils.getRot(), dt, dt.getGyro(), sd));
     			AutoUtils.setRot(rotation);
     		} else if (AutoUtils.isPoint(arg)) {
     			parentheseless = arg.substring(1, arg.length() - 1);
     			pointparts = parentheseless.split(",");
     			point[0] = Double.parseDouble(pointparts[0]);
     			point[1] = Double.parseDouble(pointparts[1]);
-    			addSequential(new PIDTurn(Math.toDegrees(Math.atan((point[0] - AutoUtils.getX())/(point[1] - AutoUtils.getY())) - AutoUtils.getRot()), Robot.dt, Robot.dt.getGyro()));
-    			addSequential(new PIDMove(Math.sqrt(((point[0] - AutoUtils.getX()) * (point[0] - AutoUtils.getX()) + ((point[1] - AutoUtils.getY()) * (point[1] - AutoUtils.getY())))), Robot.dt, new PIDSourceAverage(null, null)));
+    			addSequential(new PIDTurn(Math.toDegrees(Math.atan((point[0] - AutoUtils.getX())/(point[1] - AutoUtils.getY())) - AutoUtils.getRot()), dt, dt.getGyro(), sd));
+    			addSequential(new PIDMove(Math.sqrt(((point[0] - AutoUtils.getX()) * (point[0] - AutoUtils.getX()) + ((point[1] - AutoUtils.getY()) * (point[1] - AutoUtils.getY())))), dt, sd, pidMoveSrc));
     			AutoUtils.setX(point[0]);
     			AutoUtils.setY(point[1]);
     			AutoUtils.setRot(Math.toDegrees(Math.atan((point[0] - AutoUtils.getX())/(point[1] - AutoUtils.getY()))));

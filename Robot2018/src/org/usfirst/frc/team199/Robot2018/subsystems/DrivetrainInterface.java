@@ -1,5 +1,7 @@
 package org.usfirst.frc.team199.Robot2018.subsystems;
 
+import edu.wpi.first.wpilibj.PIDSource;
+
 public interface DrivetrainInterface {
 
 	public void initDefaultCommand();
@@ -124,4 +126,10 @@ public interface DrivetrainInterface {
 	 * Stops the solenoid that pushes the drivetrain into low or high gear
 	 */
 	public void shiftGearSolenoidOff();
+
+	/**
+	 * Returns the gyroscope
+	 * @return the gyroscope
+	 */
+	public PIDSource getGyro();
 }
