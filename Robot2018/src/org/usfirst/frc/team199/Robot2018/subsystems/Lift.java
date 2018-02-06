@@ -1,9 +1,11 @@
 package org.usfirst.frc.team199.Robot2018.subsystems;
 
 import org.usfirst.frc.team199.Robot2018.RobotMap;
+import org.usfirst.frc.team199.Robot2018.subsystems.LiftInterface.Position;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -12,7 +14,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Lift extends Subsystem implements LiftInterface {
 
 	private final WPI_TalonSRX liftMotor = RobotMap.liftMotor;
-	
+	private final Encoder liftEnc = RobotMap.liftEnc;
 	private Position targetPosition = Position.GROUND;
 	
 	/**
@@ -62,6 +64,20 @@ public class Lift extends Subsystem implements LiftInterface {
 	 */
 	public void runMotor(double output) {
 		liftMotor.set(output);
+	}
+	
+	/**
+	 * Returns the position the lift is currently at
+	 * @return pos - current position
+	 */
+	public Position getCurrPos() {
+		return targetPosition;
+	}
+	/**
+	 * Resets the encoder
+	 */
+	public void resetEnc() {
+		liftEnc.reset();
 	}
 	
 }

@@ -33,7 +33,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RobotMap {
 
 	public static WPI_TalonSRX intakeMotor;
+	
 	public static WPI_TalonSRX liftMotor;
+	public static Encoder liftEnc;
+	public static DigitalSource liftEncPort1;
+	public static DigitalSource liftEncPort2;
+	
 	public static WPI_TalonSRX climberMotor;
 
 	public static DigitalSource leftEncPort1;
@@ -96,6 +101,10 @@ public class RobotMap {
 		configSRX(intakeMotor);
 		liftMotor = new WPI_TalonSRX(getPort("LiftTalonSRX", 5));
 		configSRX(liftMotor);
+		liftEncPort1 = new DigitalInput(getPort("1LiftEnc",0));
+		liftEncPort2 = new DigitalInput(getPort("2LiftEnc",0));
+		liftEnc = new Encoder(liftEncPort1,liftEncPort2);
+		liftEnc.setPIDSourceType(PIDSourceType.kDisplacement);
 		climberMotor = new WPI_TalonSRX(getPort("ClimberTalonSRX", 6));
 		configSRX(climberMotor);
 

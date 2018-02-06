@@ -36,10 +36,22 @@ public interface LiftInterface {
 	 * @param offset - distance up or down from position
 	 */
 	public void goToPosition(Position position, double offset);
+	
 	/**
 	 * Runs lift motor at specified speed
 	 * @param speed - desired speed to run at
 	 */
 	public void runMotor(double speed);
+	
+	/**
+	 * Returns the position the lift is currently at
+	 * @return pos - current position
+	 */
+	public Position getCurrPos();
+	
+	/**
+	 * Resets the encoder
+	 */
+	public void resetEnc();
 	
 }
