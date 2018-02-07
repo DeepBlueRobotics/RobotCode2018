@@ -1,3 +1,9 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
 
 package org.usfirst.frc.team199.Robot2018;
 
@@ -65,8 +71,8 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This function is run when the robot is first started up and should be used
-	 * for any initialization code.
+	 * This function is run when the robot is first started up and should be
+	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
@@ -97,16 +103,18 @@ public class Robot extends TimedRobot {
 		// auto delay chooser
 		SmartDashboard.putNumber("Auto Delay", 0);
 
-		// parse scripts from Preferences, which maintains values throughout reboots
+
+		// parse scripts from Preferences, which maintains values throughout
+		// reboots
 		autoScripts = AutoUtils.parseScriptFile(Preferences.getInstance().getString("autoscripts", ""));
 
 		listen = new Listener();
 	}
 
 	/**
-	 * This function is called once each time the robot enters Disabled mode. You
-	 * can use it to reset any subsystem information you want to clear when the
-	 * robot is disabled.
+	 * This function is called once each time the robot enters Disabled mode.
+	 * You can use it to reset any subsystem information you want to clear when
+	 * the robot is disabled.
 	 */
 	@Override
 	public void disabledInit() {
@@ -119,9 +127,9 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This function is called once during the start of autonomous in order to grab
-	 * values from SmartDashboard and the FMS and call the Autonomous command with
-	 * those values.
+	 * This function is called once during the start of autonomous in order to
+	 * grab values from SmartDashboard and the FMS and call the Autonomous
+	 * command with those values.
 	 */
 	@Override
 	public void autonomousInit() {
