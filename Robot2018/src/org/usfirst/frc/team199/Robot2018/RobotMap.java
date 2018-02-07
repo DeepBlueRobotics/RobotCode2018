@@ -73,11 +73,20 @@ public class RobotMap {
 	 *            the TalonSRX to configure
 	 */
 	private void configSRX(WPI_TalonSRX mc) {
+		// stuff cole said to put
 		int kTimeout = (int) Robot.getConst("kTimeoutMs", 10);
 		mc.configNominalOutputForward(0, kTimeout);
 		mc.configNominalOutputReverse(0, kTimeout);
 		mc.configPeakOutputForward(1, kTimeout);
 		mc.configPeakOutputReverse(-1, kTimeout);
+
+		// current limiting stuff cole said to put
+		mc.configPeakCurrentLimit(0, 0);
+		mc.configPeakCurrentDuration(0, 0);
+		// 40 amps is the amp limit of a CIM. also, the PDP has 40 amp circuit breakers,
+		// so if we went above 40, the motors would stop completely.
+		mc.configContinuousCurrentLimit(40, 0);
+		mc.enableCurrentLimit(true);
 	}
 
 	/**
@@ -88,6 +97,7 @@ public class RobotMap {
 	 *            the VictorSPX to configure
 	 */
 	private void configSPX(WPI_VictorSPX mc) {
+		// stuff cole said to put
 		int kTimeout = (int) Robot.getConst("kTimeoutMs", 10);
 		mc.configNominalOutputForward(0, kTimeout);
 		mc.configNominalOutputReverse(0, kTimeout);
