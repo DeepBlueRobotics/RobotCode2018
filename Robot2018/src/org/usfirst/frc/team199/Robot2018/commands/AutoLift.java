@@ -27,6 +27,7 @@ public class AutoLift extends Command implements PIDOutput{
 	private double desiredDist = 0;
 	private double currDist = 0;
 	private LiftInterface lift;
+	private Position desiredPos;
 	
 	private PIDController liftController;
 
@@ -66,6 +67,8 @@ public class AutoLift extends Command implements PIDOutput{
     	
     	liftController = new PIDController(Robot.getConst("LiftkP", 1), Robot.getConst("LiftkI", 0),
 				Robot.getConst("LiftkD", 0),RobotMap.liftEnc, this);
+    	
+    	desiredPos = stage;
     }
 
     // Called just before this Command runs the first time
@@ -87,7 +90,11 @@ public class AutoLift extends Command implements PIDOutput{
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return liftController.onTarget();
+    	if(liftController.onTarget()) {
+    		lift.setTargetPosition(desiredPos);
+    		return true;
+    	}
+    	return false;
     }
 
     // Called once after isFinished returns true

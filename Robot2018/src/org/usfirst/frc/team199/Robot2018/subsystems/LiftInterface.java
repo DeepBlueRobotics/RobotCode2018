@@ -1,5 +1,7 @@
 package org.usfirst.frc.team199.Robot2018.subsystems;
 
+import org.usfirst.frc.team199.Robot2018.subsystems.LiftInterface.Position;
+
 public interface LiftInterface {
 	
 	/**
@@ -54,4 +56,9 @@ public interface LiftInterface {
 	 */
 	public void resetEnc();
 	
+	/**
+	 * Sets the current position in the lift subsystem
+	 * @param newPosition - the new position meant to be set
+	 */
+	public void setTargetPosition(Position newPosition);
 }
