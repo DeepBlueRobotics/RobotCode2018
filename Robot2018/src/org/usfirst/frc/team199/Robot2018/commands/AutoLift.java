@@ -13,17 +13,30 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class AutoLift extends Command implements PIDOutput{
+	/**
+	 * All distances are - 1 foot for initial height of intake and + 3 inches for wiggle room for dropping cubes
+	 * Also, acutal distances are divided by 3 because according to cad, the lift will have a 1:3 ratio from winch
+	 * to actual height.
+	 */
 	
-	// All distances are - 1 foot for initial height of intake and + 3 inches for wiggle room for dropping cubes
-	//Distance to switch
-	// 18.75 inches in starting position
-	private final double SWITCH_DIST = 9.75;
-	//Distance to scale
-	// 5 feet starting
-	private final double SCALE_DIST = 51;
-	//Distance to bar
-	// 7 feet starting; bar distance should be changed because I'm not aware how climber mech will be positioned
-	private final double BAR_DIST = 72;
+	/**
+	 * Distance to switch
+	 * 18.75 inches in starting position (this measurement is the fence that surrounds the switch)
+	 * 9.75 / 3 for ratio = 3.25
+	 */
+	private final double SWITCH_DIST = 3.25;
+	/**
+	 * Distance to scale
+	 * 5 feet starting
+	 * 51 / 3 = 17
+	 */
+	private final double SCALE_DIST = 17;
+	/**
+	 * Distance to bar
+	 * 72 / 3 = 24
+	 * 7 feet starting; bar distance should be changed because I'm not aware how climber mech will be positioned
+	 */
+	private final double BAR_DIST = 24;
 	private double desiredDist = 0;
 	private double currDist = 0;
 	private LiftInterface lift;
