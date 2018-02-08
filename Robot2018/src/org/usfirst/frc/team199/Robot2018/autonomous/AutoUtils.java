@@ -31,6 +31,19 @@ public class AutoUtils {
 			// trim and remove extra whitespace just to make it neater
 			line = line.trim().replaceAll("\\s+", " ");
 			
+			// make coordinates with spaces also work
+			int parenIndex = line.indexOf("(");
+			while (parenIndex != -1) {
+				// removes all spaces between the parentheses
+				int endParenIndex = line.indexOf(")", parenIndex);
+				for (int i = line.indexOf(" ", parenIndex); i < endParenIndex && i != -1; i = line.indexOf(" ", i)) {
+					line = line.substring(0, i) + line.substring(i + 1);
+				}
+				
+				// finds next parentheses
+				parenIndex = line.indexOf("(", parenIndex + 1);
+			}
+			
 			// if there's no instruction on this line, skip
 			if (line.equals("")) {
 				continue;
@@ -168,7 +181,7 @@ public class AutoUtils {
 	 * @param message the message to log
 	 */
 	private static void logWarning (int lineNumber, String message) {
-		System.err.println("[WARNING] Line " + lineNumber + ": " + message);
+		System.err.println("[ERROR] Line " + lineNumber + ": " + message);
 	}
 	
 	/**
