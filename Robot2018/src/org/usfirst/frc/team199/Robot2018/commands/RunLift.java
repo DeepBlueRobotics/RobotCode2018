@@ -17,6 +17,7 @@ public class RunLift extends Command {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	this.lift = lift;
+        requires(Robot.lift);
     	if(up)
     		dir = 1;
     	else
