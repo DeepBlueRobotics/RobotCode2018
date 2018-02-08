@@ -18,6 +18,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -232,11 +233,12 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	public void shiftGearSolenoidOff() {
 		dtGear.set(DoubleSolenoid.Value.kOff);
 	}
+	
 	/**
 	 * Returns the gyroscope
 	 * @return the gyroscope
 	 */
-	public AHRS getGyro() {
+	public PIDSource getGyro() {
 		return fancyGyro;
 	}
 	/**
