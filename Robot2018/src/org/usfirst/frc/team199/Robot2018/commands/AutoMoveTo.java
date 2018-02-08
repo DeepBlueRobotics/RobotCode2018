@@ -1,8 +1,11 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
-import org.usfirst.frc.team199.Robot2018.Robot;
+import edu.wpi.first.wpilibj.PIDSource;
+
+import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
 import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
+import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
 
 //import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
 
@@ -13,16 +16,17 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class AutoMoveTo extends CommandGroup {
 	
-    public AutoMoveTo(String[] args) {
+    public AutoMoveTo(String[] args, DrivetrainInterface dt, 
+    		SmartDashboardInterface sd, PIDSource pidMoveSrc) {
         //requires(Drivetrain);
     	double rotation;
-    	double[] point = new double[2];
+    	double[] point = {0,0};
     	String parentheseless;
     	String[] pointparts;
     	for (String arg : args) {
     		if (AutoUtils.isDouble(arg)) {
     			rotation = Double.valueOf(arg);
-    			addSequential(new PIDTurn(rotation - AutoUtils.getRot(), Robot.dt, Robot.dt.getGyro()));
+    			addSequential(new PIDTurn(rotation - AutoUtils.getRot(), dt, dt.getGyro(), sd));
     			AutoUtils.setRot(rotation);
     		} else if (AutoUtils.isPoint(arg)) {
     			parentheseless = arg.substring(1, arg.length() - 1);

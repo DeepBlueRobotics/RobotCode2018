@@ -1,10 +1,12 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
+import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
 import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
 import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
 
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -17,15 +19,16 @@ public class PIDMove extends Command implements PIDOutput {
 	private DrivetrainInterface dt;
 	private PIDController moveController;
 
-	public PIDMove(double targ, DrivetrainInterface dt, PIDSourceAverage avg) {
+	public PIDMove(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource avg) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		target = targ;
 		this.dt = dt;
-		requires(Robot.dt);
-		double kf = 1 / (dt.getCurrentMaxSpeed() * Robot.getConst("Default PID Update Time", 0.05));
-		moveController = new PIDController(Robot.getConst("MovekP", 1), Robot.getConst("MovekI", 0),
-				Robot.getConst("MovekD", 0), kf, avg, this);
+		if (Robot.dt != null) {
+			requires(Robot.dt);
+		}
+		moveController = new PIDController(sd.getConst("MovekP", 1), sd.getConst("MovekI", 0),
+			sd.getConst("MovekD", 0), avg, this);
 	}
 
 	// Called just before this Command runs the first time
