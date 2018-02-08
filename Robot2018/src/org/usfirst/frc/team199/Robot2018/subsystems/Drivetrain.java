@@ -233,7 +233,6 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		dtGear.set(DoubleSolenoid.Value.kOff);
 	}
 	/**
-	 * Returns the gyroscope
 	 * @return the gyroscope
 	 */
 	public AHRS getGyro() {
