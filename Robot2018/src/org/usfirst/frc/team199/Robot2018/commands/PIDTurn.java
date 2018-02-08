@@ -35,7 +35,9 @@ public class PIDTurn extends Command implements PIDOutput {
 	protected void initialize() {
 		dt.resetAHRS();
 		turnController.disable();
+		// input is in degrees
 		turnController.setInputRange(-180, 180);
+		// output in "motor units" (arcade and tank only accept values [-1, 1]
 		turnController.setOutputRange(-1.0, 1.0);
 		turnController.setContinuous();
 		turnController.setAbsoluteTolerance(Robot.getConst("TurnTolerance", 1));

@@ -3,6 +3,7 @@ package org.usfirst.frc.team199.Robot2018.commands;
 import java.util.ArrayList;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
+import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -21,15 +22,36 @@ public class RunScript extends CommandGroup {
     			String cmdName = cmd[0];
     			String cmdArgs = cmd[1];
     			
+    			double[] point = new double[2];
+    			double rotation = 0;
+    			String parentheseless;
+    			String[] pointparts;
+    			if (AutoUtils.isDouble(cmdArgs)) {
+        			rotation = Double.valueOf(cmdArgs);
+        		} else if (AutoUtils.isPoint(cmdArgs)) {
+        			parentheseless = cmdArgs.substring(1, cmdArgs.length() - 1);
+        			pointparts = parentheseless.split(",");
+        			point[0] = Double.parseDouble(pointparts[0]);
+        		}
+    			
     			switch (cmdName) {
 	    			case "moveto":
 	    				addSequential(new AutoMoveTo(cmdArgs.split(" "), Robot.dt, Robot.sd, new PIDSourceAverage(null, null)));
 	    				break;
 	    			case "turn":
+/**<<<<<<< corvin-refactor-for-AutoMoveTo-unit-tests                        This is commented out so I can come back after testing.
 	    				addSequential(new PIDTurn(Double.parseDouble(cmdArgs), Robot.dt, Robot.dt.getGyro(), Robot.sd));
 	    				break;
 	    			case "move":
 	    				addSequential(new PIDMove(Double.parseDouble(cmdArgs), Robot.dt, Robot.sd, new PIDSourceAverage(null, null)));
+=======**/
+	    				addSequential(new PIDTurn(Double.parseDouble(cmdArgs), Robot.dt, Robot.dt.getGyro()));
+	    				AutoUtils.setRot(rotation);
+	    				break;
+	    			case "move":
+	    				addSequential(new PIDMove(Double.parseDouble(cmdArgs), Robot.dt, new PIDSourceAverage(null, null)));
+	    				AutoUtils.setX(point[0]);
+	    				AutoUtils.setY(point[1]);
 	    				break;
 	    			case "switch":
 	    				addSequential(new EjectToSwitch());

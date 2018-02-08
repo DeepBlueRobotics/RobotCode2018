@@ -35,7 +35,9 @@ public class PIDMove extends Command implements PIDOutput {
 	@Override
 	public void initialize() {
 		dt.resetDistEncs();
-		moveController.setInputRange(0, Double.MAX_VALUE);
+		// input is in inches
+		moveController.setInputRange(-Robot.getConst("Max High Speed", 204), Robot.getConst("Max High Speed", 204));
+		// output in "motor units" (arcade and tank only accept values [-1, 1]
 		moveController.setOutputRange(-1.0, 1.0);
 		moveController.setContinuous(false);
 		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 2));
