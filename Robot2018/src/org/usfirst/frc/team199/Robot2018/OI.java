@@ -45,10 +45,6 @@ public class OI {
 
 	public OI() {
 		leftJoy = new Joystick(0);
-		shiftLowGearButton = new JoystickButton(leftJoy, getButton("Shift Low Gear", 3));
-		shiftLowGearButton.whenPressed(new ShiftLowGear());
-		shiftHighGearButton = new JoystickButton(leftJoy, getButton("Shift High Gear", 5));
-		shiftHighGearButton.whenPressed(new ShiftHighGear());
 		shiftDriveTypeButton = new JoystickButton(leftJoy, getButton("Shift Drive Type", 2));
 		shiftDriveTypeButton.whenPressed(new ShiftDriveType());
 		PIDMoveButton = new JoystickButton(leftJoy, getButton("PID Move", 7));
@@ -57,6 +53,10 @@ public class OI {
 		PIDTurnButton.whenPressed(new PIDTurn(30, Robot.dt, RobotMap.fancyGyro));
 
 		rightJoy = new Joystick(1);
+		shiftHighGearButton = new JoystickButton(rightJoy, getButton("Shift High Gear", 3));
+		shiftHighGearButton.whenPressed(new ShiftHighGear());
+		shiftLowGearButton = new JoystickButton(rightJoy, getButton("Shift Low Gear", 2));
+		shiftLowGearButton.whenPressed(new ShiftLowGear());
 		updatePIDConstantsButton = new JoystickButton(rightJoy, getButton("Get PID Constants", 8));
 		updatePIDConstantsButton.whenPressed(new UpdatePIDConstants());
 		updateEncoderDPPButton = new JoystickButton(rightJoy, getButton("Get Encoder Dist Per Pulse", 9));

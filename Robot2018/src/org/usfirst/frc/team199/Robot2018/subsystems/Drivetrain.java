@@ -264,15 +264,15 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 * Activates the solenoid to push the drivetrain into high or low gear.
 	 * 
 	 * @param highGear
-	 *            If the solenoid is to be pushed into high gear (true, kForward) or
-	 *            low gear (false, kReverse)
+	 *            If the solenoid is to be pushed into high gear (true, kReverse) or
+	 *            low gear (false, kForward)
 	 */
 	@Override
 	public void shiftGears(boolean highGear) {
 		if (highGear ^ Robot.getBool("Drivetrain Gear Shift Low", false)) {
-			dtGear.set(DoubleSolenoid.Value.kForward);
-		} else {
 			dtGear.set(DoubleSolenoid.Value.kReverse);
+		} else {
+			dtGear.set(DoubleSolenoid.Value.kForward);
 		}
 	}
 

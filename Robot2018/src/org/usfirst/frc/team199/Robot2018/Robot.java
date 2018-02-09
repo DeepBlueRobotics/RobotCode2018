@@ -174,14 +174,17 @@ public class Robot extends TimedRobot {
 //		if(firstTime) {
 //			Robot.dt.enableVelocityPIDs();
 //			firstTime = false;
-//		}
-		Robot.dt.setVPIDs(Robot.getConst("VPID Test Set", 0.5));
-		SmartDashboard.putNumber("Drivetrain/Left VPID Targ", Robot.dt.getLeftVPIDSetpoint());
-		SmartDashboard.putNumber("Drivetrain/Right VPID Targ", Robot.dt.getRightVPIDSetpoint());
-		SmartDashboard.putNumber("Left VPID Error", Robot.dt.getLeftVPIDerror());
-		SmartDashboard.putNumber("Right VPID Error", Robot.dt.getRightVPIDerror());
-		SmartDashboard.putNumber("Left Enc Rate", Robot.dt.getLeftEncRate());
-		SmartDashboard.putNumber("Right Enc Rate", Robot.dt.getRightEncRate());
+////		}
+//		Robot.dt.setVPIDs(Robot.getConst("VPID Test Set", 0.5));
+//		SmartDashboard.putNumber("Drivetrain/Left VPID Targ", Robot.dt.getLeftVPIDSetpoint());
+//		SmartDashboard.putNumber("Drivetrain/Right VPID Targ", Robot.dt.getRightVPIDSetpoint());
+//		SmartDashboard.putNumber("Left VPID Error", Robot.dt.getLeftVPIDerror());
+//		SmartDashboard.putNumber("Right VPID Error", Robot.dt.getRightVPIDerror());
+//		SmartDashboard.putNumber("Left Enc Rate", Robot.dt.getLeftEncRate());
+//		SmartDashboard.putNumber("Right Enc Rate", Robot.dt.getRightEncRate());
+		
+		dt.dtLeft.set(-oi.leftJoy.getY());
+		dt.dtRight.set(-oi.rightJoy.getY());
 		
 	}
 }
