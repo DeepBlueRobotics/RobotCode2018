@@ -172,10 +172,25 @@ public class RobotMap {
 	 * Uses SmartDashboard and math to calculate a *great* default kD
 	 */
 	public double calcDefkD() {
-		double timeConstant = Robot.getConst("Omega Max", 5330) * Robot.getConst("Mass of Robot", 54.4311)
+		/*
+		 * timeConstant is proportional to max speed of the shaft (which is the max
+		 * speed of the cim divided by the gear reduction), half the mass (because the
+		 * half of the drivetrain only has to support half of the robot), and radius of
+		 * the drivetrain wheels squared. It's inversely proportional to the stall
+		 * torque of the shaft, which is found by multiplying the stall torque of the
+		 * motor with the gear reduction.
+		 */
+		double gearReduction = Robot.getBool("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
+				: Robot.getConst("Low Gear Gear Reduction", 12.255);
+		double timeConstant = Robot.getConst("Omega Max", 5330) / gearReduction
+				* Robot.getConst("Mass of Robot", 54.4311) * Robot.getConst("Radius of Drivetrain Wheel", 0.0635)
 				* Robot.getConst("Radius of Drivetrain Wheel", 0.0635)
-				* Robot.getConst("Radius of Drivetrain Wheel", 0.0635) / Robot.getConst("Stall Torque", 2.41);
+				/ (Robot.getConst("Stall Torque", 2.41) * gearReduction);
 		double cycleTime = Robot.getConst("Code cycle time", 0.1);
+		/*
+		 * The denominator of kD is 1-(e ^ -cycleTime / timeConstant). The numerator is
+		 * one.
+		 */
 		double denominator = 1 - Math.pow(Math.E, -1 * cycleTime / timeConstant);
 		return 1 / denominator;
 	}
