@@ -173,7 +173,10 @@ public class RobotMap {
 	 */
 	public int getPort(String key, int def) {
 		if (!SmartDashboard.containsKey("Port/" + key)) {
-			SmartDashboard.putNumber("Port/" + key, def);
+			if (!SmartDashboard.putNumber("Port/" + key, def)) {
+				System.err.println("SmartDashboard Key" + "Port/" + key + "already taken by a different type");
+				return def;
+			}
 		}
 		return (int) SmartDashboard.getNumber("Port/" + key, def);
 	}
