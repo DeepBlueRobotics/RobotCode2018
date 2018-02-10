@@ -20,30 +20,26 @@ public class AutoMoveTo extends CommandGroup {
 		// requires(Drivetrain);
 		double rotation;
 		double[] point = { 0, 0 };
-		String parentheseless;
-		String[] pointparts;
 		for (String arg : args) {
 			if (AutoUtils.isDouble(arg)) {
 				rotation = Double.valueOf(arg);
-				addSequential(new PIDTurn(rotation - AutoUtils.getRot(), dt, sd, pidMoveSrc));
-				AutoUtils.setRot(rotation);
+				addSequential(new PIDTurn(rotation - AutoUtils.position.getRot(), dt, sd, pidMoveSrc));
+				AutoUtils.position.setRot(rotation);
 			} else if (AutoUtils.isPoint(arg)) {
-				parentheseless = arg.substring(1, arg.length() - 1);
-				pointparts = parentheseless.split(",");
-				point[0] = Double.parseDouble(pointparts[0]);
-				point[1] = Double.parseDouble(pointparts[1]);
+				point = AutoUtils.parsePoint(arg);
 				addSequential(new PIDTurn(Math.toDegrees(
-						Math.atan((point[0] - AutoUtils.getX()) / (point[1] - AutoUtils.getY())) - AutoUtils.getRot()),
+						Math.atan((point[0] - AutoUtils.position.getX()) / (point[1] - AutoUtils.position.getY()))
+								- AutoUtils.position.getRot()),
 						dt, sd, pidMoveSrc));
 				addSequential(new PIDMove(
-						Math.sqrt(((point[0] - AutoUtils.getX()) * (point[0] - AutoUtils.getX())
-								+ ((point[1] - AutoUtils.getY()) * (point[1] - AutoUtils.getY())))),
+						Math.sqrt(((point[0] - AutoUtils.position.getX()) * (point[0] - AutoUtils.position.getX())
+								+ ((point[1] - AutoUtils.position.getY()) * (point[1] - AutoUtils.position.getY())))),
 						dt, sd, pidMoveSrc));
-				double x = AutoUtils.getX();
-				double y = AutoUtils.getY();
-				AutoUtils.setX(point[0]);
-				AutoUtils.setY(point[1]);
-				AutoUtils.setRot(Math.toDegrees(Math.atan((point[0] - x) / (point[1] - y))));
+				double x = AutoUtils.position.getX();
+				double y = AutoUtils.position.getY();
+				AutoUtils.position.setX(point[0]);
+				AutoUtils.position.setY(point[1]);
+				AutoUtils.position.setRot(Math.toDegrees(Math.atan((point[0] - x) / (point[1] - y))));
 			} else {
 				throw new IllegalArgumentException();
 			}
