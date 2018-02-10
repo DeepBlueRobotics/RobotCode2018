@@ -1,3 +1,9 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
 
 package org.usfirst.frc.team199.Robot2018;
 
@@ -52,14 +58,20 @@ public class Robot extends TimedRobot {
 
 	public static double getConst(String key, double def) {
 		if (!SmartDashboard.containsKey("Const/" + key)) {
-			SmartDashboard.putNumber("Const/" + key, def);
+			if (!SmartDashboard.putNumber("Const/" + key, def)) {
+				System.err.println("SmartDashboard Key" + "Const/" + key + "already taken by a different type");
+				return def;
+			}
 		}
 		return SmartDashboard.getNumber("Const/" + key, def);
 	}
 
 	public static boolean getBool(String key, boolean def) {
 		if (!SmartDashboard.containsKey("Bool/" + key)) {
-			SmartDashboard.putBoolean("Bool/" + key, def);
+			if (!SmartDashboard.putBoolean("Bool/" + key, def)) {
+				System.err.println("SmartDashboard Key" + "Bool/" + key + "already taken by a different type");
+				return def;
+			}
 		}
 		return SmartDashboard.getBoolean("Bool/" + key, def);
 	}
@@ -97,7 +109,9 @@ public class Robot extends TimedRobot {
 		// auto delay chooser
 		SmartDashboard.putNumber("Auto Delay", 0);
 
-		// parse scripts from Preferences, which maintains values throughout reboots
+
+		// parse scripts from Preferences, which maintains values throughout
+		// reboots
 		autoScripts = AutoUtils.parseScriptFile(Preferences.getInstance().getString("autoscripts", ""));
 
 		listen = new Listener();

@@ -108,9 +108,10 @@ class ParseScriptFileTest {
 	@Test
 	void test9() {
 		String input = "RRxx:\n"
-				+ "moveto (42,56) 45\n"
+				+ "moveto (42,56) 45 # Trailing comment should not break anything \n"
 				+ "scale\n"
-				+ "move 46\n"
+				+ "#move 10\n" // For testing that commented lines are ignored
+				+ "move 46\n" 
 				+ "LRxx:\n"
 				+ "intake\n"
 				+ "turn (32,5)\n";
