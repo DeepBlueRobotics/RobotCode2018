@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -33,11 +34,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class RobotMap {
 
+	public static PowerDistributionPanel pdp;
+
 	public static WPI_TalonSRX liftMotor;
 	public static WPI_TalonSRX climberMotor;
 
 	public static VictorSP leftIntakeMotor;
 	public static VictorSP rightIntakeMotor;
+	public static DoubleSolenoid leftIntakeVerticalSolenoid;
+	public static DoubleSolenoid rightIntakeVerticalSolenoid;
+	public static DoubleSolenoid leftIntakeHorizontalSolenoid;
+	public static DoubleSolenoid rightIntakeHorizontalSolenoid;
 
 	public static DigitalSource leftEncPort1;
 	public static DigitalSource leftEncPort2;
@@ -104,6 +111,7 @@ public class RobotMap {
 	}
 
 	public RobotMap() {
+		pdp = new PowerDistributionPanel();
 
 		liftMotor = new WPI_TalonSRX(getPort("LiftTalonSRX", 5));
 		configSRX(liftMotor);
@@ -112,6 +120,14 @@ public class RobotMap {
 
 		leftIntakeMotor = new VictorSP(getPort("IntakeLeftVictorSP", 0));
 		rightIntakeMotor = new VictorSP(getPort("IntakeRightVictorSP", 1));
+		leftIntakeHorizontalSolenoid = new DoubleSolenoid(getPort("IntakeLeftHorizontalSolenoidPort1", 2),
+				getPort("IntakeLeftHorizontalSolenoidPort2", 3));
+		rightIntakeHorizontalSolenoid = new DoubleSolenoid(getPort("IntakeRightHorizontalSolenoidPort1", 4),
+				getPort("IntakeRightHorizontalSolenoidPort2", 5));
+		leftIntakeVerticalSolenoid = new DoubleSolenoid(getPort("IntakeLeftVerticalSolenoidPort1", 6),
+				getPort("IntakeLeftVerticalSolenoidPort2", 7));
+		rightIntakeVerticalSolenoid = new DoubleSolenoid(getPort("IntakeRightVerticalSolenoidPort1", 8),
+				getPort("IntakeRightVerticalSolenoidPort2", 9));
 
 		leftEncPort1 = new DigitalInput(getPort("1LeftEnc", 0));
 		leftEncPort2 = new DigitalInput(getPort("2LeftEnc", 1));
@@ -162,7 +178,8 @@ public class RobotMap {
 
 		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
 		fancyGyro = new AHRS(SerialPort.Port.kMXP);
-		dtGear = new DoubleSolenoid(getPort("1dtGearSolenoid", 0), getPort("2dtGearSolenoid", 1));
+		dtGear = new DoubleSolenoid(getPort("DrivetrainGearSolenoidPort1", 0),
+				getPort("DrivetrainGearSolenoidPort2", 1));
 	}
 
 	/**

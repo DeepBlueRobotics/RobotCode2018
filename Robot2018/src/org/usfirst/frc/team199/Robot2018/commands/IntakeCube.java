@@ -1,5 +1,7 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
+import org.usfirst.frc.team199.Robot2018.Robot;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -7,9 +9,11 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class IntakeCube extends Command {
 
-    public IntakeCube() {
+	boolean in;
+    public IntakeCube(boolean in) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
+    	this.in = in;
     }
 
     // Called just before this Command runs the first time
@@ -18,6 +22,11 @@ public class IntakeCube extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if(in) {
+    		Robot.intakeEject.runIntake(1);
+    	} else {
+    		Robot.intakeEject.runIntake(-1);
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()

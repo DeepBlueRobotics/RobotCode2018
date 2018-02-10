@@ -7,8 +7,13 @@
 
 package org.usfirst.frc.team199.Robot2018;
 
+import org.usfirst.frc.team199.Robot2018.commands.CloseIntake;
+import org.usfirst.frc.team199.Robot2018.commands.IntakeCube;
+import org.usfirst.frc.team199.Robot2018.commands.LowerIntake;
+import org.usfirst.frc.team199.Robot2018.commands.OpenIntake;
 import org.usfirst.frc.team199.Robot2018.commands.PIDMove;
 import org.usfirst.frc.team199.Robot2018.commands.PIDTurn;
+import org.usfirst.frc.team199.Robot2018.commands.RaiseIntake;
 import org.usfirst.frc.team199.Robot2018.commands.SetDistancePerPulse;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftDriveType;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftHighGear;
@@ -35,14 +40,20 @@ public class OI {
 	private JoystickButton updatePIDConstantsButton;
 	private JoystickButton updateEncoderDPPButton;
 	public Joystick manipulator;
-	
+	private JoystickButton closeIntake;
+	private JoystickButton openIntake;
+	private JoystickButton raiseIntake;
+	private JoystickButton lowerIntake;
+	private JoystickButton intake;
+	private JoystickButton outake;
+
 	public int getButton(String key, int def) {
 		if (!SmartDashboard.containsKey("Button/" + key)) {
 			if (!SmartDashboard.putNumber("Button/" + key, def)) {
 				System.err.println("SmartDashboard Key" + "Button/" + key + "already taken by a different type");
 				return def;
 			}
-		}		
+		}
 		return (int) SmartDashboard.getNumber("Button/" + key, def);
 	}
 
@@ -66,5 +77,17 @@ public class OI {
 		updateEncoderDPPButton.whenPressed(new SetDistancePerPulse());
 
 		manipulator = new Joystick(2);
+		closeIntake = new JoystickButton(manipulator, getButton("Close Intake Button", 1));
+		closeIntake.whenPressed(new CloseIntake());
+		openIntake = new JoystickButton(manipulator, getButton("Open Intake Button", 2));
+		openIntake.whenPressed(new OpenIntake());
+		raiseIntake = new JoystickButton(manipulator, getButton("Raise Intake Button", 3));
+		raiseIntake.whenPressed(new RaiseIntake());
+		lowerIntake = new JoystickButton(manipulator, getButton("Lower Intake Button", 4));
+		lowerIntake.whenPressed(new LowerIntake());
+		intake = new JoystickButton(manipulator, getButton("Intake Button", 5));
+		intake.whileHeld(new IntakeCube(true));
+		outake = new JoystickButton(manipulator, getButton("Outake Button", 6));
+		outake.whileHeld(new IntakeCube(false));
 	}
 }
