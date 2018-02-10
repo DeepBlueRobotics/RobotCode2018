@@ -196,7 +196,8 @@ public class RobotMap {
 		double gearReduction = Robot.getBool("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
 				: Robot.getConst("Low Gear Gear Reduction", 12.255);
 		double timeConstant = Robot.getConst("Omega Max", 5330) / gearReduction
-				* Robot.getConst("Mass of Robot", 54.4311) * Robot.getConst("Radius of Drivetrain Wheel", 0.0635)
+				* convertLbsTokG(Robot.getConst("Mass of Robot", 150)) / 2
+				* Robot.getConst("Radius of Drivetrain Wheel", 0.0635)
 				* Robot.getConst("Radius of Drivetrain Wheel", 0.0635)
 				/ (Robot.getConst("Stall Torque", 2.41) * gearReduction);
 		double cycleTime = Robot.getConst("Code cycle time", 0.1);
@@ -206,5 +207,10 @@ public class RobotMap {
 		 */
 		double denominator = 1 - Math.pow(Math.E, -1 * cycleTime / timeConstant);
 		return 1 / denominator;
+	}
+
+	private double convertLbsTokG(double lbs) {
+		// number from google ;)
+		return lbs * 0.45359237;
 	}
 }
