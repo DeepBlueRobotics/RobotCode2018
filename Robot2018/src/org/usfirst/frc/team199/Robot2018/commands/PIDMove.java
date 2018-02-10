@@ -1,11 +1,12 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
-import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
+import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
 import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -32,14 +33,18 @@ public class PIDMove extends Command implements PIDOutput {
 	 * @param avg
 	 *            the PIDSourceAverage of the DT's two Encoders
 	 */
-	public PIDMove(double targ, DrivetrainInterface dt, PIDSourceAverage avg) {
+	public PIDMove(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource avg) {
 		// Use requires() here to declare subsystem dependencies
-		requires(Robot.dt);
 		target = targ;
 		this.dt = dt;
-		double kf = 1 / (dt.getCurrentMaxSpeed() * Robot.getConst("Default PID Update Time", 0.05));
-		moveController = new PIDController(Robot.getConst("MovekP", 1), Robot.getConst("MovekI", 0),
-				Robot.getConst("MovekD", 0), kf, avg, this);
+		if (Robot.dt != null) {
+			requires(Robot.dt);
+		}
+		moveController = new PIDController(sd.getConst("MovekP", 1), sd.getConst("MovekI", 0), sd.getConst("MovekD", 0),
+				avg, this);
+		double kf = 1 / (dt.getCurrentMaxSpeed() * sd.getConst("Default PID Update Time", 0.05));
+		moveController = new PIDController(sd.getConst("MovekP", 1), sd.getConst("MovekI", 0), sd.getConst("MovekD", 0),
+				kf, avg, this);
 	}
 
 	/**

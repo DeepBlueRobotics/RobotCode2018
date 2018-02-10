@@ -55,6 +55,15 @@ public class Robot extends TimedRobot {
 	Map<String, SendableChooser<Strategy>> stratChoosers = new HashMap<String, SendableChooser<Strategy>>();
 	String[] fmsPossibilities = { "LL", "LR", "RL", "RR" };
 
+	public static SmartDashboardInterface sd = new SmartDashboardInterface() {
+		public double getConst(String key, double def) {
+			if (!SmartDashboard.containsKey("Const/" + key)) {
+				SmartDashboard.putNumber("Const/" + key, def);
+			}
+			return SmartDashboard.getNumber("Const/" + key, def);
+		}
+	};
+
 	public static double getConst(String key, double def) {
 		return sd.getConst(key, def);
 	}

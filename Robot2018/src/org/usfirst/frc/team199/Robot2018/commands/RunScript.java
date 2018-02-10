@@ -14,69 +14,63 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
  */
 public class RunScript extends CommandGroup {
 
-    public RunScript(String scriptName) {
-    		ArrayList<String[]> script = Robot.autoScripts.getOrDefault(scriptName, new ArrayList<String[]>());
-    		
-    		outerloop:
-    		for(String[] cmd : script) {
-    			String cmdName = cmd[0];
-    			String cmdArgs = cmd[1];
-    			
-    			double[] point = new double[2];
-    			double rotation = 0;
-    			String parentheseless;
-    			String[] pointparts;
-    			if (AutoUtils.isDouble(cmdArgs)) {
-        			rotation = Double.valueOf(cmdArgs);
-        		} else if (AutoUtils.isPoint(cmdArgs)) {
-        			parentheseless = cmdArgs.substring(1, cmdArgs.length() - 1);
-        			pointparts = parentheseless.split(",");
-        			point[0] = Double.parseDouble(pointparts[0]);
-        		}
-    			
-    			switch (cmdName) {
-	    			case "moveto":
-	    				addSequential(new AutoMoveTo(cmdArgs.split(" "), Robot.dt, Robot.sd, new PIDSourceAverage(null, null)));
-	    				break;
-	    			case "turn":
-/**<<<<<<< corvin-refactor-for-AutoMoveTo-unit-tests                        This is commented out so I can come back after testing.
-	    				addSequential(new PIDTurn(Double.parseDouble(cmdArgs), Robot.dt, Robot.dt.getGyro(), Robot.sd));
-	    				break;
-	    			case "move":
-	    				addSequential(new PIDMove(Double.parseDouble(cmdArgs), Robot.dt, Robot.sd, new PIDSourceAverage(null, null)));
-=======**/
-	    				addSequential(new PIDTurn(Double.parseDouble(cmdArgs), Robot.dt, Robot.dt.getGyro()));
-	    				AutoUtils.setRot(rotation);
-	    				break;
-	    			case "move":
-	    				addSequential(new PIDMove(Double.parseDouble(cmdArgs), Robot.dt, new PIDSourceAverage(null, null)));
-	    				AutoUtils.setX(point[0]);
-	    				AutoUtils.setY(point[1]);
-	    				break;
-	    			case "switch":
-	    				addSequential(new EjectToSwitch());
-	    				break;
-	    			case "scale":
-	    				addSequential(new EjectToScale());
-	    				break;
-	    			case "exchange":
-	    				addSequential(new EjectToExchange());
-	    				break;
-	    			case "wait":
-	    				addSequential(new WaitCommand(Double.parseDouble(cmdArgs)));
-	    				break;
-	    			case "intake":
-	    				addSequential(new IntakeCube());
-	    				break;
-	    			case "jump":
-	    				addSequential(new RunScript(cmdArgs));
-	    				break;
-	    			case "end":
-	    				break outerloop;
-	    			default:
-	    				// this should never happen since AutoUtils already validates the script.
-	    				System.err.println("[ERROR] `" + cmdName + "` is not a valid command name.");
-    			}
-    		}
-    }
+	public RunScript(String scriptName) {
+		ArrayList<String[]> script = Robot.autoScripts.getOrDefault(scriptName, new ArrayList<String[]>());
+
+		outerloop: for (String[] cmd : script) {
+			String cmdName = cmd[0];
+			String cmdArgs = cmd[1];
+
+			double[] point = new double[2];
+			double rotation = 0;
+			String parentheseless;
+			String[] pointparts;
+			if (AutoUtils.isDouble(cmdArgs)) {
+				rotation = Double.valueOf(cmdArgs);
+			} else if (AutoUtils.isPoint(cmdArgs)) {
+				parentheseless = cmdArgs.substring(1, cmdArgs.length() - 1);
+				pointparts = parentheseless.split(",");
+				point[0] = Double.parseDouble(pointparts[0]);
+			}
+
+			switch (cmdName) {
+			case "moveto":
+				addSequential(new AutoMoveTo(cmdArgs.split(" "), Robot.dt, Robot.sd, new PIDSourceAverage(null, null)));
+				break;
+			case "turn":
+				addSequential(new PIDTurn(Double.parseDouble(cmdArgs), Robot.dt, Robot.sd, Robot.dt.getGyro()));
+				AutoUtils.setRot(rotation);
+				break;
+			case "move":
+				addSequential(
+						new PIDMove(Double.parseDouble(cmdArgs), Robot.dt, Robot.sd, new PIDSourceAverage(null, null)));
+				AutoUtils.setX(point[0]);
+				AutoUtils.setY(point[1]);
+				break;
+			case "switch":
+				addSequential(new EjectToSwitch());
+				break;
+			case "scale":
+				addSequential(new EjectToScale());
+				break;
+			case "exchange":
+				addSequential(new EjectToExchange());
+				break;
+			case "wait":
+				addSequential(new WaitCommand(Double.parseDouble(cmdArgs)));
+				break;
+			case "intake":
+				addSequential(new IntakeCube());
+				break;
+			case "jump":
+				addSequential(new RunScript(cmdArgs));
+				break;
+			case "end":
+				break outerloop;
+			default:
+				// this should never happen since AutoUtils already validates the script.
+				System.err.println("[ERROR] `" + cmdName + "` is not a valid command name.");
+			}
+		}
+	}
 }

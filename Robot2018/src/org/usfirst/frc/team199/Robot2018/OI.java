@@ -54,7 +54,7 @@ public class OI {
 		PIDMoveButton = new JoystickButton(leftJoy, getButton("PID Move", 7));
 		PIDMoveButton.whenPressed(new PIDMove(40, Robot.dt, Robot.sd, RobotMap.distEncAvg));
 		PIDTurnButton = new JoystickButton(leftJoy, getButton("PID Turn", 8));
-		PIDTurnButton.whenPressed(new PIDTurn(30, Robot.dt, RobotMap.fancyGyro, Robot.sd));
+		PIDTurnButton.whenPressed(new PIDTurn(30, Robot.dt, Robot.sd, RobotMap.fancyGyro));
 
 		rightJoy = new Joystick(1);
 		updatePIDConstantsButton = new JoystickButton(rightJoy, getButton("Get PID Constants", 8));
