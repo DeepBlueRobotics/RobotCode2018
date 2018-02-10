@@ -1,3 +1,9 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
 
 package org.usfirst.frc.team199.Robot2018;
 
@@ -9,6 +15,7 @@ import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Position;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Strategy;
+import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
 import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
@@ -51,14 +58,20 @@ public class Robot extends TimedRobot {
 
 	public static double getConst(String key, double def) {
 		if (!SmartDashboard.containsKey("Const/" + key)) {
-			SmartDashboard.putNumber("Const/" + key, def);
+			if (!SmartDashboard.putNumber("Const/" + key, def)) {
+				System.err.println("SmartDashboard Key" + "Const/" + key + "already taken by a different type");
+				return def;
+			}
 		}
 		return SmartDashboard.getNumber("Const/" + key, def);
 	}
 
 	public static boolean getBool(String key, boolean def) {
 		if (!SmartDashboard.containsKey("Bool/" + key)) {
-			SmartDashboard.putBoolean("Bool/" + key, def);
+			if (!SmartDashboard.putBoolean("Bool/" + key, def)) {
+				System.err.println("SmartDashboard Key" + "Bool/" + key + "already taken by a different type");
+				return def;
+			}
 		}
 		return SmartDashboard.getBoolean("Bool/" + key, def);
 	}
@@ -124,6 +137,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		Scheduler.getInstance().add(new ShiftLowGear());
 		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
 		Position startPos = posChooser.getSelected();
 		double autoDelay = SmartDashboard.getNumber("Auto Delay", 0);
@@ -155,6 +169,7 @@ public class Robot extends TimedRobot {
 		// this line or comment it out.
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
+		dt.putVelocityControllersToDashboard();
 	}
 
 	/**
@@ -177,16 +192,14 @@ public class Robot extends TimedRobot {
 		// firstTime = false;
 		//// }
 		// Robot.dt.setVPIDs(Robot.getConst("VPID Test Set", 0.5));
-		// SmartDashboard.putNumber("Drivetrain/Left VPID Targ",
-		// Robot.dt.getLeftVPIDSetpoint());
-		// SmartDashboard.putNumber("Drivetrain/Right VPID Targ",
-		// Robot.dt.getRightVPIDSetpoint());
-		// SmartDashboard.putNumber("Left VPID Error", Robot.dt.getLeftVPIDerror());
-		// SmartDashboard.putNumber("Right VPID Error", Robot.dt.getRightVPIDerror());
-		// SmartDashboard.putNumber("Left Enc Rate", Robot.dt.getLeftEncRate());
-		// SmartDashboard.putNumber("Right Enc Rate", Robot.dt.getRightEncRate());
+		SmartDashboard.putNumber("Drivetrain/Left VPID Targ", Robot.dt.getLeftVPIDSetpoint());
+		SmartDashboard.putNumber("Drivetrain/Right VPID Targ", Robot.dt.getRightVPIDSetpoint());
+		SmartDashboard.putNumber("Left VPID Error", Robot.dt.getLeftVPIDerror());
+		SmartDashboard.putNumber("Right VPID Error", Robot.dt.getRightVPIDerror());
+		SmartDashboard.putNumber("Left Enc Rate", Robot.dt.getLeftEncRate());
+		SmartDashboard.putNumber("Right Enc Rate", Robot.dt.getRightEncRate());
 
-		dt.dtLeft.set(0.1);
+		// dt.dtLeft.set(0.1);
 		// dt.dtRight.set(-oi.rightJoy.getY());
 		// dt.dtLeft.set(-oi.leftJoy.getY());
 		// dt.dtRight.set(-oi.rightJoy.getY());

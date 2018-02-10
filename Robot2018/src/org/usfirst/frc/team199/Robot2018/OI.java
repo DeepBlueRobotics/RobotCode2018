@@ -35,11 +35,14 @@ public class OI {
 	private JoystickButton updatePIDConstantsButton;
 	private JoystickButton updateEncoderDPPButton;
 	public Joystick manipulator;
-
+	
 	public int getButton(String key, int def) {
 		if (!SmartDashboard.containsKey("Button/" + key)) {
-			SmartDashboard.putNumber("Button/" + key, def);
-		}
+			if (!SmartDashboard.putNumber("Button/" + key, def)) {
+				System.err.println("SmartDashboard Key" + "Button/" + key + "already taken by a different type");
+				return def;
+			}
+		}		
 		return (int) SmartDashboard.getNumber("Button/" + key, def);
 	}
 
