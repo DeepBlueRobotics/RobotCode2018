@@ -60,6 +60,8 @@ public class RobotMap {
 	public static AHRS fancyGyro;
 	public static DoubleSolenoid dtGear;
 
+	private final double DIST_PER_PULSE_RATIO = (5.0 * Math.PI) * (17 / 25) / (3 * 256);
+
 	/**
 	 * This function takes in a TalonSRX motorController and sets nominal and peak
 	 * outputs to the default
@@ -100,6 +102,18 @@ public class RobotMap {
 		mc.configPeakOutputReverse(-1, kTimeout);
 	}
 
+	/**
+	 * Uses SmartDashboard and math to calculate a *great* default kD
+	 */
+	public double calcDefkD() {
+		double timeConstant = Robot.getConst("Omega Max", 5330) * Robot.getConst("Mass of Robot", 54.4311)
+				* Robot.getConst("Radius of Drivetrain Wheel", 0.0635)
+				* Robot.getConst("Radius of Drivetrain Wheel", 0.0635) / Robot.getConst("Stall Torque", 2.41);
+		double cycleTime = Robot.getConst("Code cycle time", 0.1);
+		double denominator = 1 - Math.pow(Math.E, -1 * cycleTime / timeConstant);
+		return 1 / denominator;
+	}
+
 	public RobotMap() {
 
 		// intakeMotor = new WPI_TalonSRX(getPort("IntakeTalonSRX", 4));
@@ -109,21 +123,21 @@ public class RobotMap {
 		// climberMotor = new WPI_TalonSRX(getPort("ClimberTalonSRX", 6));
 		// configSRX(climberMotor);
 
-		leftEncPort1 = new DigitalInput(getPort("1LeftEnc", 1));
-		leftEncPort2 = new DigitalInput(getPort("2LeftEnc", 0));
+		leftEncPort1 = new DigitalInput(getPort("1LeftEnc", 2));
+		leftEncPort2 = new DigitalInput(getPort("2LeftEnc", 3));
 		leftEncDist = new Encoder(leftEncPort1, leftEncPort2);
 		leftEncDist.setPIDSourceType(PIDSourceType.kDisplacement);
 		leftEncRate = new Encoder(leftEncPort1, leftEncPort2);
 		leftEncRate.setPIDSourceType(PIDSourceType.kRate);
-		leftEncDist.setDistancePerPulse(Robot.getConst("Distance Per Pulse Left", 0.184));
-		leftEncRate.setDistancePerPulse(Robot.getConst("Distance Per Pulse Left", 0.184));
+		leftEncDist.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
+		leftEncRate.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
 
 		dtLeftMaster = new WPI_TalonSRX(getPort("LeftTalonSRXMaster", 1));
 		configSRX(dtLeftMaster);
 		dtLeftSlave = new WPI_VictorSPX(getPort("LeftVictorSPXSlave", 2));
 		configSPX(dtLeftSlave);
 		dtLeft = new SpeedControllerGroup(dtLeftMaster, dtLeftSlave);
-		//inverted bc gear boxes invert from input to output
+		// inverted bc gear boxes invert from input to output
 		dtLeft.setInverted(true);
 
 		leftVelocityController = new VelocityPIDController(Robot.getConst("VelocityLeftkP", 0),
@@ -136,21 +150,21 @@ public class RobotMap {
 		leftVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceLeft", 2));
 		SmartDashboard.putData(leftVelocityController);
 
-		rightEncPort1 = new DigitalInput(getPort("1RightEnc", 3));
-		rightEncPort2 = new DigitalInput(getPort("2RightEnc", 2));
+		rightEncPort1 = new DigitalInput(getPort("1RightEnc", 1));
+		rightEncPort2 = new DigitalInput(getPort("2RightEnc", 0));
 		rightEncDist = new Encoder(rightEncPort1, rightEncPort2);
 		rightEncDist.setPIDSourceType(PIDSourceType.kDisplacement);
 		rightEncRate = new Encoder(rightEncPort1, rightEncPort2);
 		rightEncRate.setPIDSourceType(PIDSourceType.kRate);
-		rightEncDist.setDistancePerPulse(Robot.getConst("Distance Per Pulse Right", 0.184));
-		rightEncRate.setDistancePerPulse(Robot.getConst("Distance Per Pulse Right", 0.184));
+		rightEncDist.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
+		rightEncRate.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
 
 		dtRightMaster = new WPI_TalonSRX(getPort("RightTalonSRXMaster", 4));
 		configSRX(dtRightMaster);
 		dtRightSlave = new WPI_VictorSPX(getPort("RightVictorSPXSlave", 3));
 		configSPX(dtRightSlave);
 		dtRight = new SpeedControllerGroup(dtRightMaster, dtRightSlave);
-		//inverted bc gear boxes invert from input to output
+		// inverted bc gear boxes invert from input to output
 		dtRight.setInverted(true);
 
 		rightVelocityController = new VelocityPIDController(Robot.getConst("VelocityRightkP", 0),
@@ -162,10 +176,9 @@ public class RobotMap {
 		rightVelocityController.setContinuous(false);
 		rightVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceRight", 2));
 
-		// robotDrive = new DifferentialDrive(leftVelocityController,
-		// rightVelocityController);
-		// robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
-		robotDrive = new DifferentialDrive(dtLeft, dtRight);
+		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
+		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
+		// robotDrive = new DifferentialDrive(dtLeft, dtRight);
 
 		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
 		fancyGyro = new AHRS(SerialPort.Port.kMXP);

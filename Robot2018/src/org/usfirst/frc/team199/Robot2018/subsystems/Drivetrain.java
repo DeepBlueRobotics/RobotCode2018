@@ -44,23 +44,23 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleopDrive());
 	}
-	
+
 	public void setLeft(double spd) {
 		dtLeft.set(spd);
 	}
-	
+
 	public void setRight(double spd) {
 		dtRight.set(spd);
 	}
-	
+
 	/**
 	 * Use for testing only (i.e. when not going through robotDrive)
-	 * */
+	 */
 	public void setVPIDs(double realSpd) {
 		leftVelocityController.set(realSpd);
 		rightVelocityController.set(-realSpd);
 	}
-	
+
 	public double getLeftVPIDerror() {
 		return leftVelocityController.getError();
 	}
@@ -68,7 +68,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	public double getRightVPIDerror() {
 		return rightVelocityController.getError();
 	}
-	
+
 	public double getLeftVPIDSetpoint() {
 		return leftVelocityController.get();
 	}
@@ -76,11 +76,11 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	public double getRightVPIDSetpoint() {
 		return rightVelocityController.get();
 	}
-	
+
 	public double getLeftEncRate() {
 		return leftEncRate.getRate();
 	}
-	
+
 	public double getRightEncRate() {
 		return rightEncRate.getRate();
 	}
@@ -226,6 +226,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	@Override
 	public void setDistancePerPulseLeft(double ratio) {
 		leftEncDist.setDistancePerPulse(ratio);
+		leftEncRate.setDistancePerPulse(ratio);
 	}
 
 	/**
@@ -238,6 +239,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	@Override
 	public void setDistancePerPulseRight(double ratio) {
 		rightEncDist.setDistancePerPulse(ratio);
+		rightEncRate.setDistancePerPulse(ratio);
 	}
 
 	/**
@@ -301,7 +303,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		SmartDashboard.putNumber("VPID kF", newKF);
 		return newKF;
 	}
-	
+
 	public double resetVPIDInputRanges() {
 		double currentMaxSpd = getCurrentMaxSpeed();
 		leftVelocityController.setInputRange(-currentMaxSpd, currentMaxSpd);
@@ -321,5 +323,14 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		} else {
 			return Robot.getConst("Max Low Speed", 84);
 		}
+	}
+
+	/**
+	 * Put left and right velocity controllers (PID) on SmartDashboard.
+	 */
+	@Override
+	public void putVelocityControllersToDashboard() {
+		SmartDashboard.putData(leftVelocityController);
+		SmartDashboard.putData(rightVelocityController);
 	}
 }

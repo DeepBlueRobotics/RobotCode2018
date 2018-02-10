@@ -142,4 +142,9 @@ public interface DrivetrainInterface {
 	 * @return the current max speed of the DT in inches/second
 	 */
 	public double getCurrentMaxSpeed();
+
+	/**
+	 * Put left and right velocity controllers (PID) on SmartDashboard.
+	 */
+	public void putVelocityControllersToDashboard();
 }

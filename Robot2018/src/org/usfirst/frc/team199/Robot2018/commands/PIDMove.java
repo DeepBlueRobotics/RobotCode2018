@@ -7,6 +7,7 @@ import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -40,6 +41,7 @@ public class PIDMove extends Command implements PIDOutput {
 		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 2));
 		moveController.setSetpoint(target);
 		moveController.enable();
+		SmartDashboard.putData(moveController);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
