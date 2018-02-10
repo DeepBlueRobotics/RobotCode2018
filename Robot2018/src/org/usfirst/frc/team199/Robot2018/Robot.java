@@ -15,6 +15,7 @@ import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Position;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Strategy;
+import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
 import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
@@ -108,6 +109,7 @@ public class Robot extends TimedRobot {
 		// auto delay chooser
 		SmartDashboard.putNumber("Auto Delay", 0);
 
+
 		// parse scripts from Preferences, which maintains values throughout
 		// reboots
 		autoScripts = AutoUtils.parseScriptFile(Preferences.getInstance().getString("autoscripts", ""));
@@ -137,6 +139,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		Scheduler.getInstance().add(new ShiftLowGear());
 		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
 		Position startPos = posChooser.getSelected();
 		double autoDelay = SmartDashboard.getNumber("Auto Delay", 0);

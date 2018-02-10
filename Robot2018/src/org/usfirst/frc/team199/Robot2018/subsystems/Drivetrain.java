@@ -13,6 +13,9 @@ import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
 import org.usfirst.frc.team199.Robot2018.autonomous.VelocityPIDController;
 import org.usfirst.frc.team199.Robot2018.commands.TeleopDrive;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -25,6 +28,10 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
+	private final WPI_TalonSRX dtLeftMaster = RobotMap.dtLeftMaster;
+	private final WPI_VictorSPX dtLeftSlave = RobotMap.dtLeftSlave;
+	private final WPI_TalonSRX dtRightMaster = RobotMap.dtRightMaster;
+	private final WPI_VictorSPX dtRightSlave = RobotMap.dtRightSlave;
 	private final Encoder leftEncDist = RobotMap.leftEncDist;
 	private final Encoder rightEncDist = RobotMap.rightEncDist;
 	private final PIDSourceAverage distEncAvg = RobotMap.distEncAvg;
@@ -40,6 +47,32 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	@Override
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleopDrive());
+	}
+
+	/**
+	 * Sets the left side of the drivetrain to use the talons' pids to run at the
+	 * specified speed.
+	 * 
+	 * @param value
+	 *            The speed to run at
+	 */
+	public void dtLeftPIDDrive(double value) {
+		double setValue = value * Robot.getConst("Units per 100ms", 3413);
+		dtLeftMaster.set(ControlMode.Velocity, setValue);
+		dtLeftSlave.set(ControlMode.Velocity, setValue);
+	}
+
+	/**
+	 * Sets the right side of the drivetrain to use the talons' pids to run at the
+	 * specified speed.
+	 * 
+	 * @param value
+	 *            The speed to run at
+	 */
+	public void dtRightPIDDrive(double value) {
+		double setValue = value * Robot.getConst("Units per 100ms", 3413);
+		dtRightMaster.set(ControlMode.Velocity, setValue);
+		dtRightSlave.set(ControlMode.Velocity, setValue);
 	}
 
 	/**

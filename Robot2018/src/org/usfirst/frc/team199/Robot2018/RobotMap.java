@@ -122,7 +122,7 @@ public class RobotMap {
 		dtLeft = new SpeedControllerGroup(dtLeftMaster, dtLeftSlave);
 
 		leftVelocityController = new VelocityPIDController(Robot.getConst("VelocityLeftkP", 1),
-				Robot.getConst("VelocityLeftkI", 0), Robot.getConst("VelocityLeftkD", 0),
+				Robot.getConst("VelocityLeftkI", 0), Robot.getConst("VelocityLeftkD", calcDefkD()),
 				1 / Robot.getConst("Max Low Speed", 84), leftEncRate, dtLeft);
 		leftVelocityController.enable();
 		leftVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
@@ -144,7 +144,7 @@ public class RobotMap {
 		dtRight = new SpeedControllerGroup(dtRightMaster, dtRightSlave);
 
 		rightVelocityController = new VelocityPIDController(Robot.getConst("VelocityRightkP", 1),
-				Robot.getConst("VelocityRightkI", 0), Robot.getConst("VelocityRightkD", 0),
+				Robot.getConst("VelocityRightkI", 0), Robot.getConst("VelocityRightkD", calcDefkD()),
 				1 / Robot.getConst("Max Low Speed", 84), rightEncRate, dtRight);
 		rightVelocityController.enable();
 		rightVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
@@ -181,4 +181,15 @@ public class RobotMap {
 		return (int) SmartDashboard.getNumber("Port/" + key, def);
 	}
 
+	/**
+	 * Uses SmartDashboard and math to calculate a *great* default kD
+	 */
+	public double calcDefkD() {
+		double timeConstant = Robot.getConst("Omega Max", 5330) * Robot.getConst("Mass of Robot", 54.4311)
+				* Robot.getConst("Radius of Drivetrain Wheel", 0.0635)
+				* Robot.getConst("Radius of Drivetrain Wheel", 0.0635) / Robot.getConst("Stall Torque", 2.41);
+		double cycleTime = Robot.getConst("Code cycle time", 0.1);
+		double denominator = 1 - Math.pow(Math.E, -1 * cycleTime / timeConstant);
+		return 1 / denominator;
+	}
 }
