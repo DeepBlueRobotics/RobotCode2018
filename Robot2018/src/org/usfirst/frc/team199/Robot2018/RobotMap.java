@@ -212,12 +212,14 @@ public class RobotMap {
 		 * half of the drivetrain only has to support half of the robot), and radius of
 		 * the drivetrain wheels squared. It's inversely proportional to the stall
 		 * torque of the shaft, which is found by multiplying the stall torque of the
-		 * motor with the gear reduction by the amount of motors.
+		 * motor with the gear reduction by the amount of motors. The omegaMax needs to
+		 * be converted from rpm to radians per second, so divide by 60 and multiply to
+		 * get radians.
 		 */
 		double gearReduction = Robot.getBool("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
 				: Robot.getConst("Low Gear Gear Reduction", 12.255);
 		double radius = Robot.getConst("Radius of Drivetrain Wheel", 0.0635);
-		double timeConstant = Robot.getConst("Omega Max", 5330) / gearReduction
+		double timeConstant = Robot.getConst("Omega Max", 5330) / gearReduction / 60 * 2 * Math.PI
 				* convertLbsTokG(Robot.getConst("Mass of Robot", 150)) / 2 * radius * radius
 				/ (Robot.getConst("Stall Torque", 2.41) * gearReduction * 2);
 		double cycleTime = Robot.getConst("Code cycle time", 0.1);
