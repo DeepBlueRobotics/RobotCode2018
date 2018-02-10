@@ -43,7 +43,7 @@ public class RunScript extends CommandGroup {
 	    				addSequential(new WaitCommand(Double.parseDouble(cmdArgs)));
 	    				break;
 	    			case "intake":
-	    				addSequential(new IntakeCube());
+	    				addSequential(new IntakeCube(true));
 	    				break;
 	    			case "jump":
 	    				addSequential(new RunScript(cmdArgs));
