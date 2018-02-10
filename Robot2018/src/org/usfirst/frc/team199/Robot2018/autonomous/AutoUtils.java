@@ -36,9 +36,8 @@ public class AutoUtils {
 			while (parenIndex != -1) {
 				// removes all spaces between the parentheses
 				int endParenIndex = line.indexOf(")", parenIndex);
-				for (int i = line.indexOf(" ", parenIndex); i < endParenIndex && i != -1; i = line.indexOf(" ", i)) {
-					line = line.substring(0, i) + line.substring(i + 1);
-				}
+				String coord = line.substring(parenIndex + 1, endParenIndex);
+				line = line.substring(0, parenIndex + 1) + coord.replaceAll(" ", "") + line.substring(endParenIndex);
 				
 				// finds next parentheses
 				parenIndex = line.indexOf("(", parenIndex + 1);
