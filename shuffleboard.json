@@ -1,5 +1,5 @@
 {
-  "dividerPosition": 0.29673590504451036,
+  "dividerPosition": 0.2678041543026706,
   "tabPane": [
     {
       "title": "PID Testing",
@@ -13,7 +13,7 @@
         "tiles": {
           "0,0": {
             "size": [
-              2,
+              1,
               2
             ],
             "content": {
@@ -22,9 +22,9 @@
               "_title": "SmartDashboard/Left PID Controller"
             }
           },
-          "2,0": {
+          "1,0": {
             "size": [
-              2,
+              1,
               2
             ],
             "content": {
@@ -35,16 +35,17 @@
           },
           "0,2": {
             "size": [
-              1,
-              1
+              2,
+              2
             ],
             "content": {
-              "_type": "Text View",
+              "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Left Enc Rate",
-              "_title": "SmartDashboard/Left Enc Rate"
+              "_title": "/SmartDashboard/Left Enc Rate",
+              "Visible time": 30.0
             }
           },
-          "0,3": {
+          "5,2": {
             "size": [
               1,
               1
@@ -57,16 +58,17 @@
           },
           "2,2": {
             "size": [
-              1,
-              1
+              2,
+              2
             ],
             "content": {
-              "_type": "Text View",
+              "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Right Enc Rate",
-              "_title": "SmartDashboard/Right Enc Rate"
+              "_title": "/SmartDashboard/Right Enc Rate",
+              "Visible time": 30.0
             }
           },
-          "2,3": {
+          "5,3": {
             "size": [
               1,
               1
@@ -75,6 +77,168 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Right VPID Error",
               "_title": "SmartDashboard/Right VPID Error"
+            }
+          },
+          "2,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Left VPID Targ",
+              "_title": "SmartDashboard/Drivetrain/Left VPID Targ",
+              "Visible time": 30.0,
+              "SmartDashboard/Drivetrain/Left VPID Targ visible": true
+            }
+          },
+          "4,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Right VPID Targ",
+              "_title": "SmartDashboard/Drivetrain/Right VPID Targ",
+              "Visible time": 30.0,
+              "SmartDashboard/Drivetrain/Right VPID Targ visible": true
+            }
+          },
+          "4,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Const/VelocityRightkI",
+              "_title": "SmartDashboard/Const/VelocityRightkI"
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Const/VelocityLeftkI",
+              "_title": "SmartDashboard/Const/VelocityLeftkI"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Drivetrain",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "SmartDashboard/Drivetrain",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Left VPID Targ",
+              "_title": "Left VPID Targ"
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Right VPID Targ",
+              "_title": "Right VPID Targ"
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Current Max Speed",
+              "_title": "Current Max Speed"
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Left Enc Dist",
+              "_title": "Left Enc Dist"
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Left Enc Rate",
+              "_title": "Left Enc Rate"
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Right Enc Dist",
+              "_title": "Right Enc Dist"
+            }
+          },
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Right Enc Rate",
+              "_title": "Right Enc Rate"
+            }
+          },
+          "1,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drivetrain/Enc Avg Dist",
+              "_title": "Enc Avg Dist"
+            }
+          },
+          "0,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Bool/High Gear",
+              "_title": "SmartDashboard/Bool/High Gear",
+              "colorWhenTrue": "#7CFC00FF",
+              "colorWhenFalse": "#8B0000FF"
             }
           }
         }
