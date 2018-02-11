@@ -63,7 +63,7 @@ public class RobotMap {
 	public static AHRS fancyGyro;
 	public static DoubleSolenoid dtGear;
 
-	private final double DIST_PER_PULSE_RATIO = (5.0 * Math.PI) * (17 / 25) / (3 * 256);
+	private final double DIST_PER_PULSE_RATIO = (5.0 * Math.PI) * (17.0 / 25) / (3.0 * 256);
 
 	/**
 	 * This function takes in a TalonSRX motorController and sets nominal and peak
@@ -123,8 +123,8 @@ public class RobotMap {
 		leftEncDist.setPIDSourceType(PIDSourceType.kDisplacement);
 		leftEncRate = new Encoder(leftEncPort1, leftEncPort2);
 		leftEncRate.setPIDSourceType(PIDSourceType.kRate);
-		leftEncDist.setDistancePerPulse(Robot.getConst("DPP", 0.013908));
-		leftEncRate.setDistancePerPulse(Robot.getConst("DPP", 0.013908));
+		leftEncDist.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
+		leftEncRate.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
 
 		dtLeftMaster = new WPI_TalonSRX(getPort("LeftTalonSRXMaster", 1));
 		configSRX(dtLeftMaster);
@@ -150,8 +150,8 @@ public class RobotMap {
 		rightEncDist.setPIDSourceType(PIDSourceType.kDisplacement);
 		rightEncRate = new Encoder(rightEncPort1, rightEncPort2);
 		rightEncRate.setPIDSourceType(PIDSourceType.kRate);
-		rightEncDist.setDistancePerPulse(Robot.getConst("DPP", 0.013908));
-		rightEncRate.setDistancePerPulse(Robot.getConst("DPP", 0.013908));
+		rightEncDist.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
+		rightEncRate.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
 
 		dtRightMaster = new WPI_TalonSRX(getPort("RightTalonSRXMaster", 4));
 		configSRX(dtRightMaster);
@@ -215,7 +215,7 @@ public class RobotMap {
 		double gearReduction = Robot.getBool("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
 				: Robot.getConst("Low Gear Gear Reduction", 12.255);
 		double radius = Robot.getConst("Radius of Drivetrain Wheel", 0.0635);
-		double timeConstant = Robot.getConst("Omega Max", 5330) / gearReduction
+		double timeConstant = Robot.getConst("Omega Max", 5330) / gearReduction / 60 * 2 * Math.PI
 				* convertNtokG(Robot.getConst("Weight of Robot", 342)) / 2 * radius * radius
 				/ (Robot.getConst("Stall Torque", 2.41) * gearReduction * 2);
 		double cycleTime = Robot.getConst("Code cycle time", 0.05);
@@ -223,7 +223,7 @@ public class RobotMap {
 		 * The denominator of kD is 1-(e ^ -cycleTime / timeConstant). The numerator is
 		 * one.
 		 */
-		double denominator = 1 - Math.pow(Math.E, -1 * cycleTime / timeConstant);
+		double denominator = Math.pow(Math.E, 1 * cycleTime / timeConstant) - 1;
 		return 1 / denominator;
 	}
 

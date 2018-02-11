@@ -1,9 +1,5 @@
 package org.usfirst.frc.team199.Robot2018.subsystems;
 
-import org.usfirst.frc.team199.Robot2018.RobotMap;
-
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -11,7 +7,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 
-	private final WPI_TalonSRX intakeMotor = RobotMap.intakeMotor;
+	// private final WPI_TalonSRX intakeMotor = RobotMap.intakeMotor;
 
 	/**
 	 * Set the default command for a subsystem here.
@@ -25,7 +21,8 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * returns current motor value
 	 */
 	public double getIntakeSpeed() {
-		return intakeMotor.get();
+		// return intakeMotor.get();
+		return 0;
 	}
 
 	/**
@@ -48,7 +45,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * 
 	 */
 	public void stopIntake() {
-		intakeMotor.stopMotor();
+		// intakeMotor.stopMotor();
 	}
 
 	/**
