@@ -64,7 +64,7 @@ public class VelocityPIDController extends PIDController implements SpeedControl
 	 */
 	@Override
 	public double get() {
-		return getSetpoint();
+		return out.get();
 	}
 
 	/**

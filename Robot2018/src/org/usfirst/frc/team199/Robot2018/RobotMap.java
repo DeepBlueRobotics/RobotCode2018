@@ -135,8 +135,8 @@ public class RobotMap {
 		dtLeft.setInverted(true);
 
 		leftVelocityController = new VelocityPIDController(Robot.getConst("VelocityLeftkI", 0), 0,
-				Robot.getConst("VelocityLeftkD", calcDefkD()), 1 / Robot.getConst("Max Low Speed", 84), leftEncRate,
-				dtLeft);
+				Robot.getConst("VelocityLeftkD", calcDefkD(Robot.getConst("Max Low Speed", 84))),
+				1 / Robot.getConst("Max Low Speed", 84), leftEncRate, dtLeft);
 		leftVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
 				Robot.getConst("Max High Speed", 204));
 		leftVelocityController.setOutputRange(-1.0, 1.0);
@@ -152,6 +152,7 @@ public class RobotMap {
 		rightEncRate.setPIDSourceType(PIDSourceType.kRate);
 		rightEncDist.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
 		rightEncRate.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
+		rightEncRate.setReverseDirection(true);
 
 		dtRightMaster = new WPI_TalonSRX(getPort("RightTalonSRXMaster", 4));
 		configSRX(dtRightMaster);
@@ -162,18 +163,17 @@ public class RobotMap {
 		dtRight.setInverted(true);
 
 		rightVelocityController = new VelocityPIDController(Robot.getConst("VelocityRightkI", 0), 0,
-				Robot.getConst("VelocityRightkD", calcDefkD()), 1 / Robot.getConst("Max Low Speed", 84), rightEncRate,
-				dtRight);
+				Robot.getConst("VelocityRightkD", calcDefkD(Robot.getConst("Max Low Speed", 84))),
+				1 / Robot.getConst("Max Low Speed", 84), rightEncRate, dtRight);
 		rightVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
 				Robot.getConst("Max High Speed", 204));
 		rightVelocityController.setOutputRange(-1.0, 1.0);
 		rightVelocityController.setContinuous(false);
 		rightVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceRight", 2));
 
-		// robotDrive = new DifferentialDrive(leftVelocityController,
-		// rightVelocityController);
-		// robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
-		robotDrive = new DifferentialDrive(dtLeft, dtRight);
+		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
+		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
+		// robotDrive = new DifferentialDrive(dtLeft, dtRight);
 
 		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
 		fancyGyro = new AHRS(SerialPort.Port.kMXP);
@@ -203,7 +203,7 @@ public class RobotMap {
 	/**
 	 * Uses SmartDashboard and math to calculate a *great* default kD
 	 */
-	public double calcDefkD() {
+	public double calcDefkD(double maxSpeed) {
 		/*
 		 * timeConstant is proportional to max speed of the shaft (which is the max
 		 * speed of the cim divided by the gear reduction), half the mass (because the
@@ -224,7 +224,7 @@ public class RobotMap {
 		 * one.
 		 */
 		double denominator = Math.pow(Math.E, 1 * cycleTime / timeConstant) - 1;
-		return 1 / denominator;
+		return 1 / denominator / maxSpeed;
 	}
 
 	private double convertLbsTokG(double lbs) {

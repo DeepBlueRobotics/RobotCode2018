@@ -195,10 +195,8 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void updatePidConstants() {
-		leftVelocityController.setPID(Robot.getConst("VelocityLeftkI", 0), Robot.getConst("VelocityLeftkI", 0),
-				Robot.getConst("VelocityLeftkD", 0));
-		rightVelocityController.setPID(Robot.getConst("VelocityRightkI", 0), Robot.getConst("VelocityRightkI", 0),
-				Robot.getConst("VelocityRightkD", 0));
+		leftVelocityController.setPID(Robot.getConst("VelocityLeftkI", 0), 0, calcDefkD(getCurrentMaxSpeed()));
+		rightVelocityController.setPID(Robot.getConst("VelocityRightkI", 0), 0, calcDefkD(getCurrentMaxSpeed()));
 		resetVelocityPIDkFConsts();
 	}
 
@@ -365,5 +363,37 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	public void putVelocityControllersToDashboard() {
 		SmartDashboard.putData("Left PID Controller", leftVelocityController);
 		SmartDashboard.putData("Right PID Controller", rightVelocityController);
+	}
+
+	/**
+	 * Uses SmartDashboard and math to calculate a *great* default kD
+	 */
+	public double calcDefkD(double maxSpeed) {
+		/*
+		 * timeConstant is proportional to max speed of the shaft (which is the max
+		 * speed of the cim divided by the gear reduction), half the mass (because the
+		 * half of the drivetrain only has to support half of the robot), and radius of
+		 * the drivetrain wheels squared. It's inversely proportional to the stall
+		 * torque of the shaft, which is found by multiplying the stall torque of the
+		 * motor with the gear reduction by the amount of motors.
+		 */
+		double gearReduction = Robot.getBool("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
+				: Robot.getConst("Low Gear Gear Reduction", 12.255);
+		double radius = Robot.getConst("Radius of Drivetrain Wheel", 0.0635);
+		double timeConstant = Robot.getConst("Omega Max", 5330) / gearReduction / 60 * 2 * Math.PI
+				* convertNtokG(Robot.getConst("Weight of Robot", 342)) / 2 * radius * radius
+				/ (Robot.getConst("Stall Torque", 2.41) * gearReduction * 2);
+		double cycleTime = Robot.getConst("Code cycle time", 0.05);
+		/*
+		 * The denominator of kD is 1-(e ^ -cycleTime / timeConstant). The numerator is
+		 * one.
+		 */
+		double denominator = Math.pow(Math.E, 1 * cycleTime / timeConstant) - 1;
+		return 1 / denominator / maxSpeed;
+	}
+
+	private double convertNtokG(double newtons) {
+		// weight / accel due to grav = kg
+		return newtons / 9.81;
 	}
 }
