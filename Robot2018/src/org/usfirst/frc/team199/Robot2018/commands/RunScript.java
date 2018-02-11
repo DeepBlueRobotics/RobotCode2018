@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
-import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
@@ -23,19 +22,19 @@ public class RunScript extends CommandGroup {
 
 			switch (cmdName) {
 			case "moveto":
-				addSequential(new AutoMoveTo(cmdArgs.split(" "), Robot.dt, Robot.sd, new PIDSourceAverage(null, null)));
+				addSequential(new AutoMoveTo(cmdArgs.split(" ")));
 				break;
 			case "turn":
 				double rotation = Double.parseDouble(cmdArgs);
 				addSequential(new PIDTurn(rotation, Robot.dt, Robot.sd, Robot.dt.getGyro()));
-				AutoUtils.setRot(rotation);
+				AutoUtils.position.setRot(rotation);
 				break;
 			case "move":
 				double distance = Double.parseDouble(cmdArgs);
 
-				addSequential(new PIDMove(distance, Robot.dt, Robot.sd, new PIDSourceAverage(null, null)));
-				AutoUtils.setX(distance * Math.sin(Math.toRadians(AutoUtils.getRot())));
-				AutoUtils.setY(distance * Math.cos(Math.toRadians(AutoUtils.getRot())));
+				addSequential(new PIDMove(distance, Robot.dt, Robot.sd, Robot.dt.getDistEncAvg()));
+				AutoUtils.position.setX(distance * Math.sin(Math.toRadians(AutoUtils.position.getRot())));
+				AutoUtils.position.setY(distance * Math.cos(Math.toRadians(AutoUtils.position.getRot())));
 				break;
 			case "switch":
 				addSequential(new EjectToSwitch());

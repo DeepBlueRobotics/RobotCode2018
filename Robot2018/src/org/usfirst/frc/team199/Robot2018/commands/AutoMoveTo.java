@@ -1,5 +1,6 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
+import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
 import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
@@ -23,18 +24,53 @@ public class AutoMoveTo extends CommandGroup {
 		for (String arg : args) {
 			if (AutoUtils.isDouble(arg)) {
 				rotation = Double.valueOf(arg);
-				addSequential(new PIDTurn(rotation - AutoUtils.position.getRot(), dt, sd, pidMoveSrc));
+				double relrotation = rotation - AutoUtils.position.getRot();
+				addSequential(new PIDTurn(relrotation, dt, sd, pidMoveSrc));
 				AutoUtils.position.setRot(rotation);
 			} else if (AutoUtils.isPoint(arg)) {
 				point = AutoUtils.parsePoint(arg);
-				addSequential(new PIDTurn(Math.toDegrees(
-						Math.atan((point[0] - AutoUtils.position.getX()) / (point[1] - AutoUtils.position.getY()))
-								- AutoUtils.position.getRot()),
-						dt, sd, pidMoveSrc));
-				addSequential(new PIDMove(
-						Math.sqrt(((point[0] - AutoUtils.position.getX()) * (point[0] - AutoUtils.position.getX())
-								+ ((point[1] - AutoUtils.position.getY()) * (point[1] - AutoUtils.position.getY())))),
-						dt, sd, pidMoveSrc));
+				double deltaX = point[0] - AutoUtils.position.getX();
+				double deltaY = point[1] - AutoUtils.position.getY();
+				double atan = Math.toDegrees(Math.atan(deltaX / deltaY));
+				double relrotation = atan - AutoUtils.position.getRot();
+				addSequential(new PIDTurn(relrotation, dt, sd, pidMoveSrc));
+				double dX2 = deltaX * deltaX;
+				double dY2 = deltaY * deltaY;
+				double distance = Math.sqrt(dX2 + dY2);
+				addSequential(new PIDMove(distance, dt, sd, pidMoveSrc));
+				double x = AutoUtils.position.getX();
+				double y = AutoUtils.position.getY();
+				AutoUtils.position.setX(point[0]);
+				AutoUtils.position.setY(point[1]);
+				AutoUtils.position.setRot(Math.toDegrees(Math.atan((point[0] - x) / (point[1] - y))));
+			} else {
+				throw new IllegalArgumentException();
+			}
+		}
+	}
+
+	public AutoMoveTo(String[] args) {
+		// requires(Drivetrain);
+		double rotation;
+		double[] point = { 0, 0 };
+		for (String arg : args) {
+			if (AutoUtils.isDouble(arg)) {
+				rotation = Double.valueOf(arg);
+				double relrotation = rotation - AutoUtils.position.getRot();
+				addSequential(new PIDTurn(relrotation, Robot.dt, Robot.sd, Robot.dt.getDistEncAvg()));
+				AutoUtils.position.setRot(rotation);
+			} else if (AutoUtils.isPoint(arg)) {
+				point = AutoUtils.parsePoint(arg);
+				double deltaX = point[0] - AutoUtils.position.getX();
+				double deltaY = point[1] - AutoUtils.position.getY();
+				double atan = Math.toDegrees(Math.atan(deltaX / deltaY));
+				double relrotation = atan - AutoUtils.position.getRot();
+				addSequential(new PIDTurn(relrotation, Robot.dt, Robot.sd, Robot.dt.getDistEncAvg()));
+
+				double dX2 = deltaX * deltaX;
+				double dY2 = deltaY * deltaY;
+				double distance = Math.sqrt(dX2 + dY2);
+				addSequential(new PIDMove(distance, Robot.dt, Robot.sd, Robot.dt.getDistEncAvg()));
 				double x = AutoUtils.position.getX();
 				double y = AutoUtils.position.getY();
 				AutoUtils.position.setX(point[0]);
