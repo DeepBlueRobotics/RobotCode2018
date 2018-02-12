@@ -11,6 +11,7 @@ import org.usfirst.frc.team199.Robot2018.commands.CloseIntake;
 import org.usfirst.frc.team199.Robot2018.commands.IntakeCube;
 import org.usfirst.frc.team199.Robot2018.commands.LowerIntake;
 import org.usfirst.frc.team199.Robot2018.commands.OpenIntake;
+import org.usfirst.frc.team199.Robot2018.commands.OutakeCube;
 import org.usfirst.frc.team199.Robot2018.commands.PIDMove;
 import org.usfirst.frc.team199.Robot2018.commands.PIDTurn;
 import org.usfirst.frc.team199.Robot2018.commands.RaiseIntake;
@@ -86,8 +87,8 @@ public class OI {
 		lowerIntake = new JoystickButton(manipulator, getButton("Lower Intake Button", 4));
 		lowerIntake.whenPressed(new LowerIntake());
 		intake = new JoystickButton(manipulator, getButton("Intake Button", 5));
-		intake.whileHeld(new IntakeCube(true));
+		intake.whenPressed(new IntakeCube());
 		outake = new JoystickButton(manipulator, getButton("Outake Button", 6));
-		outake.whileHeld(new IntakeCube(false));
+		outake.whenPressed(new OutakeCube());
 	}
 }

@@ -77,31 +77,55 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * Raises the intake
 	 */
 	public void raiseIntake() {
-		leftVerticalSolenoid.set(DoubleSolenoid.Value.kForward);
-		rightVerticalSolenoid.set(DoubleSolenoid.Value.kForward);
+		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Vertical Solenoid Inverted", false)
+				? DoubleSolenoid.Value.kReverse
+				: DoubleSolenoid.Value.kForward;
+		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Vertical Solenoid Inverted", false)
+				? DoubleSolenoid.Value.kReverse
+				: DoubleSolenoid.Value.kForward;
+		leftVerticalSolenoid.set(leftSet);
+		rightVerticalSolenoid.set(rightSet);
 	}
 
 	/**
 	 * Lowers the intake
 	 */
 	public void lowerIntake() {
-		leftVerticalSolenoid.set(DoubleSolenoid.Value.kReverse);
-		rightVerticalSolenoid.set(DoubleSolenoid.Value.kReverse);
+		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Vertical Solenoid Inverted", false)
+				? DoubleSolenoid.Value.kForward
+				: DoubleSolenoid.Value.kReverse;
+		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Vertical Solenoid Inverted", false)
+				? DoubleSolenoid.Value.kForward
+				: DoubleSolenoid.Value.kReverse;
+		leftVerticalSolenoid.set(leftSet);
+		rightVerticalSolenoid.set(rightSet);
 	}
 
 	/**
 	 * Opens the intake
 	 */
 	public void openIntake() {
-		leftHorizontalSolenoid.set(DoubleSolenoid.Value.kForward);
-		rightHorizontalSolenoid.set(DoubleSolenoid.Value.kForward);
+		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false)
+				? DoubleSolenoid.Value.kReverse
+				: DoubleSolenoid.Value.kForward;
+		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Horizontal Solenoid Inverted", false)
+				? DoubleSolenoid.Value.kReverse
+				: DoubleSolenoid.Value.kForward;
+		leftHorizontalSolenoid.set(leftSet);
+		rightHorizontalSolenoid.set(rightSet);
 	}
 
 	/**
 	 * Closes the intake
 	 */
 	public void closeIntake() {
-		leftHorizontalSolenoid.set(DoubleSolenoid.Value.kForward);
-		rightHorizontalSolenoid.set(DoubleSolenoid.Value.kForward);
+		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false)
+				? DoubleSolenoid.Value.kForward
+				: DoubleSolenoid.Value.kReverse;
+		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Horizontal Solenoid Inverted", false)
+				? DoubleSolenoid.Value.kForward
+				: DoubleSolenoid.Value.kReverse;
+		leftHorizontalSolenoid.set(leftSet);
+		rightHorizontalSolenoid.set(rightSet);
 	}
 }
