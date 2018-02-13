@@ -8,6 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Turns the robot to a certain target bearing using PID. Implements PIDOutput
@@ -63,7 +64,9 @@ public class PIDTurn extends Command implements PIDOutput {
 		turnController.setContinuous();
 		turnController.setAbsoluteTolerance(Robot.getConst("TurnTolerance", 1));
 		turnController.setSetpoint(target);
+		SmartDashboard.putData("Turn PID", turnController);
 		turnController.enable();
+		dt.enableVelocityPIDs();
 	}
 
 	/**
@@ -73,6 +76,8 @@ public class PIDTurn extends Command implements PIDOutput {
 	 */
 	@Override
 	protected void execute() {
+		SmartDashboard.putNumber("Turn PID Result", turnController.get());
+		SmartDashboard.putNumber("Turn PID Error", turnController.getError());
 	}
 
 	/**
@@ -95,7 +100,7 @@ public class PIDTurn extends Command implements PIDOutput {
 	@Override
 	protected void end() {
 		turnController.disable();
-		turnController.free();
+		// turnController.free();
 	}
 
 	/**

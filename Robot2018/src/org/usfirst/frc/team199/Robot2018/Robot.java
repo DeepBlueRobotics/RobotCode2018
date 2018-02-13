@@ -178,9 +178,23 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+
+		SmartDashboard.putNumber("Drivetrain/Left VPID Targ", Robot.dt.getLeftVPIDSetpoint());
+		SmartDashboard.putNumber("Drivetrain/Right VPID Targ", Robot.dt.getRightVPIDSetpoint());
+		SmartDashboard.putNumber("Left VPID Error", Robot.dt.getLeftVPIDerror());
+		SmartDashboard.putNumber("Right VPID Error", Robot.dt.getRightVPIDerror());
+		SmartDashboard.putNumber("Left Enc Rate", Robot.dt.getLeftEncRate());
+		SmartDashboard.putNumber("Right Enc Rate", Robot.dt.getRightEncRate());
+
+		SmartDashboard.putNumber("Left Enc Dist", dt.getLeftDist());
+		SmartDashboard.putNumber("Right Enc Dist", dt.getRightDist());
+		SmartDashboard.putNumber("Avg Enc Dist", dt.getEncAvgDist());
 	}
 
 	boolean firstTime = true;
+
+	public void testInit() {
+	}
 
 	/**
 	 * This function is called periodically during test mode
@@ -192,12 +206,19 @@ public class Robot extends TimedRobot {
 		// firstTime = false;
 		//// }
 		// Robot.dt.setVPIDs(Robot.getConst("VPID Test Set", 0.5));
+
+		Scheduler.getInstance().run();
+
 		SmartDashboard.putNumber("Drivetrain/Left VPID Targ", Robot.dt.getLeftVPIDSetpoint());
 		SmartDashboard.putNumber("Drivetrain/Right VPID Targ", Robot.dt.getRightVPIDSetpoint());
 		SmartDashboard.putNumber("Left VPID Error", Robot.dt.getLeftVPIDerror());
 		SmartDashboard.putNumber("Right VPID Error", Robot.dt.getRightVPIDerror());
 		SmartDashboard.putNumber("Left Enc Rate", Robot.dt.getLeftEncRate());
 		SmartDashboard.putNumber("Right Enc Rate", Robot.dt.getRightEncRate());
+
+		SmartDashboard.putNumber("Left Enc Dist", dt.getLeftDist());
+		SmartDashboard.putNumber("Right Enc Dist", dt.getRightDist());
+		SmartDashboard.putNumber("Avg Enc Dist", dt.getEncAvgDist());
 
 		// dt.dtLeft.set(0.1);
 		// dt.dtRight.set(-oi.rightJoy.getY());

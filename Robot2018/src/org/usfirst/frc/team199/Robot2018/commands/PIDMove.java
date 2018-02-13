@@ -39,7 +39,7 @@ public class PIDMove extends Command implements PIDOutput {
 		target = targ;
 		this.dt = dt;
 		double kf = 1 / (dt.getCurrentMaxSpeed() * Robot.getConst("Default PID Update Time", 0.05));
-		moveController = new PIDController(Robot.getConst("MovekP", 1), Robot.getConst("MovekI", 0),
+		moveController = new PIDController(Robot.getConst("MovekP", 0), Robot.getConst("MovekI", 0),
 				Robot.getConst("MovekD", 0), kf, avg, this);
 	}
 
@@ -50,6 +50,7 @@ public class PIDMove extends Command implements PIDOutput {
 	@Override
 	public void initialize() {
 		dt.resetDistEncs();
+		moveController.disable();
 		// input is in inches
 		moveController.setInputRange(-Robot.getConst("Max High Speed", 204), Robot.getConst("Max High Speed", 204));
 		// output in "motor units" (arcade and tank only accept values [-1, 1]
@@ -57,8 +58,11 @@ public class PIDMove extends Command implements PIDOutput {
 		moveController.setContinuous(false);
 		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 2));
 		moveController.setSetpoint(target);
+
+		SmartDashboard.putData("Move PID", moveController);
+
 		moveController.enable();
-		SmartDashboard.putData(moveController);
+		dt.enableVelocityPIDs();
 	}
 
 	/**
@@ -68,6 +72,8 @@ public class PIDMove extends Command implements PIDOutput {
 	 */
 	@Override
 	protected void execute() {
+		SmartDashboard.putNumber("Move PID Result", moveController.get());
+		SmartDashboard.putNumber("Move PID Error", moveController.getError());
 	}
 
 	/**
@@ -89,7 +95,7 @@ public class PIDMove extends Command implements PIDOutput {
 	@Override
 	protected void end() {
 		moveController.disable();
-		moveController.free();
+		// moveController.free();
 	}
 
 	/**
@@ -115,5 +121,6 @@ public class PIDMove extends Command implements PIDOutput {
 	@Override
 	public void pidWrite(double output) {
 		dt.arcadeDrive(output, 0);
+		SmartDashboard.putNumber("Move PID Output", output);
 	}
 }

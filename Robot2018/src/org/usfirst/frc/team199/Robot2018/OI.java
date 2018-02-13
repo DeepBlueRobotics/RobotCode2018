@@ -9,6 +9,7 @@ package org.usfirst.frc.team199.Robot2018;
 
 import org.usfirst.frc.team199.Robot2018.commands.PIDMove;
 import org.usfirst.frc.team199.Robot2018.commands.PIDTurn;
+import org.usfirst.frc.team199.Robot2018.commands.ResetEncoders;
 import org.usfirst.frc.team199.Robot2018.commands.SetDistancePerPulse;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftDriveType;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftHighGear;
@@ -31,18 +32,19 @@ public class OI {
 	private JoystickButton shiftDriveTypeButton;
 	private JoystickButton PIDMoveButton;
 	private JoystickButton PIDTurnButton;
+	private JoystickButton resetEncButton;
 	public Joystick rightJoy;
 	private JoystickButton updatePIDConstantsButton;
 	private JoystickButton updateEncoderDPPButton;
 	public Joystick manipulator;
-	
+
 	public int getButton(String key, int def) {
 		if (!SmartDashboard.containsKey("Button/" + key)) {
 			if (!SmartDashboard.putNumber("Button/" + key, def)) {
 				System.err.println("SmartDashboard Key" + "Button/" + key + "already taken by a different type");
 				return def;
 			}
-		}		
+		}
 		return (int) SmartDashboard.getNumber("Button/" + key, def);
 	}
 
@@ -51,9 +53,11 @@ public class OI {
 		shiftDriveTypeButton = new JoystickButton(leftJoy, getButton("Shift Drive Type", 2));
 		shiftDriveTypeButton.whenPressed(new ShiftDriveType());
 		PIDMoveButton = new JoystickButton(leftJoy, getButton("PID Move", 7));
-		PIDMoveButton.whenPressed(new PIDMove(40, Robot.dt, RobotMap.distEncAvg));
+		PIDMoveButton.whenPressed(new PIDMove(Robot.getConst("Move Targ", 24), Robot.dt, RobotMap.distEncAvg));
 		PIDTurnButton = new JoystickButton(leftJoy, getButton("PID Turn", 8));
 		PIDTurnButton.whenPressed(new PIDTurn(30, Robot.dt, RobotMap.fancyGyro));
+		resetEncButton = new JoystickButton(leftJoy, getButton("Reset Dist Enc", 10));
+		resetEncButton.whenPressed(new ResetEncoders());
 
 		rightJoy = new Joystick(1);
 		shiftHighGearButton = new JoystickButton(rightJoy, getButton("Shift High Gear", 3));

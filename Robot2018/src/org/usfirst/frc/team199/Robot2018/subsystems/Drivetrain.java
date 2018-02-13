@@ -52,6 +52,22 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		setDefaultCommand(new TeleopDrive());
 	}
 
+	public PIDSourceAverage getDistEncAvg() {
+		return distEncAvg;
+	}
+
+	public double getEncAvgDist() {
+		return distEncAvg.pidGet();
+	}
+
+	public double getLeftDist() {
+		return leftEncDist.getDistance();
+	}
+
+	public double getRightDist() {
+		return rightEncDist.getDistance();
+	}
+
 	public void setLeft(double spd) {
 		dtLeft.set(spd);
 	}
