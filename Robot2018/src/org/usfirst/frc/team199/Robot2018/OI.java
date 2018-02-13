@@ -9,6 +9,7 @@ package org.usfirst.frc.team199.Robot2018;
 
 import org.usfirst.frc.team199.Robot2018.commands.PIDMove;
 import org.usfirst.frc.team199.Robot2018.commands.PIDTurn;
+import org.usfirst.frc.team199.Robot2018.commands.RunLift;
 import org.usfirst.frc.team199.Robot2018.commands.SetDistancePerPulse;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftDriveType;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftHighGear;
@@ -31,6 +32,8 @@ public class OI {
 	private JoystickButton shiftDriveTypeButton;
 	private JoystickButton PIDMoveButton;
 	private JoystickButton PIDTurnButton;
+	private JoystickButton MoveLiftUpButton;
+	private JoystickButton MoveLiftDownButton;
 	public Joystick rightJoy;
 	private JoystickButton updatePIDConstantsButton;
 	private JoystickButton updateEncoderDPPButton;
@@ -55,6 +58,11 @@ public class OI {
 		PIDMoveButton.whenPressed(new PIDMove(40, Robot.dt, RobotMap.distEncAvg));
 		PIDTurnButton = new JoystickButton(leftJoy, getButton("PID Turn", 8));
 		PIDTurnButton.whenPressed(new PIDTurn(30, Robot.dt, RobotMap.fancyGyro));
+		
+		MoveLiftUpButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Up",10));
+		MoveLiftDownButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Down",11));
+		MoveLiftUpButton.whileHeld(new RunLift(Robot.lift,true));
+		MoveLiftDownButton.whileHeld(new RunLift(Robot.lift,false));
 
 		rightJoy = new Joystick(1);
 		updatePIDConstantsButton = new JoystickButton(rightJoy, getButton("Get PID Constants", 8));
