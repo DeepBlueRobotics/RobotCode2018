@@ -246,8 +246,13 @@ public class AutoUtils {
 		if (AutoUtils.isPoint(cmdArgs)) {
 			parentheseless = cmdArgs.substring(1, cmdArgs.length() - 1);
 			pointparts = parentheseless.split(",");
-			point[0] = Double.parseDouble(pointparts[0]);
-			point[1] = Double.parseDouble(pointparts[1]);
+            try {
+			    point[0] = Double.parseDouble(pointparts[0]);
+			    point[1] = Double.parseDouble(pointparts[1]);
+            } catch (Exception e) {
+                point[0] = 1;
+                point[1] = 1;
+            }
 		}
 		return point;
 	}
