@@ -1,12 +1,12 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
+import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
 import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
-
-import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -33,19 +33,25 @@ public class PIDTurn extends Command implements PIDOutput {
 	 *            testing)
 	 * @param ahrs
 	 *            the AHRS (gyro)
+	 * @param sd
+	 *            the Smart Dashboard reference, or a SmartDashboardInterface for
+	 *            testing
 	 */
-	public PIDTurn(double targ, DrivetrainInterface dt, AHRS ahrs) {
+	public PIDTurn(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
 		// Use requires() here to declare subsystem dependencies
-		requires(Robot.dt);
 		target = targ;
 		this.dt = dt;
+		if (Robot.dt != null) {
+			requires(Robot.dt);
+		}
+		turnController = new PIDController(sd.getConst("TurnkP", 1), sd.getConst("TurnkI", 0), sd.getConst("TurnkD", 0),
+				ahrs, this);
 		// calculates the maximum turning speed in degrees/sec based on the max linear
 		// speed in inches/s and the distance (inches) between sides of the DT
-		double maxTurnSpeed = dt.getCurrentMaxSpeed() * 360
-				/ (Math.PI * Robot.getConst("Distance Between Wheels", 26.25));
-		double kf = 1 / (maxTurnSpeed * Robot.getConst("Default PID Update Time", 0.05));
-		turnController = new PIDController(Robot.getConst("TurnkP", 1), Robot.getConst("TurnkI", 0),
-				Robot.getConst("TurnkD", 0), kf, ahrs, this);
+		double maxTurnSpeed = dt.getCurrentMaxSpeed() * 360 / (Math.PI * sd.getConst("Distance Between Wheels", 26.25));
+		double kf = 1 / (maxTurnSpeed * sd.getConst("Default PID Update Time", 0.05));
+		turnController = new PIDController(sd.getConst("TurnkP", 1), sd.getConst("TurnkI", 0), sd.getConst("TurnkD", 0),
+				kf, ahrs, this);
 	}
 
 	/**

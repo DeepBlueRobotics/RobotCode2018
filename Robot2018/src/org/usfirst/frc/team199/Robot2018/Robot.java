@@ -55,11 +55,17 @@ public class Robot extends TimedRobot {
 	Map<String, SendableChooser<Strategy>> stratChoosers = new HashMap<String, SendableChooser<Strategy>>();
 	String[] fmsPossibilities = { "LL", "LR", "RL", "RR" };
 
-	public static double getConst(String key, double def) {
-		if (!SmartDashboard.containsKey("Const/" + key)) {
-			SmartDashboard.putNumber("Const/" + key, def);
+	public static SmartDashboardInterface sd = new SmartDashboardInterface() {
+		public double getConst(String key, double def) {
+			if (!SmartDashboard.containsKey("Const/" + key)) {
+				SmartDashboard.putNumber("Const/" + key, def);
+			}
+			return SmartDashboard.getNumber("Const/" + key, def);
 		}
-		return SmartDashboard.getNumber("Const/" + key, def);
+	};
+
+	public static double getConst(String key, double def) {
+		return sd.getConst(key, def);
 	}
 
 	public static boolean getBool(String key, boolean def) {
@@ -70,8 +76,8 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
+	 * This function is run when the robot is first started up and should be used
+	 * for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
@@ -110,9 +116,9 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This function is called once each time the robot enters Disabled mode.
-	 * You can use it to reset any subsystem information you want to clear when
-	 * the robot is disabled.
+	 * This function is called once each time the robot enters Disabled mode. You
+	 * can use it to reset any subsystem information you want to clear when the
+	 * robot is disabled.
 	 */
 	@Override
 	public void disabledInit() {
@@ -125,9 +131,9 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This function is called once during the start of autonomous in order to
-	 * grab values from SmartDashboard and the FMS and call the Autonomous
-	 * command with those values.
+	 * This function is called once during the start of autonomous in order to grab
+	 * values from SmartDashboard and the FMS and call the Autonomous command with
+	 * those values.
 	 */
 	@Override
 	public void autonomousInit() {
