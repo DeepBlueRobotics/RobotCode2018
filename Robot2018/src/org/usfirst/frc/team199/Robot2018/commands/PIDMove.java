@@ -76,7 +76,9 @@ public class PIDMove extends Command implements PIDOutput {
 	 */
 	@Override
 	protected boolean isFinished() {
-		return moveController.onTarget();
+		return moveController.onTarget()
+				&& Math.abs(dt.getLeftEncRate()) <= Robot.getConst("Maximum Velocity When Stop", 1)
+				&& Math.abs(dt.getRightEncRate()) <= Robot.getConst("Maximum Velocity When Stop", 1);
 	}
 
 	/**

@@ -34,6 +34,8 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	private final WPI_VictorSPX dtRightSlave = RobotMap.dtRightSlave;
 	private final Encoder leftEncDist = RobotMap.leftEncDist;
 	private final Encoder rightEncDist = RobotMap.rightEncDist;
+	private final Encoder leftEncRate = RobotMap.leftEncRate;
+	private final Encoder rightEncRate = RobotMap.rightEncRate;
 	private final PIDSourceAverage distEncAvg = RobotMap.distEncAvg;
 	private final SpeedControllerGroup dtLeft = RobotMap.dtLeft;
 	private final SpeedControllerGroup dtRight = RobotMap.dtRight;
@@ -47,6 +49,24 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	@Override
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleopDrive());
+	}
+
+	/**
+	 * Returns the getRate() of the left encoder
+	 * 
+	 * @return the rate of the left encoder
+	 */
+	public double getLeftEncRate() {
+		return leftEncRate.getRate();
+	}
+
+	/**
+	 * Returns the getRate() of the right encoder
+	 * 
+	 * @return the rate of the right encoder
+	 */
+	public double getRightEncRate() {
+		return rightEncRate.getRate();
 	}
 
 	/**
