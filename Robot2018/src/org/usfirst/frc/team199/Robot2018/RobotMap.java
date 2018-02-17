@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -171,12 +171,13 @@ public class RobotMap {
 		rightVelocityController.setContinuous(false);
 		rightVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceRight", 2));
 
-		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
-		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
-		// robotDrive = new DifferentialDrive(dtLeft, dtRight);
+		// robotDrive = new DifferentialDrive(leftVelocityController,
+		// rightVelocityController);
+		// robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
+		robotDrive = new DifferentialDrive(dtLeft, dtRight);
 
 		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
-		fancyGyro = new AHRS(SerialPort.Port.kMXP);
+		fancyGyro = new AHRS(SPI.Port.kMXP);
 		dtGear = new DoubleSolenoid(getPort("1dtGearSolenoid", 0), getPort("2dtGearSolenoid", 1));
 	}
 

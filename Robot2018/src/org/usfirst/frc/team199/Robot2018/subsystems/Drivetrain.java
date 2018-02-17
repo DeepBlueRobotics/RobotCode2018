@@ -251,7 +251,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public double getAHRSAngle() {
-		return fancyGyro.getAngle();
+		return fancyGyro.getYaw();
 	}
 
 	/**
