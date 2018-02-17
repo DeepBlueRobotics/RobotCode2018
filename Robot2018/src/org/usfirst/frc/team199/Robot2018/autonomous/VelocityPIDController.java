@@ -41,7 +41,7 @@ public class VelocityPIDController extends PIDController implements SpeedControl
 	 */
 	@Override
 	public void pidWrite(double output) {
-		setSetpoint(output);
+		set(output);
 	}
 
 	/**

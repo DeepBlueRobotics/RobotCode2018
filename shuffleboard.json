@@ -242,6 +242,17 @@
               "colorWhenTrue": "#7CFC00FF",
               "colorWhenFalse": "#8B0000FF"
             }
+          },
+          "2,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Const/DPP",
+              "_title": "SmartDashboard/Const/DPP"
+            }
           }
         }
       }
