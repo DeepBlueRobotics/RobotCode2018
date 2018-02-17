@@ -15,6 +15,7 @@ import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Position;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Strategy;
+import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
 import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
@@ -57,21 +58,27 @@ public class Robot extends TimedRobot {
 
 	public static double getConst(String key, double def) {
 		if (!SmartDashboard.containsKey("Const/" + key)) {
-			SmartDashboard.putNumber("Const/" + key, def);
+			if (!SmartDashboard.putNumber("Const/" + key, def)) {
+				System.err.println("SmartDashboard Key" + "Const/" + key + "already taken by a different type");
+				return def;
+			}
 		}
 		return SmartDashboard.getNumber("Const/" + key, def);
 	}
 
 	public static boolean getBool(String key, boolean def) {
 		if (!SmartDashboard.containsKey("Bool/" + key)) {
-			SmartDashboard.putBoolean("Bool/" + key, def);
+			if (!SmartDashboard.putBoolean("Bool/" + key, def)) {
+				System.err.println("SmartDashboard Key" + "Bool/" + key + "already taken by a different type");
+				return def;
+			}
 		}
 		return SmartDashboard.getBoolean("Bool/" + key, def);
 	}
 
 	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
+	 * This function is run when the robot is first started up and should be used
+	 * for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
@@ -102,6 +109,7 @@ public class Robot extends TimedRobot {
 		// auto delay chooser
 		SmartDashboard.putNumber("Auto Delay", 0);
 
+
 		// parse scripts from Preferences, which maintains values throughout
 		// reboots
 		autoScripts = AutoUtils.parseScriptFile(Preferences.getInstance().getString("autoscripts", ""));
@@ -110,9 +118,9 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This function is called once each time the robot enters Disabled mode.
-	 * You can use it to reset any subsystem information you want to clear when
-	 * the robot is disabled.
+	 * This function is called once each time the robot enters Disabled mode. You
+	 * can use it to reset any subsystem information you want to clear when the
+	 * robot is disabled.
 	 */
 	@Override
 	public void disabledInit() {
@@ -125,12 +133,13 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This function is called once during the start of autonomous in order to
-	 * grab values from SmartDashboard and the FMS and call the Autonomous
-	 * command with those values.
+	 * This function is called once during the start of autonomous in order to grab
+	 * values from SmartDashboard and the FMS and call the Autonomous command with
+	 * those values.
 	 */
 	@Override
 	public void autonomousInit() {
+		Scheduler.getInstance().add(new ShiftLowGear());
 		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
 		Position startPos = posChooser.getSelected();
 		double autoDelay = SmartDashboard.getNumber("Auto Delay", 0);

@@ -54,6 +54,6 @@ public class RunScript extends CommandGroup {
 	    				// this should never happen since AutoUtils already validates the script.
 	    				System.err.println("[ERROR] `" + cmdName + "` is not a valid command name.");
     			}
-    		}
-    }
+		}
+	}
 }
