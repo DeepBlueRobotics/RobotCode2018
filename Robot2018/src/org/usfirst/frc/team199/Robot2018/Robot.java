@@ -24,8 +24,8 @@ import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -38,7 +38,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends TimedRobot {
+public class Robot extends IterativeRobot {
 
 	public static Climber climber;
 	public static ClimberAssist climberAssist;
@@ -58,23 +58,34 @@ public class Robot extends TimedRobot {
 	String[] fmsPossibilities = { "LL", "LR", "RL", "RR" };
 
 	public static double getConst(String key, double def) {
-		if (!SmartDashboard.containsKey("Const/" + key)) {
-			if (!SmartDashboard.putNumber("Const/" + key, def)) {
-				System.err.println("SmartDashboard Key" + "Const/" + key + "already taken by a different type");
+		Preferences pref = Preferences.getInstance();
+		if (!pref.containsKey("Const/" + key)) {
+			pref.putDouble("Const/" + key, def);
+			if (pref.getDouble("Const/ + key", def) != def) {
+				System.err.println("pref Key" + "Const/" + key + "already taken by a different type");
 				return def;
 			}
 		}
-		return SmartDashboard.getNumber("Const/" + key, def);
+		return pref.getDouble("Const/" + key, def);
+		/*
+		 * if (!SmartDashboard.containsKey("Const/" + key)) { if
+		 * (!SmartDashboard.putNumber("Const/" + key, def)) {
+		 * System.err.println("SmartDashboard Key" + "Const/" + key +
+		 * "already taken by a different type"); return def; } } return
+		 * SmartDashboard.getNumber("Const/" + key, def);
+		 */
 	}
 
 	public static boolean getBool(String key, boolean def) {
-		if (!SmartDashboard.containsKey("Bool/" + key)) {
-			if (!SmartDashboard.putBoolean("Bool/" + key, def)) {
-				System.err.println("SmartDashboard Key" + "Bool/" + key + "already taken by a different type");
+		Preferences pref = Preferences.getInstance();
+		if (!pref.containsKey("Bool/" + key)) {
+			pref.putBoolean("Bool/" + key, def);
+			if (pref.getBoolean("Bool/" + key, def) == def) {
+				System.err.println("pref Key" + "Bool/" + key + "already taken by a different type");
 				return def;
 			}
 		}
-		return SmartDashboard.getBoolean("Bool/" + key, def);
+		return pref.getBoolean("Bool/" + key, def);
 	}
 
 	/**
@@ -182,16 +193,20 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 
-		SmartDashboard.putNumber("Drivetrain/Left VPID Targ", Robot.dt.getLeftVPIDSetpoint());
-		SmartDashboard.putNumber("Drivetrain/Right VPID Targ", Robot.dt.getRightVPIDSetpoint());
-		SmartDashboard.putNumber("Left VPID Error", Robot.dt.getLeftVPIDerror());
-		SmartDashboard.putNumber("Right VPID Error", Robot.dt.getRightVPIDerror());
-		SmartDashboard.putNumber("Left Enc Rate", Robot.dt.getLeftEncRate());
-		SmartDashboard.putNumber("Right Enc Rate", Robot.dt.getRightEncRate());
-
-		SmartDashboard.putNumber("Left Enc Dist", dt.getLeftDist());
-		SmartDashboard.putNumber("Right Enc Dist", dt.getRightDist());
-		SmartDashboard.putNumber("Avg Enc Dist", dt.getEncAvgDist());
+		// SmartDashboard.putNumber("Drivetrain/Left VPID Targ",
+		// Robot.dt.getLeftVPIDSetpoint());
+		// SmartDashboard.putNumber("Drivetrain/Right VPID Targ",
+		// Robot.dt.getRightVPIDSetpoint());
+		// SmartDashboard.putNumber("Left VPID Error", Robot.dt.getLeftVPIDerror());
+		// SmartDashboard.putNumber("Right VPID Error", Robot.dt.getRightVPIDerror());
+		// SmartDashboard.putNumber("Left Enc Rate", Robot.dt.getLeftEncRate());
+		// SmartDashboard.putNumber("Right Enc Rate", Robot.dt.getRightEncRate());
+		//
+		// SmartDashboard.putNumber("Left Enc Dist", dt.getLeftDist());
+		// SmartDashboard.putNumber("Right Enc Dist", dt.getRightDist());
+		// SmartDashboard.putNumber("Avg Enc Dist", dt.getEncAvgDist());
+		//
+		// SmartDashboard.putNumber("Angle", dt.getAHRSAngle());
 	}
 
 	boolean firstTime = true;

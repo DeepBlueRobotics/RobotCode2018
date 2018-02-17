@@ -18,6 +18,7 @@ public class PIDMove extends Command implements PIDOutput {
 	private double target;
 	private DrivetrainInterface dt;
 	private PIDController moveController;
+	private PIDSourceAverage avg;
 
 	/**
 	 * Constructs this command with a new PIDController. Sets all of the
@@ -38,6 +39,7 @@ public class PIDMove extends Command implements PIDOutput {
 		requires(Robot.dt);
 		target = targ;
 		this.dt = dt;
+		this.avg = avg;
 		double kf = 1 / (dt.getCurrentMaxSpeed() * Robot.getConst("Default PID Update Time", 0.05));
 		moveController = new PIDController(Robot.getConst("MovekP", 0), Robot.getConst("MovekI", 0),
 				Robot.getConst("MovekD", 0), kf, avg, this);
@@ -56,13 +58,13 @@ public class PIDMove extends Command implements PIDOutput {
 		// output in "motor units" (arcade and tank only accept values [-1, 1]
 		moveController.setOutputRange(-1.0, 1.0);
 		moveController.setContinuous(false);
-		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 2));
-		moveController.setSetpoint(target);
+		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 0.1));
+		moveController.setSetpoint(Robot.getConst("Move Targ", 24));
 
 		SmartDashboard.putData("Move PID", moveController);
 
 		moveController.enable();
-		dt.enableVelocityPIDs();
+		// dt.enableVelocityPIDs();
 	}
 
 	/**
@@ -72,6 +74,7 @@ public class PIDMove extends Command implements PIDOutput {
 	 */
 	@Override
 	protected void execute() {
+		System.out.println("Enc Avg Dist: " + avg.pidGet());
 		SmartDashboard.putNumber("Move PID Result", moveController.get());
 		SmartDashboard.putNumber("Move PID Error", moveController.getError());
 	}
@@ -95,6 +98,7 @@ public class PIDMove extends Command implements PIDOutput {
 	@Override
 	protected void end() {
 		moveController.disable();
+		System.out.println("End");
 		// moveController.free();
 	}
 

@@ -55,9 +55,11 @@ public class OI {
 		PIDMoveButton = new JoystickButton(leftJoy, getButton("PID Move", 7));
 		PIDMoveButton.whenPressed(new PIDMove(Robot.getConst("Move Targ", 24), Robot.dt, RobotMap.distEncAvg));
 		PIDTurnButton = new JoystickButton(leftJoy, getButton("PID Turn", 8));
-		PIDTurnButton.whenPressed(new PIDTurn(30, Robot.dt, RobotMap.fancyGyro));
+		// PIDTurnButton.whenPressed(new PIDTurn(Robot.getConst("Turn Targ", 90),
+		// Robot.dt, RobotMap.fancyGyro));
 		resetEncButton = new JoystickButton(leftJoy, getButton("Reset Dist Enc", 10));
 		resetEncButton.whenPressed(new ResetEncoders());
+		PIDTurnButton.whenReleased(new PIDTurn(Robot.getConst("Turn Targ", 90), Robot.dt, RobotMap.fancyGyro));
 
 		rightJoy = new Joystick(1);
 		shiftHighGearButton = new JoystickButton(rightJoy, getButton("Shift High Gear", 3));

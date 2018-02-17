@@ -7,6 +7,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -19,6 +20,9 @@ public class PIDTurn extends Command implements PIDOutput {
 	private double target;
 	private DrivetrainInterface dt;
 	private PIDController turnController;
+	private AHRS ahrs;
+	private Timer tim;
+	private double lastTime;
 
 	/**
 	 * Constructs this command with a new PIDController. Sets all of the
@@ -40,13 +44,15 @@ public class PIDTurn extends Command implements PIDOutput {
 		requires(Robot.dt);
 		target = targ;
 		this.dt = dt;
+		this.ahrs = ahrs;
 		// calculates the maximum turning speed in degrees/sec based on the max linear
 		// speed in inches/s and the distance (inches) between sides of the DT
 		double maxTurnSpeed = dt.getCurrentMaxSpeed() * 360
 				/ (Math.PI * Robot.getConst("Distance Between Wheels", 26.25));
 		double kf = 1 / (maxTurnSpeed * Robot.getConst("Default PID Update Time", 0.05));
-		turnController = new PIDController(Robot.getConst("TurnkP", 1), Robot.getConst("TurnkI", 0),
-				Robot.getConst("TurnkD", 0), kf, ahrs, this);
+		turnController = new PIDController(Robot.getConst("TurnkP", 0.018), Robot.getConst("TurnkI", 0.00003),
+				Robot.getConst("TurnkD", 0.015), kf, ahrs, this);
+		// tim = new Timer();
 	}
 
 	/**
@@ -55,18 +61,30 @@ public class PIDTurn extends Command implements PIDOutput {
 	 */
 	@Override
 	protected void initialize() {
-		dt.resetAHRS();
 		turnController.disable();
+		// dt.enableVelocityPIDs();
+		System.out.println("initialize2s");
+		dt.resetAHRS();
+		System.out.println("after reset");
+		System.out.println("after disabling");
 		// input is in degrees
 		turnController.setInputRange(-180, 180);
 		// output in "motor units" (arcade and tank only accept values [-1, 1]
 		turnController.setOutputRange(-1.0, 1.0);
-		turnController.setContinuous();
+		turnController.setContinuous(true);
 		turnController.setAbsoluteTolerance(Robot.getConst("TurnTolerance", 1));
-		turnController.setSetpoint(target);
+		double newSetPoint = Robot.getConst("Turn Targ", 90);
+		while (Math.abs(newSetPoint) > 180) {
+			newSetPoint = newSetPoint - Math.signum(newSetPoint) * 360;
+		}
+		turnController.setSetpoint(newSetPoint);
+
 		SmartDashboard.putData("Turn PID", turnController);
+
 		turnController.enable();
-		dt.enableVelocityPIDs();
+		System.out.println("initialize finished");
+		// tim.start();
+		// lastTime = tim.get();
 	}
 
 	/**
@@ -76,8 +94,12 @@ public class PIDTurn extends Command implements PIDOutput {
 	 */
 	@Override
 	protected void execute() {
-		SmartDashboard.putNumber("Turn PID Result", turnController.get());
-		SmartDashboard.putNumber("Turn PID Error", turnController.getError());
+		System.out.println("execute");
+		System.out.println("Angle: " + dt.getAHRSAngle());
+		// if (tim.get() > lastTime + Robot.getConst("Update Time", 1)) {
+		// SmartDashboard.putNumber("Angle", dt.getAHRSAngle());
+		// lastTime = tim.get();
+		// }
 	}
 
 	/**
@@ -89,7 +111,8 @@ public class PIDTurn extends Command implements PIDOutput {
 	 */
 	@Override
 	protected boolean isFinished() {
-		return turnController.onTarget();
+		System.out.println("isFinished");
+		return (turnController.onTarget() && Math.abs(ahrs.getRate()) < 1);
 	}
 
 	/**
@@ -100,6 +123,9 @@ public class PIDTurn extends Command implements PIDOutput {
 	@Override
 	protected void end() {
 		turnController.disable();
+		System.out.println("end");
+		SmartDashboard.putNumber("Turn PID Result", turnController.get());
+		SmartDashboard.putNumber("Turn PID Error", turnController.getError());
 		// turnController.free();
 	}
 
@@ -125,5 +151,6 @@ public class PIDTurn extends Command implements PIDOutput {
 	@Override
 	public void pidWrite(double output) {
 		dt.arcadeDrive(0, output);
+		SmartDashboard.putNumber("Turn PID Output", output);
 	}
 }
