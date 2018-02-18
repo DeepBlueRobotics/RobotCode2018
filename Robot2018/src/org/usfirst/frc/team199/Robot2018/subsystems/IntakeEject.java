@@ -2,6 +2,7 @@ package org.usfirst.frc.team199.Robot2018.subsystems;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.RobotMap;
+import org.usfirst.frc.team199.Robot2018.commands.DefaultIntake;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -24,6 +25,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * Set the default command for a subsystem here.
 	 */
 	public void initDefaultCommand() {
+		setDefaultCommand(new DefaultIntake());
 	}
 
 	/**
@@ -61,15 +63,36 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	}
 
 	/**
+	 * Sets the left roller to run at the specified speed
+	 * 
+	 * @param speed
+	 *            Speed the left motor should run at
+	 */
+	public void runLeftIntake(double speed) {
+		double actualSpeed = speed * Robot.getConst("Intake Motor Left Speed Multiplier", 1);
+		leftIntakeMotor.set(actualSpeed);
+	}
+
+	/**
+	 * Sets the left roller to run at the specified speed
+	 * 
+	 * @param speed
+	 *            Speed the left motor should run at
+	 */
+	public void runRightIntake(double speed) {
+		double actualSpeed = speed * Robot.getConst("Intake Motor Right Speed Multiplier", 1);
+		rightIntakeMotor.set(actualSpeed);
+	}
+
+	/**
 	 * Spins the rollers
 	 * 
 	 * @param speed
 	 *            - positive -> rollers in, negative -> rollers out
 	 */
 	public void runIntake(double speed) {
-		double actualSpeed = speed * Robot.getConst("Intake Motor Speed Multiplier", 1);
-		leftIntakeMotor.set(actualSpeed);
-		rightIntakeMotor.set(actualSpeed);
+		runLeftIntake(speed);
+		runRightIntake(speed);
 	}
 
 	/**
