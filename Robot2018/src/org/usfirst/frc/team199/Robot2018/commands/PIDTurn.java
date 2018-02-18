@@ -61,16 +61,34 @@ public class PIDTurn extends Command implements PIDOutput {
 		// tim = new Timer();
 	}
 
+	/**
+	 * Constructs this command with a new PIDController. Sets all of the
+	 * controller's PID constants based on SD prefs. Sets the controller's PIDSource
+	 * to the AHRS (gyro) object and sets its PIDOutput to this command which
+	 * implements PIDOutput's pidWrite() method.
+	 * 
+	 * @param point
+	 *            the target point (in inches) to turn to, relative to the starting
+	 *            position
+	 * @param dt
+	 *            the Drivetrain (for actual code) or a DrivetrainInterface (for
+	 *            testing)
+	 * @param ahrs
+	 *            the AHRS (gyro)
+	 * @param sd
+	 *            the Smart Dashboard reference, or a SmartDashboardInterface for
+	 *            testing
+	 */
 	public PIDTurn(double[] point, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
 		this.dt = dt;
 		this.ahrs = ahrs;
-		
+
 		double dx = point[0] - AutoUtils.position.getX();
 		double dy = point[1] - AutoUtils.position.getY();
-		
+
 		double absTurn = Math.toDegrees(Math.atan(dx / dy));
 		target = absTurn - AutoUtils.position.getRot();
-		
+
 		if (Robot.dt != null) {
 			requires(Robot.dt);
 		}
@@ -160,7 +178,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		SmartDashboard.putNumber("Turn PID Result", turnController.get());
 		SmartDashboard.putNumber("Turn PID Error", turnController.getError());
 		// turnController.free();
-		
+
 		AutoUtils.position.changeRot(dt.getAHRSAngle());
 	}
 

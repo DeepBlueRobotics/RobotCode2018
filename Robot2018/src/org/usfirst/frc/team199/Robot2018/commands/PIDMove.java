@@ -144,7 +144,7 @@ public class PIDMove extends Command implements PIDOutput {
 		moveController.disable();
 		System.out.println("End");
 		// moveController.free();
-		
+
 		double angle = Math.toRadians(AutoUtils.position.getRot());
 		double dist = avg.pidGet();
 		double x = Math.cos(angle) * dist;
