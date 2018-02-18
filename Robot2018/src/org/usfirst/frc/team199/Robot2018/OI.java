@@ -16,6 +16,7 @@ import org.usfirst.frc.team199.Robot2018.commands.PIDMove;
 import org.usfirst.frc.team199.Robot2018.commands.PIDTurn;
 import org.usfirst.frc.team199.Robot2018.commands.RaiseIntake;
 import org.usfirst.frc.team199.Robot2018.commands.ResetEncoders;
+import org.usfirst.frc.team199.Robot2018.commands.RunLift;
 import org.usfirst.frc.team199.Robot2018.commands.SetDistancePerPulse;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftDriveType;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftHighGear;
@@ -39,6 +40,8 @@ public class OI {
 	private JoystickButton PIDMoveButton;
 	private JoystickButton PIDTurnButton;
 	private JoystickButton resetEncButton;
+	private JoystickButton MoveLiftUpButton;
+	private JoystickButton MoveLiftDownButton;
 	public Joystick rightJoy;
 	private JoystickButton updatePIDConstantsButton;
 	private JoystickButton updateEncoderDPPButton;
@@ -84,6 +87,10 @@ public class OI {
 		updatePIDConstantsButton.whenPressed(new UpdatePIDConstants());
 		updateEncoderDPPButton = new JoystickButton(rightJoy, getButton("Get Encoder Dist Per Pulse", 9));
 		updateEncoderDPPButton.whenPressed(new SetDistancePerPulse());
+		MoveLiftUpButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Up", 10));
+		MoveLiftDownButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Down", 11));
+		MoveLiftUpButton.whileHeld(new RunLift(Robot.lift, true));
+		MoveLiftDownButton.whileHeld(new RunLift(Robot.lift, false));
 
 		manipulator = new Joystick(2);
 		closeIntake = new JoystickButton(manipulator, getButton("Close Intake Button", 1));
