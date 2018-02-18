@@ -7,6 +7,20 @@ public interface DrivetrainInterface {
 	public void initDefaultCommand();
 
 	/**
+	 * Returns the getRate() of the left encoder
+	 * 
+	 * @return the rate of the left encoder
+	 */
+	public double getLeftEncRate();
+
+	/**
+	 * Returns the getRate() of the right encoder
+	 * 
+	 * @return the rate of the right encoder
+	 */
+	public double getRightEncRate();
+
+	/**
 	 * Drives based on joystick input and SmartDashboard values
 	 */
 	public void teleopDrive();

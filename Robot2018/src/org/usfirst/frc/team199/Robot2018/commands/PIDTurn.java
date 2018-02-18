@@ -118,6 +118,11 @@ public class PIDTurn extends Command implements PIDOutput {
 	protected boolean isFinished() {
 		System.out.println("isFinished");
 		return (turnController.onTarget() && Math.abs(dt.getGyroRate()) < 1);
+		// return turnController.onTarget()
+		// && Math.abs(dt.getLeftEncRate()) <= Robot.getConst("Maximum Velocity When
+		// Stop", 1)
+		// && Math.abs(dt.getRightEncRate()) <= Robot.getConst("Maximum Velocity When
+		// Stop", 1);
 	}
 
 	/**

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -33,11 +34,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class RobotMap {
 
+	public static PowerDistributionPanel pdp;
+
 	public static WPI_TalonSRX liftMotor;
 	public static WPI_TalonSRX climberMotor;
 
 	public static VictorSP leftIntakeMotor;
 	public static VictorSP rightIntakeMotor;
+	public static DoubleSolenoid leftIntakeVerticalSolenoid;
+	public static DoubleSolenoid rightIntakeVerticalSolenoid;
+	public static DoubleSolenoid leftIntakeHorizontalSolenoid;
+	public static DoubleSolenoid rightIntakeHorizontalSolenoid;
 
 	public static DigitalSource leftEncPort1;
 	public static DigitalSource leftEncPort2;
@@ -106,6 +113,7 @@ public class RobotMap {
 	}
 
 	public RobotMap() {
+		pdp = new PowerDistributionPanel();
 
 		// intakeMotor = new WPI_TalonSRX(getPort("IntakeTalonSRX", 4));
 		// configSRX(intakeMotor);
@@ -114,8 +122,20 @@ public class RobotMap {
 		// climberMotor = new WPI_TalonSRX(getPort("ClimberTalonSRX", 6));
 		// configSRX(climberMotor);
 
-		leftIntakeMotor = new VictorSP(getPort("IntakeLeftVictorSP", 0));
-		rightIntakeMotor = new VictorSP(getPort("IntakeRightVictorSP", 1));
+		leftIntakeMotor = new VictorSP(getPort("IntakeLeftVictorSP", 9));
+		rightIntakeMotor = new VictorSP(getPort("IntakeRightVictorSP", 8));
+		// leftIntakeHorizontalSolenoid = new
+		// DoubleSolenoid(getPort("IntakeLeftHorizontalSolenoidPort1", 2),
+		// getPort("IntakeLeftHorizontalSolenoidPort2", 3));
+		// rightIntakeHorizontalSolenoid = new
+		// DoubleSolenoid(getPort("IntakeRightHorizontalSolenoidPort1", 4),
+		// getPort("IntakeRightHorizontalSolenoidPort2", 5));
+		// leftIntakeVerticalSolenoid = new
+		// DoubleSolenoid(getPort("IntakeLeftVerticalSolenoidPort1", 6),
+		// getPort("IntakeLeftVerticalSolenoidPort2", 7));
+		// rightIntakeVerticalSolenoid = new
+		// DoubleSolenoid(getPort("IntakeRightVerticalSolenoidPort1", 8),
+		// getPort("IntakeRightVerticalSolenoidPort2", 9));
 
 		leftEncPort1 = new DigitalInput(getPort("1LeftEnc", 2));
 		leftEncPort2 = new DigitalInput(getPort("2LeftEnc", 3));
@@ -211,7 +231,9 @@ public class RobotMap {
 		 * half of the drivetrain only has to support half of the robot), and radius of
 		 * the drivetrain wheels squared. It's inversely proportional to the stall
 		 * torque of the shaft, which is found by multiplying the stall torque of the
-		 * motor with the gear reduction by the amount of motors.
+		 * motor with the gear reduction by the amount of motors. The omegaMax needs to
+		 * be converted from rpm to radians per second, so divide by 60 and multiply to
+		 * get radians.
 		 */
 		double gearReduction = Robot.getBool("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
 				: Robot.getConst("Low Gear Gear Reduction", 12.255);

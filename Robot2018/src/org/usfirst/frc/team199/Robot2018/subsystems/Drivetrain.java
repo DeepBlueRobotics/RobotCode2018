@@ -101,10 +101,20 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		return rightVelocityController.get();
 	}
 
+	/**
+	 * Returns the getRate() of the left encoder
+	 * 
+	 * @return the rate of the left encoder
+	 */
 	public double getLeftEncRate() {
 		return leftEncRate.getRate();
 	}
 
+	/**
+	 * Returns the getRate() of the right encoder
+	 * 
+	 * @return the rate of the right encoder
+	 */
 	public double getRightEncRate() {
 		return rightEncRate.getRate();
 	}
