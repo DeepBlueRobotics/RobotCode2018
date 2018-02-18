@@ -1,8 +1,24 @@
 package org.usfirst.frc.team199.Robot2018.subsystems;
 
+import edu.wpi.first.wpilibj.PIDSource;
+
 public interface DrivetrainInterface {
 
 	public void initDefaultCommand();
+
+	/**
+	 * Returns the getRate() of the left encoder
+	 * 
+	 * @return the rate of the left encoder
+	 */
+	public double getLeftEncRate();
+
+	/**
+	 * Returns the getRate() of the right encoder
+	 * 
+	 * @return the rate of the right encoder
+	 */
+	public double getRightEncRate();
 
 	/**
 	 * Drives based on joystick input and SmartDashboard values
@@ -67,6 +83,8 @@ public interface DrivetrainInterface {
 	 */
 	public void resetAHRS();
 
+	public double getGyroRate();
+
 	/**
 	 * Used to get the yaw angle (Z-axis in degrees) that the ahrs currently reads
 	 * 
@@ -126,6 +144,13 @@ public interface DrivetrainInterface {
 	public void shiftGearSolenoidOff();
 
 	/**
+	 * Returns the gyroscope
+	 * 
+	 * @return the gyroscope
+	 */
+	public PIDSource getGyro();
+
+	/**
 	 * Reset the kf constants for both VelocityPIDControllers based on current DT
 	 * gearing (high or low gear).
 	 * 
@@ -142,4 +167,9 @@ public interface DrivetrainInterface {
 	 * @return the current max speed of the DT in inches/second
 	 */
 	public double getCurrentMaxSpeed();
+
+	/**
+	 * Put left and right velocity controllers (PID) on SmartDashboard.
+	 */
+	public void putVelocityControllersToDashboard();
 }
