@@ -25,16 +25,17 @@ public class RunScript extends CommandGroup {
 				addSequential(new AutoMoveTo(cmdArgs.split(" ")));
 				break;
 			case "turn":
-				double rotation = Double.parseDouble(cmdArgs);
-				addSequential(new PIDTurn(rotation, Robot.dt, Robot.sd, Robot.dt.getGyro()));
-				AutoUtils.position.setRot(rotation);
+				if (AutoUtils.isPoint(cmdArgs)) {
+					double[] point = AutoUtils.parsePoint(cmdArgs);
+					addSequential(new PIDTurn(point, Robot.dt, Robot.sd, Robot.dt.getGyro()));
+				} else {
+					double rotation = Double.parseDouble(cmdArgs);
+					addSequential(new PIDTurn(rotation, Robot.dt, Robot.sd, Robot.dt.getGyro()));
+				}
 				break;
 			case "move":
 				double distance = Double.parseDouble(cmdArgs);
-
 				addSequential(new PIDMove(distance, Robot.dt, Robot.sd, Robot.dt.getDistEncAvg()));
-				AutoUtils.position.setX(distance * Math.sin(Math.toRadians(AutoUtils.position.getRot())));
-				AutoUtils.position.setY(distance * Math.cos(Math.toRadians(AutoUtils.position.getRot())));
 				break;
 			case "switch":
 				addSequential(new EjectToSwitch());
