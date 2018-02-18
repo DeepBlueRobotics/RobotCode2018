@@ -57,16 +57,18 @@ public class Robot extends IterativeRobot {
 	Map<String, SendableChooser<Strategy>> stratChoosers = new HashMap<String, SendableChooser<Strategy>>();
 	String[] fmsPossibilities = { "LL", "LR", "RL", "RR" };
 
-	public static double getConst(String key, double def) {
-		Preferences pref = Preferences.getInstance();
-		if (!pref.containsKey("Const/" + key)) {
-			pref.putDouble("Const/" + key, def);
-			if (pref.getDouble("Const/ + key", def) != def) {
-				System.err.println("pref Key" + "Const/" + key + "already taken by a different type");
-				return def;
+	public static SmartDashboardInterface sd = new SmartDashboardInterface() {
+		public double getConst(String key, double def) {
+			Preferences pref = Preferences.getInstance();
+			if (!pref.containsKey("Const/" + key)) {
+				pref.putDouble("Const/" + key, def);
+				if (pref.getDouble("Const/ + key", def) != def) {
+					System.err.println("pref Key" + "Const/" + key + "already taken by a different type");
+					return def;
+				}
 			}
+			return pref.getDouble("Const/" + key, def);
 		}
-		return pref.getDouble("Const/" + key, def);
 		/*
 		 * if (!SmartDashboard.containsKey("Const/" + key)) { if
 		 * (!SmartDashboard.putNumber("Const/" + key, def)) {
@@ -74,6 +76,10 @@ public class Robot extends IterativeRobot {
 		 * "already taken by a different type"); return def; } } return
 		 * SmartDashboard.getNumber("Const/" + key, def);
 		 */
+	};
+
+	public static double getConst(String key, double def) {
+		return sd.getConst(key, def);
 	}
 
 	public static boolean getBool(String key, boolean def) {

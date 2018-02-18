@@ -20,6 +20,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -244,6 +245,10 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		fancyGyro.reset();
 	}
 
+	public double getGyroRate() {
+		return fancyGyro.getRate();
+	}
+
 	/**
 	 * Used to get the yaw angle (Z-axis in degrees) that the ahrs currently reads
 	 * 
@@ -331,6 +336,13 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	@Override
 	public void shiftGearSolenoidOff() {
 		dtGear.set(DoubleSolenoid.Value.kOff);
+	}
+
+	/**
+	 * @return the gyroscope
+	 */
+	public PIDSource getGyro() {
+		return fancyGyro;
 	}
 
 	/**
