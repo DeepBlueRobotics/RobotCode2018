@@ -2,6 +2,7 @@ package org.usfirst.frc.team199.Robot2018.commands;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
+import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
 
 import edu.wpi.first.wpilibj.PIDController;
@@ -32,12 +33,50 @@ public class PIDMove extends Command implements PIDOutput {
 	 * @param dt
 	 *            the Drivetrain (for actual code) or a DrivetrainInterface (for
 	 *            testing)
+	 * @param sd
+	 *            the SmartDashboard
 	 * @param avg
 	 *            the PIDSourceAverage of the DT's two Encoders
 	 */
 	public PIDMove(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource avg) {
 		// Use requires() here to declare subsystem dependencies
 		target = targ;
+		this.dt = dt;
+		this.avg = avg;
+		if (Robot.dt != null) {
+			requires(Robot.dt);
+		}
+		moveController = new PIDController(sd.getConst("MovekP", 1), sd.getConst("MovekI", 0), sd.getConst("MovekD", 0),
+				avg, this);
+		double kf = 1 / (dt.getCurrentMaxSpeed() * sd.getConst("Default PID Update Time", 0.05));
+		moveController = new PIDController(sd.getConst("MovekP", 1), sd.getConst("MovekI", 0), sd.getConst("MovekD", 0),
+				kf, avg, this);
+	}
+
+	/**
+	 * Constructs this command with a new PIDController. Sets all of the
+	 * controller's PID constants based on SD prefs. Sets the controller's PIDSource
+	 * to the encoder average object and sets its PIDOutput to this command which
+	 * implements PIDOutput's pidWrite() method.
+	 * 
+	 * @param point
+	 *            the target point in inches, absolute distance from the starting
+	 *            point
+	 * @param dt
+	 *            the Drivetrain (for actual code) or a DrivetrainInterface (for
+	 *            testing)
+	 * @param sd
+	 *            the SmartDashboard
+	 * @param avg
+	 *            the PIDSorceAverage of the DT's two Encoders
+	 */
+	public PIDMove(double[] point, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource avg) {
+		double dx = point[0] - AutoUtils.position.getX();
+		double dy = point[1] - AutoUtils.position.getY();
+
+		double dist = Math.sqrt(dx * dx + dy * dy); // pythagorean theorem to find distance
+
+		this.target = dist;
 		this.dt = dt;
 		this.avg = avg;
 		if (Robot.dt != null) {
@@ -107,6 +146,13 @@ public class PIDMove extends Command implements PIDOutput {
 		moveController.disable();
 		System.out.println("End");
 		// moveController.free();
+		
+		double angle = Math.toRadians(AutoUtils.position.getRot());
+		double dist = avg.pidGet();
+		double x = Math.cos(angle) * dist;
+		double y = Math.sin(angle) * dist;
+		AutoUtils.position.changeX(x);
+		AutoUtils.position.changeY(y);
 	}
 
 	/**

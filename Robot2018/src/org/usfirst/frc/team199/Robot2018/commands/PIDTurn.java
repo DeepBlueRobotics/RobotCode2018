@@ -2,6 +2,7 @@ package org.usfirst.frc.team199.Robot2018.commands;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
+import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
 
 import edu.wpi.first.wpilibj.PIDController;
@@ -48,6 +49,28 @@ public class PIDTurn extends Command implements PIDOutput {
 		this.dt = dt;
 		this.ahrs = ahrs;
 
+		if (Robot.dt != null) {
+			requires(Robot.dt);
+		}
+		// calculates the maximum turning speed in degrees/sec based on the max linear
+		// speed in inches/s and the distance (inches) between sides of the DT
+		double maxTurnSpeed = dt.getCurrentMaxSpeed() * 360 / (Math.PI * sd.getConst("Distance Between Wheels", 26.25));
+		double kf = 1 / (maxTurnSpeed * sd.getConst("Default PID Update Time", 0.05));
+		turnController = new PIDController(sd.getConst("TurnkP", 1), sd.getConst("TurnkI", 0), sd.getConst("TurnkD", 0),
+				kf, ahrs, this);
+		// tim = new Timer();
+	}
+
+	public PIDTurn(double[] point, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
+		this.dt = dt;
+		this.ahrs = ahrs;
+		
+		double dx = point[0] - AutoUtils.position.getX();
+		double dy = point[1] - AutoUtils.position.getY();
+		
+		double absTurn = Math.toDegrees(Math.atan(dx / dy));
+		target = absTurn - AutoUtils.position.getRot();
+		
 		if (Robot.dt != null) {
 			requires(Robot.dt);
 		}
@@ -137,6 +160,8 @@ public class PIDTurn extends Command implements PIDOutput {
 		SmartDashboard.putNumber("Turn PID Result", turnController.get());
 		SmartDashboard.putNumber("Turn PID Error", turnController.getError());
 		// turnController.free();
+		
+		AutoUtils.position.changeRot(dt.getAHRSAngle());
 	}
 
 	/**
