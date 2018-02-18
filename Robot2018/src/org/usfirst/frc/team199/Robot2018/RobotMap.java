@@ -19,8 +19,10 @@ import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -32,9 +34,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class RobotMap {
 
-	public static WPI_TalonSRX intakeMotor;
+	public static PowerDistributionPanel pdp;
+
 	public static WPI_TalonSRX liftMotor;
 	public static WPI_TalonSRX climberMotor;
+
+	public static VictorSP leftIntakeMotor;
+	public static VictorSP rightIntakeMotor;
+	public static DoubleSolenoid leftIntakeVerticalSolenoid;
+	public static DoubleSolenoid rightIntakeVerticalSolenoid;
+	public static DoubleSolenoid leftIntakeHorizontalSolenoid;
+	public static DoubleSolenoid rightIntakeHorizontalSolenoid;
 
 	public static DigitalSource leftEncPort1;
 	public static DigitalSource leftEncPort2;
@@ -60,6 +70,8 @@ public class RobotMap {
 	public static AHRS fancyGyro;
 	public static DoubleSolenoid dtGear;
 
+	private final double DIST_PER_PULSE_RATIO = (5.0 * Math.PI) * (17.0 / 25) / (3.0 * 256);
+
 	/**
 	 * This function takes in a TalonSRX motorController and sets nominal and peak
 	 * outputs to the default
@@ -79,7 +91,7 @@ public class RobotMap {
 		mc.configPeakCurrentLimit(0, 0);
 		mc.configPeakCurrentDuration(0, 0);
 		// 40 amps is the amp limit of a CIM. also, the PDP has 40 amp circuit breakers,
-		// so if we went above 40, the motors would stop completely.
+		// so if we went above 40, the motors would stop completely
 		mc.configContinuousCurrentLimit(40, 0);
 		mc.enableCurrentLimit(true);
 	}
@@ -101,63 +113,91 @@ public class RobotMap {
 	}
 
 	public RobotMap() {
+		pdp = new PowerDistributionPanel();
 
-		intakeMotor = new WPI_TalonSRX(getPort("IntakeTalonSRX", 4));
-		configSRX(intakeMotor);
-		liftMotor = new WPI_TalonSRX(getPort("LiftTalonSRX", 5));
-		configSRX(liftMotor);
-		climberMotor = new WPI_TalonSRX(getPort("ClimberTalonSRX", 6));
-		configSRX(climberMotor);
+		// intakeMotor = new WPI_TalonSRX(getPort("IntakeTalonSRX", 4));
+		// configSRX(intakeMotor);
+		// liftMotor = new WPI_TalonSRX(getPort("LiftTalonSRX", 5));
+		// configSRX(liftMotor);
+		// climberMotor = new WPI_TalonSRX(getPort("ClimberTalonSRX", 6));
+		// configSRX(climberMotor);
 
-		leftEncPort1 = new DigitalInput(getPort("1LeftEnc", 0));
-		leftEncPort2 = new DigitalInput(getPort("2LeftEnc", 1));
+		leftIntakeMotor = new VictorSP(getPort("IntakeLeftVictorSP", 9));
+		rightIntakeMotor = new VictorSP(getPort("IntakeRightVictorSP", 8));
+		// leftIntakeHorizontalSolenoid = new
+		// DoubleSolenoid(getPort("IntakeLeftHorizontalSolenoidPort1", 2),
+		// getPort("IntakeLeftHorizontalSolenoidPort2", 3));
+		// rightIntakeHorizontalSolenoid = new
+		// DoubleSolenoid(getPort("IntakeRightHorizontalSolenoidPort1", 4),
+		// getPort("IntakeRightHorizontalSolenoidPort2", 5));
+		// leftIntakeVerticalSolenoid = new
+		// DoubleSolenoid(getPort("IntakeLeftVerticalSolenoidPort1", 6),
+		// getPort("IntakeLeftVerticalSolenoidPort2", 7));
+		// rightIntakeVerticalSolenoid = new
+		// DoubleSolenoid(getPort("IntakeRightVerticalSolenoidPort1", 8),
+		// getPort("IntakeRightVerticalSolenoidPort2", 9));
+
+		leftEncPort1 = new DigitalInput(getPort("1LeftEnc", 2));
+		leftEncPort2 = new DigitalInput(getPort("2LeftEnc", 3));
 		leftEncDist = new Encoder(leftEncPort1, leftEncPort2);
 		leftEncDist.setPIDSourceType(PIDSourceType.kDisplacement);
 		leftEncRate = new Encoder(leftEncPort1, leftEncPort2);
 		leftEncRate.setPIDSourceType(PIDSourceType.kRate);
-		dtLeftMaster = new WPI_TalonSRX(getPort("LeftTalonSRXMaster", 0));
+		leftEncDist.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
+		leftEncRate.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
+
+		dtLeftMaster = new WPI_TalonSRX(getPort("LeftTalonSRXMaster", 1));
 		configSRX(dtLeftMaster);
-		dtLeftSlave = new WPI_VictorSPX(getPort("LeftTalonSPXSlave", 1));
+		dtLeftSlave = new WPI_VictorSPX(getPort("LeftVictorSPXSlave", 2));
 		configSPX(dtLeftSlave);
 		dtLeft = new SpeedControllerGroup(dtLeftMaster, dtLeftSlave);
+		// inverted bc gear boxes invert from input to output
+		dtLeft.setInverted(true);
 
-		leftVelocityController = new VelocityPIDController(Robot.getConst("VelocityLeftkP", 1),
-				Robot.getConst("VelocityLeftkI", 0), Robot.getConst("VelocityLeftkD", 0),
+		leftVelocityController = new VelocityPIDController(Robot.getConst("VelocityLeftkI", 0), 0,
+				Robot.getConst("VelocityLeftkD", calcDefkD(Robot.getConst("Max Low Speed", 84))),
 				1 / Robot.getConst("Max Low Speed", 84), leftEncRate, dtLeft);
-		leftVelocityController.enable();
 		leftVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
 				Robot.getConst("Max High Speed", 204));
 		leftVelocityController.setOutputRange(-1.0, 1.0);
 		leftVelocityController.setContinuous(false);
 		leftVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceLeft", 2));
+		SmartDashboard.putData(leftVelocityController);
 
-		rightEncPort1 = new DigitalInput(getPort("1RightEnc", 2));
-		rightEncPort2 = new DigitalInput(getPort("2RightEnc", 3));
-		rightEncDist = new Encoder(leftEncPort1, leftEncPort2);
+		rightEncPort1 = new DigitalInput(getPort("1RightEnc", 1));
+		rightEncPort2 = new DigitalInput(getPort("2RightEnc", 0));
+		rightEncDist = new Encoder(rightEncPort1, rightEncPort2);
 		rightEncDist.setPIDSourceType(PIDSourceType.kDisplacement);
-		rightEncRate = new Encoder(leftEncPort1, leftEncPort2);
+		rightEncRate = new Encoder(rightEncPort1, rightEncPort2);
 		rightEncRate.setPIDSourceType(PIDSourceType.kRate);
-		dtRightMaster = new WPI_TalonSRX(getPort("RightTalonSRXMaster", 2));
+		rightEncDist.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
+		rightEncRate.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
+		rightEncRate.setReverseDirection(true);
+
+		dtRightMaster = new WPI_TalonSRX(getPort("RightTalonSRXMaster", 4));
 		configSRX(dtRightMaster);
-		dtRightSlave = new WPI_VictorSPX(getPort("RightTalonSPXSlave", 3));
+		dtRightSlave = new WPI_VictorSPX(getPort("RightVictorSPXSlave", 3));
 		configSPX(dtRightSlave);
 		dtRight = new SpeedControllerGroup(dtRightMaster, dtRightSlave);
+		// inverted bc gear boxes invert from input to output
+		dtRight.setInverted(true);
 
-		rightVelocityController = new VelocityPIDController(Robot.getConst("VelocityRightkP", 1),
-				Robot.getConst("VelocityRightkI", 0), Robot.getConst("VelocityRightkD", 0),
+		rightVelocityController = new VelocityPIDController(Robot.getConst("VelocityRightkI", 0), 0,
+				Robot.getConst("VelocityRightkD", calcDefkD(Robot.getConst("Max Low Speed", 84))),
 				1 / Robot.getConst("Max Low Speed", 84), rightEncRate, dtRight);
-		rightVelocityController.enable();
 		rightVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
 				Robot.getConst("Max High Speed", 204));
 		rightVelocityController.setOutputRange(-1.0, 1.0);
 		rightVelocityController.setContinuous(false);
 		rightVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceRight", 2));
 
-		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
-		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
+		// robotDrive = new DifferentialDrive(leftVelocityController,
+		// rightVelocityController);
+		// robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
+		robotDrive = new DifferentialDrive(dtLeft, dtRight);
 
 		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
-		fancyGyro = new AHRS(SerialPort.Port.kMXP);
+		fancyGyro = new AHRS(SPI.Port.kMXP);
 		dtGear = new DoubleSolenoid(getPort("1dtGearSolenoid", 0), getPort("2dtGearSolenoid", 1));
 	}
 
@@ -173,9 +213,50 @@ public class RobotMap {
 	 */
 	public int getPort(String key, int def) {
 		if (!SmartDashboard.containsKey("Port/" + key)) {
-			SmartDashboard.putNumber("Port/" + key, def);
+			if (!SmartDashboard.putNumber("Port/" + key, def)) {
+				System.err.println("SmartDashboard Key" + "Port/" + key + "already taken by a different type");
+				return def;
+			}
 		}
 		return (int) SmartDashboard.getNumber("Port/" + key, def);
 	}
 
+	/**
+	 * Uses SmartDashboard and math to calculate a *great* default kD
+	 */
+	public double calcDefkD(double maxSpeed) {
+		/*
+		 * timeConstant is proportional to max speed of the shaft (which is the max
+		 * speed of the cim divided by the gear reduction), half the mass (because the
+		 * half of the drivetrain only has to support half of the robot), and radius of
+		 * the drivetrain wheels squared. It's inversely proportional to the stall
+		 * torque of the shaft, which is found by multiplying the stall torque of the
+		 * motor with the gear reduction by the amount of motors. The omegaMax needs to
+		 * be converted from rpm to radians per second, so divide by 60 and multiply to
+		 * get radians.
+		 */
+		double gearReduction = Robot.getBool("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
+				: Robot.getConst("Low Gear Gear Reduction", 12.255);
+		double radius = Robot.getConst("Radius of Drivetrain Wheel", 0.0635);
+		double timeConstant = Robot.getConst("Omega Max", 5330) / gearReduction / 60 * 2 * Math.PI
+				* convertNtokG(Robot.getConst("Weight of Robot", 342)) / 2 * radius * radius
+				/ (Robot.getConst("Stall Torque", 2.41) * gearReduction * 2);
+		double cycleTime = Robot.getConst("Code cycle time", 0.05);
+		/*
+		 * The denominator of kD is 1-(e ^ -cycleTime / timeConstant). The numerator is
+		 * one.
+		 */
+		double denominator = Math.pow(Math.E, 1 * cycleTime / timeConstant) - 1;
+		return 1 / denominator / maxSpeed;
+	}
+
+	private double convertLbsTokG(double lbs) {
+		// number from google ;)
+		return lbs * 0.45359237;
+	}
+
+	private double convertNtokG(double newtons) {
+		// weight / accel due to grav = kg
+		return newtons / 9.81;
+	}
 }

@@ -1,12 +1,14 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
-import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
+import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
 import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Drives the robot a certain target distance using PID. Implements PIDOutput in
@@ -17,6 +19,7 @@ public class PIDMove extends Command implements PIDOutput {
 	private double target;
 	private DrivetrainInterface dt;
 	private PIDController moveController;
+	private PIDSource avg;
 
 	/**
 	 * Constructs this command with a new PIDController. Sets all of the
@@ -32,14 +35,19 @@ public class PIDMove extends Command implements PIDOutput {
 	 * @param avg
 	 *            the PIDSourceAverage of the DT's two Encoders
 	 */
-	public PIDMove(double targ, DrivetrainInterface dt, PIDSourceAverage avg) {
+	public PIDMove(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource avg) {
 		// Use requires() here to declare subsystem dependencies
-		requires(Robot.dt);
 		target = targ;
 		this.dt = dt;
-		double kf = 1 / (dt.getCurrentMaxSpeed() * Robot.getConst("Default PID Update Time", 0.05));
-		moveController = new PIDController(Robot.getConst("MovekP", 1), Robot.getConst("MovekI", 0),
-				Robot.getConst("MovekD", 0), kf, avg, this);
+		this.avg = avg;
+		if (Robot.dt != null) {
+			requires(Robot.dt);
+		}
+		moveController = new PIDController(sd.getConst("MovekP", 1), sd.getConst("MovekI", 0), sd.getConst("MovekD", 0),
+				avg, this);
+		double kf = 1 / (dt.getCurrentMaxSpeed() * sd.getConst("Default PID Update Time", 0.05));
+		moveController = new PIDController(sd.getConst("MovekP", 1), sd.getConst("MovekI", 0), sd.getConst("MovekD", 0),
+				kf, avg, this);
 	}
 
 	/**
@@ -49,14 +57,19 @@ public class PIDMove extends Command implements PIDOutput {
 	@Override
 	public void initialize() {
 		dt.resetDistEncs();
+		moveController.disable();
 		// input is in inches
 		moveController.setInputRange(-Robot.getConst("Max High Speed", 204), Robot.getConst("Max High Speed", 204));
 		// output in "motor units" (arcade and tank only accept values [-1, 1]
 		moveController.setOutputRange(-1.0, 1.0);
 		moveController.setContinuous(false);
-		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 2));
-		moveController.setSetpoint(target);
+		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 0.1));
+		moveController.setSetpoint(Robot.getConst("Move Targ", 24));
+
+		SmartDashboard.putData("Move PID", moveController);
+
 		moveController.enable();
+		// dt.enableVelocityPIDs();
 	}
 
 	/**
@@ -66,6 +79,9 @@ public class PIDMove extends Command implements PIDOutput {
 	 */
 	@Override
 	protected void execute() {
+		System.out.println("Enc Avg Dist: " + avg.pidGet());
+		SmartDashboard.putNumber("Move PID Result", moveController.get());
+		SmartDashboard.putNumber("Move PID Error", moveController.getError());
 	}
 
 	/**
@@ -76,7 +92,9 @@ public class PIDMove extends Command implements PIDOutput {
 	 */
 	@Override
 	protected boolean isFinished() {
-		return moveController.onTarget();
+		return moveController.onTarget()
+				&& Math.abs(dt.getLeftEncRate()) <= Robot.getConst("Maximum Velocity When Stop", 1)
+				&& Math.abs(dt.getRightEncRate()) <= Robot.getConst("Maximum Velocity When Stop", 1);
 	}
 
 	/**
@@ -87,7 +105,8 @@ public class PIDMove extends Command implements PIDOutput {
 	@Override
 	protected void end() {
 		moveController.disable();
-		moveController.free();
+		System.out.println("End");
+		// moveController.free();
 	}
 
 	/**
@@ -113,5 +132,6 @@ public class PIDMove extends Command implements PIDOutput {
 	@Override
 	public void pidWrite(double output) {
 		dt.arcadeDrive(output, 0);
+		SmartDashboard.putNumber("Move PID Output", output);
 	}
 }
