@@ -42,12 +42,19 @@ public class PIDTurn extends Command implements PIDOutput {
 	 * @param sd
 	 *            the Smart Dashboard reference, or a SmartDashboardInterface for
 	 *            testing
+	 * @param absolute
+	 *            whether the target passed is absolute or relative
 	 */
-	public PIDTurn(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
+	public PIDTurn(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs, boolean absolute) {
 		// Use requires() here to declare subsystem dependencies
-		target = targ;
 		this.dt = dt;
 		this.ahrs = ahrs;
+
+		if (absolute) {
+			target = targ - AutoUtils.position.getRot();
+		} else {
+			target = targ;
+		}
 
 		if (Robot.dt != null) {
 			requires(Robot.dt);
@@ -59,6 +66,28 @@ public class PIDTurn extends Command implements PIDOutput {
 		turnController = new PIDController(sd.getConst("TurnkP", 1), sd.getConst("TurnkI", 0), sd.getConst("TurnkD", 0),
 				kf, ahrs, this);
 		// tim = new Timer();
+	}
+
+	/**
+	 * Constructs this command with a new PIDController. Sets all of the
+	 * controller's PID constants based on SD prefs. Sets the controller's PIDSource
+	 * to the AHRS (gyro) object and sets its PIDOutput to this command which
+	 * implements PIDOutput's pidWrite() method.
+	 * 
+	 * @param targ
+	 *            the target bearing (in degrees) to turn to (so negative if turning
+	 *            left, positive if turning right)
+	 * @param dt
+	 *            the Drivetrain (for actual code) or a DrivetrainInterface (for
+	 *            testing)
+	 * @param ahrs
+	 *            the AHRS (gyro)
+	 * @param sd
+	 *            the Smart Dashboard reference, or a SmartDashboardInterface for
+	 *            testing
+	 */
+	public PIDTurn(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
+		this(targ, dt, sd, ahrs, false);
 	}
 
 	/**
