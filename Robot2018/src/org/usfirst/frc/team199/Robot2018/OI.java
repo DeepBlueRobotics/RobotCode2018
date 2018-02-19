@@ -43,7 +43,7 @@ public class OI {
 	public Joystick rightJoy;
 	private JoystickButton updatePIDConstantsButton;
 	private JoystickButton updateEncoderDPPButton;
-	public Joystick manipulator;
+	public static Joystick manipulator;
 	private JoystickButton closeIntake;
 	private JoystickButton openIntake;
 	private JoystickButton raiseIntake;
@@ -85,10 +85,6 @@ public class OI {
 		updatePIDConstantsButton.whenPressed(new UpdatePIDConstants());
 		updateEncoderDPPButton = new JoystickButton(rightJoy, getButton("Get Encoder Dist Per Pulse", 9));
 		updateEncoderDPPButton.whenPressed(new SetDistancePerPulse());
-		MoveLiftUpButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Up", 10));
-		MoveLiftDownButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Down", 11));
-		MoveLiftUpButton.whileHeld(new RunLift(Robot.lift, true));
-		MoveLiftDownButton.whileHeld(new RunLift(Robot.lift, false));
 
 		// manipulator = new Joystick(2);
 		// closeIntake = new JoystickButton(manipulator, getButton("Close Intake
@@ -107,5 +103,10 @@ public class OI {
 		// intake.whenPressed(new IntakeCube());
 		// outake = new JoystickButton(manipulator, getButton("Outake Button", 6));
 		// outake.whenPressed(new OutakeCube());
+		
+		/*MoveLiftUpButton = new JoystickButton(manipulator, getButton("Run Lift Motor Up", 7));
+		MoveLiftDownButton = new JoystickButton(manipulator, getButton("Run Lift Motor Down", 8));
+		MoveLiftUpButton.whileHeld(new RunLift(Robot.lift, true));
+		MoveLiftDownButton.whileHeld(new RunLift(Robot.lift, false));*/
 	}
 }

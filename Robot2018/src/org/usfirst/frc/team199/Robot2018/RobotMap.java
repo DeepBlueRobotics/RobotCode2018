@@ -36,12 +36,15 @@ public class RobotMap {
 
 	public static PowerDistributionPanel pdp;
 
-	public static WPI_TalonSRX liftMotor;
+	public static WPI_VictorSPX liftMotorA;
+	public static WPI_TalonSRX liftMotorB;
+	public static WPI_TalonSRX liftMotorC;
+	public static SpeedControllerGroup liftMotors;
 	public static Encoder liftEnc;
 	public static DigitalSource liftEncPort1;
 	public static DigitalSource liftEncPort2;
 
-	public static WPI_TalonSRX climberMotor;
+	//public static WPI_TalonSRX climberMotor;
 
 	public static VictorSP leftIntakeMotor;
 	public static VictorSP rightIntakeMotor;
@@ -118,15 +121,18 @@ public class RobotMap {
 
 	public RobotMap() {
 		pdp = new PowerDistributionPanel();
-
-		liftMotor = new WPI_TalonSRX(getPort("LiftTalonSRX", 7));
-		configSRX(liftMotor);
+		
+		liftMotorA = new WPI_VictorSPX(getPort("LiftVictorSPX", 5));
+		configSPX(liftMotorA);
+		liftMotorB = new WPI_TalonSRX(getPort("1LiftTalonSRX", 6));
+		configSRX(liftMotorB);
+		liftMotorC = new WPI_TalonSRX(getPort("2LiftTalonSRX", 7));
+		configSRX(liftMotorC);
+		liftMotors = new SpeedControllerGroup(liftMotorB, liftMotorA, liftMotorC);
 		liftEncPort1 = new DigitalInput(getPort("1LiftEnc", 4));
 		liftEncPort2 = new DigitalInput(getPort("2LiftEnc", 5));
 		liftEnc = new Encoder(liftEncPort1, liftEncPort2);
 		liftEnc.setPIDSourceType(PIDSourceType.kDisplacement);
-		climberMotor = new WPI_TalonSRX(getPort("ClimberTalonSRX", 6));
-		configSRX(climberMotor);
 
 		leftIntakeMotor = new VictorSP(getPort("IntakeLeftVictorSP", 9));
 		rightIntakeMotor = new VictorSP(getPort("IntakeRightVictorSP", 8));
