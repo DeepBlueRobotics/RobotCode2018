@@ -26,8 +26,8 @@ right joystick [1]
 		7
 		8	update the PIDController constants with SmartDashboard values [UpdatePIDConstants]
 		9	set the left and right encoder distance per pulse with SmartDashboard values [SetDistancePerPulse]
-		10	run lift motor up [RunLift]
-		11	run lift motor down [RunLift]
+		10	
+		11	
 	axes
 		0	X axis	arcade turn (if default)
 		1	Y axis	tank right, if NOT default: arcade forward
@@ -40,8 +40,8 @@ manipulator [3]
 		4	Y	lower intake [LowerIntake]
 		5	LB	take in [IntakeCube]
 		6	RB	take out [OuttakeCube]
-		7	back
-		8	start
+		7	back run lift motor up [RunLift]
+		8	start run lift motor down [RunLift]
 		9	N/a
 		10	N/a
 	press mode to toggle mode light
@@ -55,5 +55,9 @@ manipulator [3]
 			mode light off:
 	POV
 		D-pad (left joystick if mode light on)
+			UP		move lift ground [AutoLift(GROUND)]
+			RIGHT	move lift switch [AutoLift(SWITCH)]
+			DOWN	move lift scale [AutoLift(SCALE)]
+			LEFT	move lift bar [AutoLift(BAR)]
 	rumble
 		fake news
