@@ -2,6 +2,7 @@ package org.usfirst.frc.team199.Robot2018.commands;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
+import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
 
 import edu.wpi.first.wpilibj.PIDController;
@@ -41,12 +42,81 @@ public class PIDTurn extends Command implements PIDOutput {
 	 * @param sd
 	 *            the Smart Dashboard reference, or a SmartDashboardInterface for
 	 *            testing
+	 * @param absolute
+	 *            whether the target passed is absolute or relative
 	 */
-	public PIDTurn(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
+	public PIDTurn(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs, boolean absolute) {
 		// Use requires() here to declare subsystem dependencies
-		target = targ;
 		this.dt = dt;
 		this.ahrs = ahrs;
+
+		if (absolute) {
+			target = targ - AutoUtils.position.getRot();
+		} else {
+			target = targ;
+		}
+
+		if (Robot.dt != null) {
+			requires(Robot.dt);
+		}
+		// calculates the maximum turning speed in degrees/sec based on the max linear
+		// speed in inches/s and the distance (inches) between sides of the DT
+		double maxTurnSpeed = dt.getCurrentMaxSpeed() * 360 / (Math.PI * sd.getConst("Distance Between Wheels", 26.25));
+		double kf = 1 / (maxTurnSpeed * sd.getConst("Default PID Update Time", 0.05));
+		turnController = new PIDController(sd.getConst("TurnkP", 1), sd.getConst("TurnkI", 0), sd.getConst("TurnkD", 0),
+				kf, ahrs, this);
+		// tim = new Timer();
+	}
+
+	/**
+	 * Constructs this command with a new PIDController. Sets all of the
+	 * controller's PID constants based on SD prefs. Sets the controller's PIDSource
+	 * to the AHRS (gyro) object and sets its PIDOutput to this command which
+	 * implements PIDOutput's pidWrite() method.
+	 * 
+	 * @param targ
+	 *            the target bearing (in degrees) to turn to (so negative if turning
+	 *            left, positive if turning right)
+	 * @param dt
+	 *            the Drivetrain (for actual code) or a DrivetrainInterface (for
+	 *            testing)
+	 * @param ahrs
+	 *            the AHRS (gyro)
+	 * @param sd
+	 *            the Smart Dashboard reference, or a SmartDashboardInterface for
+	 *            testing
+	 */
+	public PIDTurn(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
+		this(targ, dt, sd, ahrs, false);
+	}
+
+	/**
+	 * Constructs this command with a new PIDController. Sets all of the
+	 * controller's PID constants based on SD prefs. Sets the controller's PIDSource
+	 * to the AHRS (gyro) object and sets its PIDOutput to this command which
+	 * implements PIDOutput's pidWrite() method.
+	 * 
+	 * @param point
+	 *            the target point (in inches) to turn to, relative to the starting
+	 *            position
+	 * @param dt
+	 *            the Drivetrain (for actual code) or a DrivetrainInterface (for
+	 *            testing)
+	 * @param ahrs
+	 *            the AHRS (gyro)
+	 * @param sd
+	 *            the Smart Dashboard reference, or a SmartDashboardInterface for
+	 *            testing
+	 */
+	public PIDTurn(double[] point, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
+		this.dt = dt;
+		this.ahrs = ahrs;
+
+		double dx = point[0] - AutoUtils.position.getX();
+		double dy = point[1] - AutoUtils.position.getY();
+
+		double absTurn = Math.toDegrees(Math.atan2(dy, dx));
+		target = absTurn - AutoUtils.position.getRot();
 
 		if (Robot.dt != null) {
 			requires(Robot.dt);
@@ -79,7 +149,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		turnController.setOutputRange(Robot.getConst("Output", 0.5) * -1, Robot.getConst("Output", 0.5));
 		turnController.setContinuous(true);
 		turnController.setAbsoluteTolerance(Robot.getConst("TurnTolerance", 1));
-		double newSetPoint = Robot.getConst("Turn Targ", 90) + dt.getAHRSAngle();
+		double newSetPoint = target + dt.getAHRSAngle();
 		while (Math.abs(newSetPoint) > 180) {
 			newSetPoint = newSetPoint - Math.signum(newSetPoint) * 360;
 		}
@@ -136,6 +206,8 @@ public class PIDTurn extends Command implements PIDOutput {
 		SmartDashboard.putNumber("Turn PID Result", turnController.get());
 		SmartDashboard.putNumber("Turn PID Error", turnController.getError());
 		// turnController.free();
+
+		AutoUtils.position.changeRot(dt.getAHRSAngle());
 	}
 
 	/**

@@ -24,15 +24,16 @@ public class AutoUtils {
 		ArrayList<String[]> currScript = new ArrayList<String[]>();
 		String currScriptName = "";
 
-		int count = 1;
+		int count = 0;
 		for (String line : lines) {
+			count++;
 			// remove comments
 			int commentIndex = line.indexOf("#");
 			if (commentIndex != -1)
 				line = line.substring(0, commentIndex);
 
 			// trim and remove extra whitespace just to make it neater
-			line = line.trim().replaceAll("\\s+", " ");	
+			line = line.trim().replaceAll("\\s+", " ");
 			// make coordinates with spaces also work
 			int parenIndex = line.indexOf("(");
 			while (parenIndex != -1) {
@@ -40,7 +41,7 @@ public class AutoUtils {
 				int endParenIndex = line.indexOf(")", parenIndex);
 				String coord = line.substring(parenIndex + 1, endParenIndex);
 				line = line.substring(0, parenIndex + 1) + coord.replaceAll(" ", "") + line.substring(endParenIndex);
-				
+
 				// finds next parentheses
 				parenIndex = line.indexOf("(", parenIndex + 1);
 			}
@@ -76,7 +77,7 @@ public class AutoUtils {
 					currScript.add(command);
 				}
 			}
-			count++;
+
 		}
 
 		// puts the last script in
@@ -187,7 +188,7 @@ public class AutoUtils {
 	 *            the message to log
 	 */
 
-	private static void logWarning (int lineNumber, String message) {
+	private static void logWarning(int lineNumber, String message) {
 		System.err.println("[ERROR] Line " + lineNumber + ": " + message);
 	}
 
@@ -246,13 +247,13 @@ public class AutoUtils {
 		if (AutoUtils.isPoint(cmdArgs)) {
 			parentheseless = cmdArgs.substring(1, cmdArgs.length() - 1);
 			pointparts = parentheseless.split(",");
-            try {
-			    point[0] = Double.parseDouble(pointparts[0]);
-			    point[1] = Double.parseDouble(pointparts[1]);
-            } catch (Exception e) {
-                point[0] = 1;
-                point[1] = 1;
-            }
+			try {
+				point[0] = Double.parseDouble(pointparts[0]);
+				point[1] = Double.parseDouble(pointparts[1]);
+			} catch (Exception e) {
+				point[0] = 1;
+				point[1] = 1;
+			}
 		}
 		return point;
 	}

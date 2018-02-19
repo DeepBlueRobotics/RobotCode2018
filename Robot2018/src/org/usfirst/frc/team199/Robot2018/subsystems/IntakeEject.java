@@ -49,9 +49,9 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * 
 	 */
 	public boolean hasCube() {
-		return pdp.getCurrent(Robot.rmap.getPort("PDP Intake Left Channel", 4)) > Robot.getConst("Max Current", 38)
-				&& pdp.getCurrent(Robot.rmap.getPort("PDP Intake Right Channel", 11)) > Robot.getConst("Max Current",
-						38);
+		return pdp.getCurrent(Robot.rmap.getPort("PDP Intake Left Channel", 4)) > Robot.getConst("Max Current", 39)
+				|| pdp.getCurrent(Robot.rmap.getPort("PDP Intake Right Channel", 11)) > Robot.getConst("Max Current",
+						39);
 	}
 
 	/**
@@ -159,9 +159,9 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	}
 
 	/**
-	 * Opens the intake
+	 * Closes the intake
 	 */
-	public void openIntake() {
+	public void closeIntake() {
 		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false)
 				? DoubleSolenoid.Value.kReverse
 				: DoubleSolenoid.Value.kForward;
@@ -175,9 +175,9 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	}
 
 	/**
-	 * Closes the intake
+	 * Opens the intake
 	 */
-	public void closeIntake() {
+	public void openIntake() {
 		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false)
 				? DoubleSolenoid.Value.kForward
 				: DoubleSolenoid.Value.kReverse;

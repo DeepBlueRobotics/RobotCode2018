@@ -130,12 +130,10 @@ public class RobotMap {
 
 		leftIntakeMotor = new VictorSP(getPort("IntakeLeftVictorSP", 9));
 		rightIntakeMotor = new VictorSP(getPort("IntakeRightVictorSP", 8));
-		// leftIntakeHorizontalSolenoid = new
-		// DoubleSolenoid(getPort("IntakeLeftHorizontalSolenoidPort1", 2),
-		// getPort("IntakeLeftHorizontalSolenoidPort2", 3));
-		// rightIntakeHorizontalSolenoid = new
-		// DoubleSolenoid(getPort("IntakeRightHorizontalSolenoidPort1", 4),
-		// getPort("IntakeRightHorizontalSolenoidPort2", 5));
+		leftIntakeHorizontalSolenoid = new DoubleSolenoid(getPort("IntakeLeftHorizontalSolenoidPort1", 2),
+				getPort("IntakeLeftHorizontalSolenoidPort2", 3));
+		rightIntakeHorizontalSolenoid = new DoubleSolenoid(getPort("IntakeRightHorizontalSolenoidPort1", 4),
+				getPort("IntakeRightHorizontalSolenoidPort2", 5));
 		// leftIntakeVerticalSolenoid = new
 		// DoubleSolenoid(getPort("IntakeLeftVerticalSolenoidPort1", 6),
 		// getPort("IntakeLeftVerticalSolenoidPort2", 7));
