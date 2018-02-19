@@ -100,7 +100,7 @@ public class PIDMove extends Command implements PIDOutput {
 		moveController.setOutputRange(-1.0, 1.0);
 		moveController.setContinuous(false);
 		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 0.1));
-		moveController.setSetpoint(Robot.getConst("Move Targ", 24));
+		moveController.setSetpoint(target);
 
 		moveController.enable();
 		// dt.enableVelocityPIDs();
