@@ -1,0 +1,60 @@
+controller indices
+	manipulator
+		buttons
+			1	A
+			2	B
+			3	X
+			4	Y
+			5	LB
+			6	RB
+			7	back
+			8	start
+			9	N/a
+			10	N/a
+		press mode to toggle mode light
+		axes
+			0	left thumbstick X axis (D-pad if mode light on)
+			1	left thumbstick Y axis (D-pad if mode light on)
+			2	left trigger
+			3	right trigger
+			4	right thumbstick X axis
+			5	right thumbstick Y axis
+				mode light off:
+		POV
+			D-pad (left joystick if mode light on)
+		rumble
+			fake news
+	left joystick
+		buttons
+			1
+			2
+			3
+			4
+			5
+			6
+			7
+			8
+			9
+			10
+			11
+		axes
+			0	X axis
+			1	Y axis (forward is negative)
+			2	Z axis (knob at base)
+	right joystick
+		buttons
+			1
+			2
+			3
+			4
+			5
+			6
+			7
+			8
+			9
+			10
+			11
+		axes
+			0	X axis
+			1	Y axis (forward is negative)
+			2	Z axis (knob at base)
