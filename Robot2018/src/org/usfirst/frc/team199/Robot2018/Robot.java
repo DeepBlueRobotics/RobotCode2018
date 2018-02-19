@@ -212,7 +212,7 @@ public class Robot extends IterativeRobot {
 		// SmartDashboard.putNumber("Right Enc Dist", dt.getRightDist());
 		// SmartDashboard.putNumber("Avg Enc Dist", dt.getEncAvgDist());
 		//
-		// SmartDashboard.putNumber("Angle", dt.getAHRSAngle());
+		SmartDashboard.putNumber("Angle", dt.getAHRSAngle());
 	}
 
 	boolean firstTime = true;

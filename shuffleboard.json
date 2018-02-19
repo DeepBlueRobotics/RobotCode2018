@@ -1,5 +1,5 @@
 {
-  "dividerPosition": 0.2218100890207715,
+  "dividerPosition": 0.45185185185185184,
   "tabPane": [
     {
       "title": "PID Testing",
@@ -41,9 +41,8 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Left Enc Rate",
-              "_title": "SmartDashboard/Left Enc Rate",
-              "Visible time": 30.0,
-              "SmartDashboard/Left Enc Rate visible": true
+              "_title": "/SmartDashboard/Left Enc Rate",
+              "Visible time": 30.0
             }
           },
           "5,2": {
@@ -65,9 +64,8 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Right Enc Rate",
-              "_title": "SmartDashboard/Right Enc Rate",
-              "Visible time": 30.0,
-              "SmartDashboard/Right Enc Rate visible": true
+              "_title": "/SmartDashboard/Right Enc Rate",
+              "Visible time": 30.0
             }
           },
           "5,3": {
@@ -242,17 +240,6 @@
               "colorWhenTrue": "#7CFC00FF",
               "colorWhenFalse": "#8B0000FF"
             }
-          },
-          "2,1": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Const/DPP",
-              "_title": "SmartDashboard/Const/DPP"
-            }
           }
         }
       }
@@ -297,9 +284,8 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Right Enc Dist",
-              "_title": "SmartDashboard/Right Enc Dist",
-              "Visible time": 10.0,
-              "SmartDashboard/Right Enc Dist visible": true
+              "_title": "/SmartDashboard/Right Enc Dist",
+              "Visible time": 10.0
             }
           },
           "1,0": {
@@ -310,14 +296,13 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Left Enc Dist",
-              "_title": "SmartDashboard/Left Enc Dist",
-              "Visible time": 10.0,
-              "SmartDashboard/Left Enc Dist visible": true
+              "_title": "/SmartDashboard/Left Enc Dist",
+              "Visible time": 10.0
             }
           },
           "5,0": {
             "size": [
-              2,
+              1,
               1
             ],
             "content": {
@@ -431,7 +416,7 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "5,0": {
+          "1,0": {
             "size": [
               2,
               1
@@ -475,7 +460,7 @@
               "_title": "SmartDashboard/Turn PID Result"
             }
           },
-          "5,1": {
+          "2,1": {
             "size": [
               1,
               1
@@ -519,32 +504,6 @@
               "_title": "SmartDashboard/Right VPID Error"
             }
           },
-          "3,2": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/Drivetrain/Left VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Left VPID Targ",
-              "Visible time": 30.0,
-              "SmartDashboard/Drivetrain/Left VPID Targ visible": true
-            }
-          },
-          "5,2": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/Drivetrain/Right VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Right VPID Targ",
-              "Visible time": 30.0,
-              "SmartDashboard/Drivetrain/Right VPID Targ visible": true
-            }
-          },
           "0,2": {
             "size": [
               1,
@@ -556,7 +515,7 @@
               "_title": "SmartDashboard/Const/Turn Targ"
             }
           },
-          "6,1": {
+          "1,1": {
             "size": [
               1,
               1
@@ -565,32 +524,6 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Const/TurnTolerance",
               "_title": "SmartDashboard/Const/TurnTolerance"
-            }
-          },
-          "3,0": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/Drivetrain/Right Enc Dist",
-              "_title": "SmartDashboard/Drivetrain/Right Enc Dist",
-              "Visible time": 30.0,
-              "SmartDashboard/Drivetrain/Right Enc Dist visible": true
-            }
-          },
-          "1,0": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/Drivetrain/Left Enc Dist",
-              "_title": "SmartDashboard/Drivetrain/Left Enc Dist",
-              "Visible time": 30.0,
-              "SmartDashboard/Drivetrain/Left Enc Dist visible": true
             }
           }
         }
