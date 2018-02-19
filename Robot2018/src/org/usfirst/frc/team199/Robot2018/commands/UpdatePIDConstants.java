@@ -5,7 +5,7 @@ import org.usfirst.frc.team199.Robot2018.Robot;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Updates the PIDControllers' PIDConstants based on SmartDashboard values
  */
 public class UpdatePIDConstants extends InstantCommand {
 
