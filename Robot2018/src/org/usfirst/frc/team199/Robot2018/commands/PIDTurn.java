@@ -58,6 +58,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		turnController = new PIDController(sd.getConst("TurnkP", 1), sd.getConst("TurnkI", 0), sd.getConst("TurnkD", 0),
 				kf, ahrs, this);
 		// tim = new Timer();
+		SmartDashboard.putData("Turn PID", turnController);
 	}
 
 	/**
@@ -69,22 +70,20 @@ public class PIDTurn extends Command implements PIDOutput {
 		turnController.disable();
 		// dt.enableVelocityPIDs();
 		System.out.println("initialize2s");
-		dt.resetAHRS();
+		// dt.resetAHRS();
 		System.out.println("after reset");
 		System.out.println("after disabling");
 		// input is in degrees
 		turnController.setInputRange(-180, 180);
 		// output in "motor units" (arcade and tank only accept values [-1, 1]
-		turnController.setOutputRange(-1.0, 1.0);
+		turnController.setOutputRange(Robot.getConst("Output", 0.5) * -1, Robot.getConst("Output", 0.5));
 		turnController.setContinuous(true);
 		turnController.setAbsoluteTolerance(Robot.getConst("TurnTolerance", 1));
-		double newSetPoint = Robot.getConst("Turn Targ", 90);
+		double newSetPoint = Robot.getConst("Turn Targ", 90) + dt.getAHRSAngle();
 		while (Math.abs(newSetPoint) > 180) {
 			newSetPoint = newSetPoint - Math.signum(newSetPoint) * 360;
 		}
 		turnController.setSetpoint(newSetPoint);
-
-		SmartDashboard.putData("Turn PID", turnController);
 
 		turnController.enable();
 		System.out.println("initialize finished");
