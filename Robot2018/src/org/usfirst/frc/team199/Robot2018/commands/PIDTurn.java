@@ -115,7 +115,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		double dx = point[0] - AutoUtils.position.getX();
 		double dy = point[1] - AutoUtils.position.getY();
 
-		double absTurn = Math.toDegrees(Math.atan2(dx, dy));
+		double absTurn = Math.toDegrees(Math.atan2(dy, dx));
 		target = absTurn - AutoUtils.position.getRot();
 
 		if (Robot.dt != null) {
