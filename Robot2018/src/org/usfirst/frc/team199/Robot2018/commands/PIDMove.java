@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Drives the robot a certain target distance using PID. Implements PIDOutput in
@@ -21,6 +20,7 @@ public class PIDMove extends Command implements PIDOutput {
 	private DrivetrainInterface dt;
 	private PIDController moveController;
 	private PIDSource avg;
+	private SmartDashboardInterface sd;
 
 	/**
 	 * Constructs this command with a new PIDController. Sets all of the
@@ -43,13 +43,14 @@ public class PIDMove extends Command implements PIDOutput {
 		target = targ;
 		this.dt = dt;
 		this.avg = avg;
+		this.sd = sd;
 		if (Robot.dt != null) {
 			requires(Robot.dt);
 		}
 		double kf = 1 / (dt.getCurrentMaxSpeed() * sd.getConst("Default PID Update Time", 0.05));
 		moveController = new PIDController(sd.getConst("MovekP", 0.1), sd.getConst("MovekI", 0),
 				sd.getConst("MovekD", 0), kf, avg, this);
-		SmartDashboard.putData("Move PID", moveController);
+		sd.putData("Move PID", moveController);
 	}
 
 	/**
@@ -78,6 +79,7 @@ public class PIDMove extends Command implements PIDOutput {
 		this.target = dist;
 		this.dt = dt;
 		this.avg = avg;
+		this.sd = sd;
 		if (Robot.dt != null) {
 			requires(Robot.dt);
 		}
@@ -114,8 +116,8 @@ public class PIDMove extends Command implements PIDOutput {
 	@Override
 	protected void execute() {
 		System.out.println("Enc Avg Dist: " + avg.pidGet());
-		SmartDashboard.putNumber("Move PID Result", moveController.get());
-		SmartDashboard.putNumber("Move PID Error", moveController.getError());
+		sd.putNumber("Move PID Result", moveController.get());
+		sd.putNumber("Move PID Error", moveController.getError());
 	}
 
 	/**
@@ -173,6 +175,6 @@ public class PIDMove extends Command implements PIDOutput {
 	@Override
 	public void pidWrite(double output) {
 		dt.arcadeDrive(output, 0);
-		SmartDashboard.putNumber("Move PID Output", output);
+		sd.putNumber("Move PID Output", output);
 	}
 }
