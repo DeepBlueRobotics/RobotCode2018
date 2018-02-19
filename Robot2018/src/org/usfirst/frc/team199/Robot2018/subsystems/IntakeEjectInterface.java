@@ -31,6 +31,22 @@ public interface IntakeEjectInterface {
 	public void stopIntake();
 
 	/**
+	 * Sets the left roller to run at the specified speed
+	 * 
+	 * @param speed
+	 *            Speed the left motor should run at
+	 */
+	public void runLeftIntake(double speed);
+
+	/**
+	 * Sets the right roller to run at the specified speed
+	 * 
+	 * @param speed
+	 *            Speed the right motor should run at
+	 */
+	public void runRightIntake(double speed);
+
+	/**
 	 * Spins the rollers
 	 * 
 	 * @param speed

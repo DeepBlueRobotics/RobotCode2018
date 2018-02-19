@@ -36,7 +36,7 @@ RxLx:
 #-------------------------------------------------
 
 #Exchange
-RxxE
+RxxE:
 	moveto (0, 188.4) (-210.6, 188.4) (-210.6, 44.4) (-123.6, 44.4) (-123.6, -39.6) 180 #Curve around switch for baseline #then go to exchange
 	exchange
 
@@ -144,7 +144,7 @@ LxRx:
 #-------------------------------------------------
 
 #Exchange
-LxxE
+LxxE:
 	moveto (0, 188.4) (210.6, 188.4) (210.6, 3.7) (124.8, 3.7) (124.8, -3.3) 180 #Curve around switch for baseline then go to exchange
 	exchange
 
@@ -244,13 +244,13 @@ moveto (48,80.375)  #cross baseline
 CRxx:
 moveto (0,60) 90 #5 feet forward, turn 90
 moveto (48,60) -90 #4 feet right,turn -90
-moveto(48,104.375) #7 feet forward until against switch enclosure, compensating for robot length
+moveto (48,104.375) #7 feet forward until against switch enclosure, compensating for robot length
 switch #deploy switch 
 
 CLxx:
 moveto (0,60) -90 #5 feet forward, turn -90
 moveto (-48,60) 90 #4 feet left,turn 90
-moveto(-48,104.375) #7 feet forward until against switch enclosure,compensating for robot length
+moveto (-48,104.375) #7 feet forward until against switch enclosure,compensating for robot length
 switch #deploy switch 
 
 
@@ -275,7 +275,7 @@ scale #deploy scale
 CRLx:
 moveto (0,60) 90 #5 feet forward, turn 90
 moveto (48,60) -90 #4 feet right,turn -90
-moveto(48,104.375) #7 feet forward until against switch enclosure
+moveto (48,104.375) #7 feet forward until against switch enclosure
 switch #deploy switch 
 move -39 #move 39 inches back
 turn -90 #turn -90 degrees
@@ -294,7 +294,7 @@ scale #deploy scale2
 CRRx:
 moveto (0,60) 90 #5 feet forward, turn 90
 moveto (48,60) -90 #4 feet right,turn -90
-moveto(48,104.375) #7 feet forward until against switch enclosure
+moveto (48,104.375) #7 feet forward until against switch enclosure
 switch #deploy switch 
 move -39 #move 39 inches back
 turn -90 #turn -90 degrees
@@ -313,7 +313,7 @@ scale #deploy scale
 CLRx:
 moveto (0,60) -90 #5 feet forward, turn -90
 moveto (-48,60) 90 #4 feet left,turn 90
-moveto(-48,104.375) #7 feet forward until against switch enclosure
+moveto (-48,104.375) #7 feet forward until against switch enclosure
 switch #deploy switch 
 move -39 #move 39 inches back
 turn -90 #turn -90 degrees
@@ -331,7 +331,7 @@ scale #deploy scale
 CLLx:
 moveto (0,60) -90 #5 feet forward, turn -90
 moveto (-48,60) 90 #4 feet left,turn 90
-moveto(-48,104.375) #7 feet forward until against switch enclosure
+moveto (-48,104.375) #7 feet forward until against switch enclosure
 switch #deploy switch 
 move -39 #move 39 inches back
 turn 90 #turn 90 degrees
@@ -352,7 +352,7 @@ scale #deploy scale2
 CRxE:
 moveto (0,60) 90 #5 feet forward, turn 90
 moveto (48,60) -90 #4 feet right,turn -90
-moveto(48,104.375) #7 feet forward until against switch enclosure, compensating for robot length
+moveto (48,104.375) #7 feet forward until against switch enclosure, compensating for robot length
 switch #deploy switch 
 move -24 # 2 feet back
 turn -90
@@ -368,7 +368,7 @@ exchange
 CLxE:
 moveto (0,60) -90 #5 feet forward, turn -90
 moveto (-48,60) 90 #3 feet left,turn 90
-moveto(-48,104.375) #7 feet forward until against switch enclosure,compensating for robot length
+moveto (-48,104.375) #7 feet forward until against switch enclosure,compensating for robot length
 switch #deploy switch
 move -24
 turn 90
@@ -383,7 +383,7 @@ exchange
 CxxE:
 moveto (0,60) -90 #5 feet forward, turn -90
 moveto (-48,60) 90 #3 feet left,turn 90
-moveto(-48,104.375) #7 feet forward until against switch enclosure,compensating for robot length
+moveto (-48,104.375) #7 feet forward until against switch enclosure,compensating for robot length
 move -96 #move 8 feet back
 turn 180 #turn 180 degrees to face the exchange
 exchange
