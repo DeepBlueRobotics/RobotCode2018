@@ -24,6 +24,7 @@ public class PIDTurn extends Command implements PIDOutput {
 	private PIDSource ahrs;
 	private Timer tim;
 	private double lastTime;
+	private SmartDashboardInterface sd;
 
 	/**
 	 * Constructs this command with a new PIDController. Sets all of the
@@ -49,6 +50,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		// Use requires() here to declare subsystem dependencies
 		this.dt = dt;
 		this.ahrs = ahrs;
+		this.sd = sd;
 
 		if (absolute) {
 			target = targ - AutoUtils.position.getRot();
@@ -128,7 +130,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		turnController = new PIDController(sd.getConst("TurnkP", 1), sd.getConst("TurnkI", 0), sd.getConst("TurnkD", 0),
 				kf, ahrs, this);
 		// tim = new Timer();
-		SmartDashboard.putData("Turn PID", turnController);
+		sd.putData("Turn PID", turnController);
 	}
 
 	/**
@@ -203,8 +205,8 @@ public class PIDTurn extends Command implements PIDOutput {
 	protected void end() {
 		turnController.disable();
 		System.out.println("end");
-		SmartDashboard.putNumber("Turn PID Result", turnController.get());
-		SmartDashboard.putNumber("Turn PID Error", turnController.getError());
+		sd.putNumber("Turn PID Result", turnController.get());
+		sd.putNumber("Turn PID Error", turnController.getError());
 		// turnController.free();
 
 		AutoUtils.position.changeRot(dt.getAHRSAngle());

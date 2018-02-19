@@ -25,6 +25,7 @@ import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -68,6 +69,14 @@ public class Robot extends IterativeRobot {
 				}
 			}
 			return pref.getDouble("Const/" + key, def);
+		}
+
+		public void putData(String string, PIDController controller) {
+			SmartDashboard.putData(string, controller);
+		}
+
+		public void putNumber(String string, double d) {
+			SmartDashboard.putNumber(string, d);
 		}
 		/*
 		 * if (!SmartDashboard.containsKey("Const/" + key)) { if
