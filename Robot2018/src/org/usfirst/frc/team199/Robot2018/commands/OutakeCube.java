@@ -20,24 +20,28 @@ public class OutakeCube extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		tim = new Timer();
+		tim.reset();
+		tim.start();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		Robot.intakeEject.runIntake(-1);
+		Robot.intakeEject.runIntake(1);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return tim.get() > Robot.getConst("Outake Time", 1);
+		return tim.get() > Robot.getConst("Outake Time", 0.5);
 	}
 
 	// Called once after isFinished returns true
 	protected void end() {
+		Robot.intakeEject.runIntake(0);
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
+		end();
 	}
 }
