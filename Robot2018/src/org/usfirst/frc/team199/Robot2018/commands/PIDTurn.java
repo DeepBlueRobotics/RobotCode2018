@@ -149,7 +149,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		turnController.setOutputRange(Robot.getConst("Output", 0.5) * -1, Robot.getConst("Output", 0.5));
 		turnController.setContinuous(true);
 		turnController.setAbsoluteTolerance(Robot.getConst("TurnTolerance", 1));
-		double newSetPoint = Robot.getConst("Turn Targ", 90) + dt.getAHRSAngle();
+		double newSetPoint = target + dt.getAHRSAngle();
 		while (Math.abs(newSetPoint) > 180) {
 			newSetPoint = newSetPoint - Math.signum(newSetPoint) * 360;
 		}
