@@ -169,8 +169,8 @@ public class Robot extends IterativeRobot {
 			strategies.put(key, chooser.getSelected());
 		}
 
-		Autonomous auto = new Autonomous(startPos, strategies, autoDelay, fmsInput, false);
-		auto.start();
+		Scheduler.getInstance().add(new Autonomous(startPos, strategies, autoDelay, fmsInput, false));
+		// auto.start();
 	}
 
 	/**

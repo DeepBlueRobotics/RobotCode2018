@@ -65,6 +65,16 @@ public interface IntakeEjectInterface {
 	public void lowerIntake();
 
 	/**
+	 * Toggles the left intake between open and closed
+	 */
+	public void toggleLeftIntake();
+
+	/**
+	 * Toggles the right intake between open and closed
+	 */
+	public void toggleRightIntake();
+
+	/**
 	 * Closes the intake
 	 */
 	public void closeIntake();
