@@ -94,8 +94,8 @@ public class PIDMove extends Command implements PIDOutput {
 	 */
 	@Override
 	public void initialize() {
-		double dx = pointX - AutoUtils.position.getX();
-		double dy = pointY - AutoUtils.position.getY();
+		double dx = pointX - AutoUtils.state.getX();
+		double dy = pointY - AutoUtils.state.getY();
 
 		double dist = Math.sqrt(dx * dx + dy * dy); // pythagorean theorem to find distance
 		this.target = dist;
@@ -151,15 +151,15 @@ public class PIDMove extends Command implements PIDOutput {
 		System.out.println("End");
 		// moveController.free();
 
-		double angle = Math.toRadians(AutoUtils.position.getRot());
+		double angle = Math.toRadians(AutoUtils.state.getRot());
 		double dist = avg.pidGet();
 		// x and y are switched because we are using bearings
 		double y = Math.cos(angle) * dist;
 		double x = Math.sin(angle) * dist;
-		AutoUtils.position.changeX(x);
-		AutoUtils.position.changeY(y);
+		AutoUtils.state.changeX(x);
+		AutoUtils.state.changeY(y);
 
-		AutoUtils.position.setRot(dt.getAHRSAngle());
+		AutoUtils.state.setRot(dt.getAHRSAngle());
 	}
 
 	/**

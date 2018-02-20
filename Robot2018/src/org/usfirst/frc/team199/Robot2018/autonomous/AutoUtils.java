@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class AutoUtils {
 
-	public static Position position;
+	public static State state;
 
 	/**
 	 * Parses the inputted script file into a map of scripts

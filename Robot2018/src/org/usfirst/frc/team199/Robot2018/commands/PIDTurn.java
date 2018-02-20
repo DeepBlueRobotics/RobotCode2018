@@ -144,18 +144,18 @@ public class PIDTurn extends Command implements PIDOutput {
 
 		if (!turnToPoint) {
 			if (absoluteRotation) {
-				target -= AutoUtils.position.getRot();
+				target -= AutoUtils.state.getRot();
 			}
 		} else {
-			double dx = pointX - AutoUtils.position.getX();
-			double dy = pointY - AutoUtils.position.getY();
+			double dx = pointX - AutoUtils.state.getX();
+			double dy = pointY - AutoUtils.state.getY();
 
 			System.out.println("x = " + dx + ", y = " + dy);
 
 			// x and y are switched because we are using bearings
 			double absTurn = Math.toDegrees(Math.atan2(dx, dy));
-			target = absTurn - AutoUtils.position.getRot();
-			System.out.println("current bearing = " + AutoUtils.position.getRot());
+			target = absTurn - AutoUtils.state.getRot();
+			System.out.println("current bearing = " + AutoUtils.state.getRot());
 			System.out.println("target bearing = " + target);
 		}
 
@@ -232,7 +232,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		sd.putNumber("Turn PID Error", turnController.getError());
 		// turnController.free();
 
-		AutoUtils.position.setRot(dt.getAHRSAngle());
+		AutoUtils.state.setRot(dt.getAHRSAngle());
 	}
 
 	/**

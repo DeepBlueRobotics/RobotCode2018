@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
-import org.usfirst.frc.team199.Robot2018.autonomous.Position;
+import org.usfirst.frc.team199.Robot2018.autonomous.State;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Strategy;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
@@ -166,7 +166,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		dt.resetAHRS();
-		AutoUtils.position = new Position(0, 0, 0);
+		AutoUtils.state = new State(0, 0, 0);
 		Scheduler.getInstance().add(new ShiftLowGear());
 		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
 		Autonomous.Position startPos = posChooser.getSelected();
