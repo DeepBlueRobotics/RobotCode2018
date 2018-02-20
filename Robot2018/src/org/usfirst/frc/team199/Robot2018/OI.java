@@ -86,7 +86,7 @@ public class OI {
 		MoveLiftUpButton.whileHeld(new RunLift(Robot.lift, true));
 		MoveLiftDownButton.whileHeld(new RunLift(Robot.lift, false));
 
-		// manipulator = new Joystick(2);
+		manipulator = new Joystick(2);
 		// closeIntake = new JoystickButton(manipulator, getButton("Close Intake
 		// Button", 1));
 		// closeIntake.whenPressed(new CloseIntake());

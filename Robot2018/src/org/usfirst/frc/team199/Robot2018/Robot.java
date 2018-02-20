@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
+import org.usfirst.frc.team199.Robot2018.autonomous.Position;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous;
-import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Position;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Strategy;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
@@ -22,9 +22,9 @@ import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
 import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEject;
 import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
 
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -53,7 +53,7 @@ public class Robot extends IterativeRobot {
 	public static Map<String, ArrayList<String[]>> autoScripts;
 
 	Command autonomousCommand;
-	SendableChooser<Position> posChooser = new SendableChooser<Position>();
+	SendableChooser<Autonomous.Position> posChooser = new SendableChooser<Autonomous.Position>();
 	Map<String, SendableChooser<Strategy>> stratChoosers = new HashMap<String, SendableChooser<Strategy>>();
 	String[] fmsPossibilities = { "LL", "LR", "RL", "RR" };
 
@@ -68,6 +68,14 @@ public class Robot extends IterativeRobot {
 				}
 			}
 			return pref.getDouble("Const/" + key, def);
+		}
+
+		public void putData(String string, PIDController controller) {
+			SmartDashboard.putData(string, controller);
+		}
+
+		public void putNumber(String string, double d) {
+			SmartDashboard.putNumber(string, d);
 		}
 		/*
 		 * if (!SmartDashboard.containsKey("Const/" + key)) { if
@@ -109,7 +117,7 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 
 		// auto position chooser
-		for (Position p : Position.values()) {
+		for (Autonomous.Position p : Autonomous.Position.values()) {
 			posChooser.addObject(p.getSDName(), p);
 		}
 		SmartDashboard.putData("Starting Position", posChooser);
@@ -131,8 +139,8 @@ public class Robot extends IterativeRobot {
 		autoScripts = AutoUtils.parseScriptFile(Preferences.getInstance().getString("autoscripts", ""));
 
 		listen = new Listener();
-		CameraServer.getInstance().startAutomaticCapture(0);
-		CameraServer.getInstance().startAutomaticCapture(1);
+		// CameraServer.getInstance().startAutomaticCapture(0);
+		// CameraServer.getInstance().startAutomaticCapture(1);
 	}
 
 	/**
@@ -157,9 +165,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		dt.resetAHRS();
+		AutoUtils.position = new Position(0, 0, 0);
 		Scheduler.getInstance().add(new ShiftLowGear());
 		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
-		Position startPos = posChooser.getSelected();
+		Autonomous.Position startPos = posChooser.getSelected();
 		double autoDelay = SmartDashboard.getNumber("Auto Delay", 0);
 
 		Map<String, Strategy> strategies = new HashMap<String, Strategy>();
