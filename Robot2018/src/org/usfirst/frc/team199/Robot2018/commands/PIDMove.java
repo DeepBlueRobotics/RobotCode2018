@@ -44,8 +44,7 @@ public class PIDMove extends Command implements PIDOutput {
 			requires(Robot.dt);
 		}
 		double kf = 1 / (dt.getCurrentMaxSpeed() * sd.getConst("Default PID Update Time", 0.05));
-		moveController = new PIDController(sd.getConst("MovekP", 0.1), sd.getConst("MovekI", 0),
-				sd.getConst("MovekD", 0), kf, avg, this) {
+		moveController = new PIDController(sd.getConst("MovekP", 0.1), sd.getConst("MovekI", 0), sd.getConst("MovekD", 0), kf, avg, this) {
 			/**
 			 * Move Velocity: V = sqrt(8TGd) / (R*m) 
 			 * where T = max torque of wheels 
@@ -60,6 +59,7 @@ public class PIDMove extends Command implements PIDOutput {
 				return (targ / Math.abs(targ)) * feedForwardConst * Math.sqrt(Math.abs(targ));
 			}
 		};
+		SmartDashboard.putData("Move PID", moveController);
 	}
 
 	/**
@@ -77,8 +77,6 @@ public class PIDMove extends Command implements PIDOutput {
 		moveController.setContinuous(false);
 		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 0.1));
 		moveController.setSetpoint(Robot.getConst("Move Targ", 24));
-
-		SmartDashboard.putData("Move PID", moveController);
 
 		moveController.enable();
 		// dt.enableVelocityPIDs();

@@ -7,14 +7,8 @@
 
 package org.usfirst.frc.team199.Robot2018;
 
-import org.usfirst.frc.team199.Robot2018.commands.CloseIntake;
-import org.usfirst.frc.team199.Robot2018.commands.IntakeCube;
-import org.usfirst.frc.team199.Robot2018.commands.LowerIntake;
-import org.usfirst.frc.team199.Robot2018.commands.OpenIntake;
-import org.usfirst.frc.team199.Robot2018.commands.OutakeCube;
 import org.usfirst.frc.team199.Robot2018.commands.PIDMove;
 import org.usfirst.frc.team199.Robot2018.commands.PIDTurn;
-import org.usfirst.frc.team199.Robot2018.commands.RaiseIntake;
 import org.usfirst.frc.team199.Robot2018.commands.ResetEncoders;
 import org.usfirst.frc.team199.Robot2018.commands.RunLift;
 import org.usfirst.frc.team199.Robot2018.commands.SetDistancePerPulse;
@@ -32,6 +26,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
+	/*
+	 * WHENEVER YOU ADD OR CHANGE WHAT A BUTTON OR JOYSTICK DOES, indicate in
+	 * /docs/controllers.txt to keep that reference up to date.
+	 */
 
 	public Joystick leftJoy;
 	private JoystickButton shiftLowGearButton;
@@ -92,18 +90,22 @@ public class OI {
 		MoveLiftUpButton.whileHeld(new RunLift(Robot.lift, true));
 		MoveLiftDownButton.whileHeld(new RunLift(Robot.lift, false));
 
-		manipulator = new Joystick(2);
-		closeIntake = new JoystickButton(manipulator, getButton("Close Intake Button", 1));
-		closeIntake.whenPressed(new CloseIntake());
-		openIntake = new JoystickButton(manipulator, getButton("Open Intake Button", 2));
-		openIntake.whenPressed(new OpenIntake());
-		raiseIntake = new JoystickButton(manipulator, getButton("Raise Intake Button", 3));
-		raiseIntake.whenPressed(new RaiseIntake());
-		lowerIntake = new JoystickButton(manipulator, getButton("Lower Intake Button", 4));
-		lowerIntake.whenPressed(new LowerIntake());
-		intake = new JoystickButton(manipulator, getButton("Intake Button", 5));
-		intake.whenPressed(new IntakeCube());
-		outake = new JoystickButton(manipulator, getButton("Outake Button", 6));
-		outake.whenPressed(new OutakeCube());
+		// manipulator = new Joystick(2);
+		// closeIntake = new JoystickButton(manipulator, getButton("Close Intake
+		// Button", 1));
+		// closeIntake.whenPressed(new CloseIntake());
+		// openIntake = new JoystickButton(manipulator, getButton("Open Intake Button",
+		// 2));
+		// openIntake.whenPressed(new OpenIntake());
+		// raiseIntake = new JoystickButton(manipulator, getButton("Raise Intake
+		// Button", 3));
+		// raiseIntake.whenPressed(new RaiseIntake());
+		// lowerIntake = new JoystickButton(manipulator, getButton("Lower Intake
+		// Button", 4));
+		// lowerIntake.whenPressed(new LowerIntake());
+		// intake = new JoystickButton(manipulator, getButton("Intake Button", 5));
+		// intake.whenPressed(new IntakeCube());
+		// outake = new JoystickButton(manipulator, getButton("Outake Button", 6));
+		// outake.whenPressed(new OutakeCube());
 	}
 }
