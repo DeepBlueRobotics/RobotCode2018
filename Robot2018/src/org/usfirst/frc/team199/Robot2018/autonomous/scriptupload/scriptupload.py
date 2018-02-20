@@ -1,6 +1,7 @@
 #nt setup
 from networktables import NetworkTables
 import __future__
+import time
 NetworkTables.initialize(server='10.1.99.2')
 prefs = NetworkTables.getTable("Preferences")
 
@@ -29,6 +30,8 @@ while not go:
 #puts the string
 prefs.putString("autoscripts", oneline)
 print("Uploading %s as a String[] to key \"autoscripts\"" % filename)
+
+time.sleep(0.1)
 
 #checks if the key has been filled
 tester = "" #a variable to check if autoscripts is None

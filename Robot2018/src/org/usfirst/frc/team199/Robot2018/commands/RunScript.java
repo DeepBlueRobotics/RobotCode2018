@@ -14,7 +14,13 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class RunScript extends CommandGroup {
 
 	public RunScript(String scriptName) {
-		ArrayList<String[]> script = Robot.autoScripts.getOrDefault(scriptName, new ArrayList<String[]>());
+		ArrayList<String[]> script;
+		if (Robot.autoScripts.containsKey(scriptName)) {
+			script = Robot.autoScripts.get(scriptName);
+		} else {
+			System.err.println("[ERROR] auto scripts file does not contain script `" + scriptName + "`.");
+			return;
+		}
 
 		outerloop: for (String[] cmd : script) {
 			String cmdName = cmd[0];

@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DefaultIntake extends Command {
 
+	private boolean manipulatorPluggedIn = true;
+
 	public DefaultIntake() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
@@ -17,13 +19,21 @@ public class DefaultIntake extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
+		try {
+			Robot.oi.manipulator.getRawAxis(1);
+		} catch (NullPointerException e) {
+			System.err.println("[ERROR] Manipulator not plugged in.");
+			manipulatorPluggedIn = false;
+		}
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		// 1 and 5 represent the axes' index in driver station
-		Robot.intakeEject.runLeftIntake(Robot.oi.manipulator.getRawAxis(1));
-		Robot.intakeEject.runRightIntake(Robot.oi.manipulator.getRawAxis(5));
+		if (manipulatorPluggedIn) {
+			Robot.intakeEject.runLeftIntake(Robot.oi.manipulator.getRawAxis(1));
+			Robot.intakeEject.runRightIntake(Robot.oi.manipulator.getRawAxis(5));
+		}
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
