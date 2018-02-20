@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class AutoUtils {
 
-	public static Position position;
+	public static Position position = new Position(0, 0, 0);
 
 	/**
 	 * Parses the inputted script file into a map of scripts
@@ -25,7 +25,6 @@ public class AutoUtils {
 		String currScriptName = "";
 
 		int count = 0;
-		int errorCount = 0;
 		for (String line : lines) {
 			count++;
 			// remove comments
@@ -76,8 +75,6 @@ public class AutoUtils {
 				if (isValidCommand(instruction, args, count)) {
 					String[] command = { instruction, args };
 					currScript.add(command);
-				} else {
-					errorCount++;
 				}
 			}
 
@@ -88,8 +85,6 @@ public class AutoUtils {
 
 		// remove the stray one in the beginning
 		autoScripts.remove("");
-
-		System.out.println("[INFO] Successfuly parsed " + count + " lines with " + errorCount + " errors.");
 
 		return autoScripts;
 	}
