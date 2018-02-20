@@ -9,100 +9,100 @@
 
 #Cross Auto Line
 Rxxx: 
-	moveto (0, 120) #Drive past auto line 
+	moveto (0,120) #Drive past auto line 
 
 #-------------------------------------------------
 
 #Switch
 RRxx:
-	moveto (0, 128.4) (-42.6, 128.4) -90 #Drive directly forward to switch and then ram into switch  
+	moveto (0,128.4) (-42.6,128.4) -90 #Drive directly forward to switch and then ram into switch  
 	switch
 
 RLxx:
-	moveto (0, 188.4) (-210.6, 188.4) (-210.6, 128.4) (-186.6, 128.4) 90 #Curve around switch and then "ram" into switch
+	moveto (0,188.4) (-210.6,188.4) (-210.6,128.4) (-186.6,128.4) 90 #Curve around switch and then "ram" into switch
 	switch
 
 #-------------------------------------------------
 
 #Scale
 RxRx:
-	moveto (0, 284.4) (-24.6, 284.4) -90 #Drive directly forward and place at initial horizontal to scale
+	moveto (0,284.4) (-24.6,284.4) -90 #Drive directly forward and place at initial horizontal to scale
 	scale
 
 RxLx:
-	moveto (0, 188.4) (-246.6, 188.4) (-246.6, 284.4) (-192.6, 284.4) 90 #Curve around switch and drive to scale
+	moveto (0,188.4) (-246.6,188.4) (-246.6,284.4) (-192.6,284.4) 90 #Curve around switch and drive to scale
 	scale
 
 #-------------------------------------------------
 
 #Exchange
 RxxE:
-	moveto (0, 188.4) (-210.6, 188.4) (-210.6, 44.4) (-123.6, 44.4) (-123.6, -39.6) 180 #Curve around switch for baseline #then go to exchange
+	moveto (0,188.4) (-210.6,188.4) (-210.6,44.4) (-123.6,44.4) (-123.6,-39.6) 180 #Curve around switch for baseline #then go to exchange
 	exchange
 
 #-------------------------------------------------
 
 #Switch and Scale
 RRRx:
-	moveto (0, 128.4) (-41.4, 128.4) -90 #Drive directly forward then turn into switch
+	moveto (0,128.4) (-41.4,128.4) -90 #Drive directly forward then turn into switch
 	switch
-	moveto (0, 128.4) #Back out from switch
-	moveto (0, 80.4) (-9, 80.4) #Drive toward cubes
+	moveto (0,128.4) #Back out from switch
+	moveto (0,80.4) (-9,80.4) #Drive toward cubes
 	intake
-	moveto (0, 80.4) #Back out from cubes
-	moveto (0, 284.4) (-24.6, 284.4) -90 #Drive toward scale
+	moveto (0,80.4) #Back out from cubes
+	moveto (0,284.4) (-24.6,284.4) -90 #Drive toward scale
 	scale
 
 RRLx:
-	moveto (0, 128.4) (-41.4, 128.4) -90 #Drive directly forward then turn into switch
+	moveto (0,128.4) (-41.4,128.4) -90 #Drive directly forward then turn into switch
 	switch
-	moveto (0, 128.4) #Back out from switch
-	moveto (0, 80.4) (-9, 80.4) -90 #Drive toward cubes
+	moveto (0,128.4) #Back out from switch
+	moveto (0,80.4) (-9,80.4) -90 #Drive toward cubes
 	intake
-	moveto (0, 80.4) #Back out from cubes
-	moveto (0, 188.4) (-246.6, 188.4) (-246.6, 284.4) (-192.6, 284.4) 90 #Curve around switch + place at init distance to scale
+	moveto (0,80.4) #Back out from cubes
+	moveto (0,188.4) (-246.6,188.4) (-246.6,284.4) (-192.6,284.4) 90 #Curve around switch + place at init distance to scale
 	scale
 
 RLRx:
-	moveto (0, 284.4) (-24.6, 284.4) -90 #Drive directly forward and place at initial horizontal to scale
+	moveto (0,284.4) (-24.6,284.4) -90 #Drive directly forward and place at initial horizontal to scale
 	scale
-	moveto (0, 284.4) #Back out from switch
-	moveto (0, 80.4) (-108, 80.4) -90 #Drive toward cubes
+	moveto (0,284.4) #Back out from switch
+	moveto (0,80.4) (-108,80.4) -90 #Drive toward cubes
 	intake
-	moveto (0, 80.4) #Back out from cubes
-	moveto (0, 188.4) (-210.6,188.4) (-210.6, 128.4) (-186.6, 128.4) #Drive toward switch
+	moveto (0,80.4) #Back out from cubes
+	moveto (0,188.4) (-210.6,188.4) (-210.6,128.4) (-186.6,128.4) #Drive toward switch
 	switch
 
 RLLx:
-	moveto (0, 188.4) (-210.6,188.4) (-210.6, 128.4) (-186.6, 128.4) 90 #Curve around switch and then "ram" into switch
+	moveto (0,188.4) (-210.6,188.4) (-210.6,128.4) (-186.6,128.4) 90 #Curve around switch and then "ram" into switch
 	switch
-	moveto (-246.6, 128.4) #Back out from switch
-	moveto (-246.6, 80.4) (-144, 80.4) #Drive toward cubes
+	moveto (-246.6,128.4) #Back out from switch
+	moveto (-246.6,80.4) (-144,80.4) #Drive toward cubes
 	intake
-	moveto (-246.6, 80.4) #Back out from cubes
-	moveto (-246.6, 284.4) (-192.6, 284.4) 90 #Curve around switch + place at init distance to scale
+	moveto (-246.6,80.4) #Back out from cubes
+	moveto (-246.6,284.4) (-192.6,284.4) 90 #Curve around switch + place at init distance to scale
 	scale
 
 #-------------------------------------------------
 
 #Switch and Exchange
 RRxE:
-	moveto (0, 128.4) (-41.4, 128.4) -90 #Drive directly forward then turn into switch
+	moveto (0,128.4) (-41.4,128.4) -90 #Drive directly forward then turn into switch
 	switch
-	moveto (0, 128.4) (0,80.4) (-144, 80.4) #Back out from switch
+	moveto (0,128.4) (0,80.4) (-144,80.4) #Back out from switch
 	intake
 	moveto (0, 80.4) #Back out from cubes
-	moveto (0, 188.4) (-210.6, 188.4) (-210.6, 44.4) (-123.6, 44.4) 180 #Curve around switch for baseline #then go to
+	moveto (0,188.4) (-210.6,188.4) (-210.6,44.4) (-123.6,44.4) 180 #Curve around switch for baseline #then go to
 	exchange
 
 RLxE:
-	moveto (0, 188.4) (-210.6,188.4) (-210.6, 128.4) (-186.6, 128.4) 90 #Curve around switch and then "ram" into switch
+	moveto (0,188.4) (-210.6,188.4) (-210.6,128.4) (-186.6,128.4) 90 #Curve around switch and then "ram" into switch
 	switch
-	moveto (-246.6, 128.4) #Back out from switch
-	moveto (-246.6, 80.4) (-12, 80.4) #Drive toward cubes
+	moveto (-246.6,128.4) #Back out from switch
+	moveto (-246.6,80.4) (-12, 80.4) #Drive toward cubes
 	#intake
-	moveto (-246.6, 80.4) #Back out from cubes
-	moveto (-246.6, 44.4) (-123.6, 44.4) (-123.6, -39.6) #Drive toward exchange
+	moveto (-246.6,80.4) #Back out from cubes
+	moveto (-246.6,44.4) (-123.6,44.4) (-123.6,-39.6) #Drive toward exchange
 	exchange
 
 # Naming Conventions
@@ -122,22 +122,22 @@ Lxxx:
 
 #Switch
 LLxx:
-	moveto (0, 129.8) (42.6, 129.8) -90 #Drive directly forward to switch and then ram into switch  
+	moveto (0, 129.8) (42.6, 129.8) 90 #Drive directly forward to switch and then ram into switch  
 	switch
 
 LRxx:
-	moveto (0, 188.4) (210.6,188.4) (210.6, 129.8) (186.6, 129.8) 90 #Curve around switch and then "ram" into switch
+	moveto (0, 188.4) (210.6,188.4) (210.6, 129.8) (186.6, 129.8) -90 #Curve around switch and then "ram" into switch
 	switch
 
 #-------------------------------------------------
 
 #Scale
 LxLx:
-	moveto (0, 284.4) (24.6, 284.4) -90 #Drive directly forward and place at initial horizontal to scale
+	moveto (0, 284.4) (24.6, 284.4) 90 #Drive directly forward and place at initial horizontal to scale
 	scale
 
 LxRx:
-	moveto (0, 188.4) (246.6, 188.4) (246.6, 284.4) (16.05, 284.4) 90 #Curve around switch + place at init distance to scale
+	moveto (0, 188.4) (246.6, 188.4) (246.6, 284.4) (216.05, 284.4) -90 #Curve around switch + place at init distance to scale
 	scale
 
 #-------------------------------------------------
@@ -157,7 +157,7 @@ LRRx:
 	moveto (246.6, 80.4) (12, 80.4) #Drive toward cubes
 	intake
 	moveto (246.6, 80.4) #Back out from cubes
-	moveto (246.6, 284.4) (16.05, 284.4) 90 #Curve around switch + place at init distance to scale
+	moveto (246.6, 284.4) (16.05, 284.4) -90 #Curve around switch + place at init distance to scale
 	scale
 
 LRLx:
@@ -167,50 +167,50 @@ LRLx:
 	moveto (0, 80.4) (108, 80.4) -90 #Drive toward cubes
 	intake
 	moveto (0, 80.4) #Back out from cubes
-	moveto (0, 188.4) (210.6,188.4) (210.6, 129.8) (186.6, 129.8) #Drive toward switch
+	moveto (0, 188.4) (210.6,188.4) (210.6, 129.8) (186.6, 129.8) 90 #Drive toward switch
 	switch
 
 LLRx:
 	moveto (0, 129.8) (42.6, 129.8) 90 #Drive directly forward then turn into switch
 	switch
 	moveto (0, 129.8) #Back out from switch
-	moveto (0, 80.4) (108, 80.4) -90 #Drive toward cubes
+	moveto (0, 80.4) (108, 80.4) 90 #Drive toward cubes
 	intake
 	moveto (0, 80.4) #Back out from cubes
-	moveto (0, 188.4) (246.6, 188.4) (246.6, 284.4) (192.6, 284.4) 90 #Curve around switch and drive to scale
+	moveto (0, 188.4) (246.6, 188.4) (246.6, 284.4) (192.6, 284.4) -90 #Curve around switch and drive to scale
 	scale
 
 LLLx:
 	moveto (0, 129.8) (42.6, 129.8) 90 #Drive directly forward then turn into switch
 	switch
 	moveto (0, 129.8) #Back out from switch
-	moveto (0, 80.4) (108, 80.4) #Drive toward cubes
+	moveto (0, 80.4) (108, 80.4) 90 #Drive toward cubes
 	intake
 	moveto (0, 80.4) #Back out from cubes
-	moveto (0, 284.4) (24.6, 284.4) -90 #Drive toward scale
+	moveto (0, 284.4) (24.6, 284.4) 90 #Drive toward scale
 	scale
 
 #-------------------------------------------------
 
 #Switch and Exchange
 LRxE:
-	moveto (0, 188.4) (210.6,188.4) (210.6, 129.8) (186.6, 129.8) 180 #Curve around switch and then "ram" into switch
+	moveto (0, 188.4) (210.6,188.4) (210.6, 129.8) (186.6, 129.8) -90 #Curve around switch and then "ram" into switch
 	switch
 	moveto (246.6, 129.8) #Back out from switch
 	moveto (246.6, 80.4) (12, 80.4) #Drive toward cubes
 	intake
 	moveto (246.6, 80.4) #Back out from cubes
-	moveto (246.6, 3.7) (124.8, 3.7) (124.8, -39.6) #Drive toward exchange
+	moveto (246.6, 3.7) (124.8, 3.7) 180 #Drive toward exchange
 	exchange
 
 LLxE:
 	moveto (0, 129.8) (42.6, 129.8) 90 #Drive directly forward then turn into switch
 	switch
-	moveto (17, 129.8) #Back out from switch
-	moveto (17, 80.4) (12, 80.4) #Drive toward cubes
+	moveto (0, 129.8) #Back out from switch
+	moveto (102, 80.4) 90 #Drive toward cubes
 	intake
 	moveto (0, 80.4) #Back out from cubes
-	moveto (0, 188.4) (210.6, 188.4) (210.6, 44.4) (124.8, 44.4) (124.8, -39.6) 180 #Go to exchange
+	moveto (0, 36) (96,36) 180 #Go to exchange
 	exchange
 
 # moveto
