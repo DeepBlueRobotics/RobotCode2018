@@ -128,8 +128,9 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * Toggles the left intake between open and closed
 	 */
 	public void toggleLeftIntake() {
+		boolean open = Robot.getBool("Left Horizontal Solenoid Open", true);
 		DoubleSolenoid.Value set;
-		if (Robot.getBool("Bool/Left Horizontal Solenoid Open", true)) {
+		if (open) {
 			set = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false) ? DoubleSolenoid.Value.kForward
 					: DoubleSolenoid.Value.kReverse;
 		} else {
@@ -137,16 +138,16 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 					: DoubleSolenoid.Value.kForward;
 		}
 		leftHorizontalSolenoid.set(set);
-		SmartDashboard.putBoolean("Bool/Left Horizontal Solenoid Open",
-				Robot.getBool("Left Horizontal Solenoid Open", true));
+		SmartDashboard.putBoolean("Bool/Left Horizontal Solenoid Open", !open);
 	}
 
 	/**
 	 * Toggles the right intake between open and closed
 	 */
 	public void toggleRightIntake() {
+		boolean open = Robot.getBool("Right Horizontal Solenoid Open", true);
 		DoubleSolenoid.Value set;
-		if (Robot.getBool("Bool/Right Horizontal Solenoid Open", true)) {
+		if (open) {
 			set = Robot.getBool("Intake Right Horizontal Solenoid Inverted", false) ? DoubleSolenoid.Value.kForward
 					: DoubleSolenoid.Value.kReverse;
 		} else {
@@ -154,8 +155,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 					: DoubleSolenoid.Value.kForward;
 		}
 		rightHorizontalSolenoid.set(set);
-		SmartDashboard.putBoolean("Bool/Right Horizontal Solenoid Open",
-				Robot.getBool("right Horizontal Solenoid Open", true));
+		SmartDashboard.putBoolean("Bool/Right Horizontal Solenoid Open", !open);
 	}
 
 	/**
@@ -168,8 +168,8 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Horizontal Solenoid Inverted", false)
 				? DoubleSolenoid.Value.kReverse
 				: DoubleSolenoid.Value.kForward;
-		SmartDashboard.putBoolean("Bool/Left Horizontal Solenoid Open", true);
-		SmartDashboard.putBoolean("Bool/Right Horizontal Solenoid Open", true);
+		SmartDashboard.putBoolean("Bool/Left Horizontal Solenoid Open", false);
+		SmartDashboard.putBoolean("Bool/Right Horizontal Solenoid Open", false);
 		leftHorizontalSolenoid.set(leftSet);
 		rightHorizontalSolenoid.set(rightSet);
 	}
@@ -184,8 +184,8 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Horizontal Solenoid Inverted", false)
 				? DoubleSolenoid.Value.kForward
 				: DoubleSolenoid.Value.kReverse;
-		SmartDashboard.putBoolean("Bool/Left Horizontal Solenoid Open", false);
-		SmartDashboard.putBoolean("Bool/Right Horizontal Solenoid Open", false);
+		SmartDashboard.putBoolean("Bool/Left Horizontal Solenoid Open", true);
+		SmartDashboard.putBoolean("Bool/Right Horizontal Solenoid Open", true);
 		leftHorizontalSolenoid.set(leftSet);
 		rightHorizontalSolenoid.set(rightSet);
 	}
