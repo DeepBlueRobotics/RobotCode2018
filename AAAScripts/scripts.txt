@@ -44,7 +44,7 @@ RxxE:
 
 #Switch and Scale
 RRRx:
-	moveto (0, 128.4) (-41.4, 128.4) 90 #Drive directly forward then turn into switch
+	moveto (0, 128.4) (-41.4, 128.4) -90 #Drive directly forward then turn into switch
 	switch
 	moveto (0, 128.4) #Back out from switch
 	moveto (0, 80.4) (-9, 80.4) #Drive toward cubes
@@ -54,7 +54,7 @@ RRRx:
 	scale
 
 RRLx:
-	moveto (0, 128.4) (-41.4, 128.4) 90 #Drive directly forward then turn into switch
+	moveto (0, 128.4) (-41.4, 128.4) -90 #Drive directly forward then turn into switch
 	switch
 	moveto (0, 128.4) #Back out from switch
 	moveto (0, 80.4) (-9, 80.4) -90 #Drive toward cubes
@@ -74,7 +74,7 @@ RLRx:
 	switch
 
 RLLx:
-	moveto (0, 188.4) (-210.6,188.4) (-210.6, 128.4) (-186.6, 128.4) -90 #Curve around switch and then "ram" into switch
+	moveto (0, 188.4) (-210.6,188.4) (-210.6, 128.4) (-186.6, 128.4) 90 #Curve around switch and then "ram" into switch
 	switch
 	moveto (-246.6, 128.4) #Back out from switch
 	moveto (-246.6, 80.4) (-144, 80.4) #Drive toward cubes
@@ -87,17 +87,16 @@ RLLx:
 
 #Switch and Exchange
 RRxE:
-	moveto (0, 128.4) (-41.4, 128.4) 90 #Drive directly forward then turn into switch
+	moveto (0, 128.4) (-41.4, 128.4) -90 #Drive directly forward then turn into switch
 	switch
-	moveto (-192, 128.4) #Back out from switch
-	moveto (-192, 80.4) (-144, 80.4) #Drive toward cubes
-	#intake
+	moveto (0, 128.4) (0,80.4) (-144, 80.4) #Back out from switch
+	intake
 	moveto (0, 80.4) #Back out from cubes
-	moveto (0, 188.4) (-210.6, 188.4) (-210.6, 44.4) (-123.6, 44.4) (-123.6, -39.6) 180 #Curve around switch for baseline #then go to
+	moveto (0, 188.4) (-210.6, 188.4) (-210.6, 44.4) (-123.6, 44.4) 180 #Curve around switch for baseline #then go to
 	exchange
 
 RLxE:
-	moveto (0, 188.4) (-210.6,188.4) (-210.6, 128.4) (-186.6, 128.4) 180 #Curve around switch and then "ram" into switch
+	moveto (0, 188.4) (-210.6,188.4) (-210.6, 128.4) (-186.6, 128.4) 90 #Curve around switch and then "ram" into switch
 	switch
 	moveto (-246.6, 128.4) #Back out from switch
 	moveto (-246.6, 80.4) (-12, 80.4) #Drive toward cubes
