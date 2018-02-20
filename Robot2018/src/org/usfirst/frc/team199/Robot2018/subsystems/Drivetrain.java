@@ -403,7 +403,21 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		SmartDashboard.putData("Right PID Controller", rightVelocityController);
 	}
 
+	public double getPIDMoveConstant() {
+		double G = Robot.rmap.getGearRatio();
+		double T = Robot.rmap.getStallTorque();
+		double R = Robot.rmap.getRadius();
+		double M = Robot.rmap.getWeight();
+		return Math.sqrt((8*T*G)/(R*M));
+	}
 	
+	public double getPIDTurnConstant() {
+		double G = Robot.rmap.getGearRatio();
+		double T = Robot.rmap.getStallTorque();
+		double R = Robot.rmap.getRadius();
+		double M = Robot.rmap.getWeight();
+		return 4 * Math.sqrt((T*G) / (R*M));
+	}
 	
 	private double convertNtokG(double newtons) {
 		// weight / accel due to grav = kg

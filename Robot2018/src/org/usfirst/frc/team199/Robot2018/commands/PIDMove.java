@@ -47,7 +47,7 @@ public class PIDMove extends Command implements PIDOutput {
 		moveController = new PIDController(sd.getConst("MovekP", 0.1), sd.getConst("MovekI", 0),
 				sd.getConst("MovekD", 0), kf, avg, this) {
 			/**
-			 * Move Velocity: V = sqrt(8TGd) / (R*m)) 
+			 * Move Velocity: V = sqrt(8TGd) / (R*m) 
 			 * where T = max torque of wheels 
 			 * G = gear ratio 
 			 * d = distance remaining 
@@ -55,13 +55,9 @@ public class PIDMove extends Command implements PIDOutput {
 			 * m = mass 
 			 */
 			@Override
-			protected double calculateFeedForward() {
-				double T = SmartDashboard.getNumber(,);
-				double G = SmartDashboard.getNumber(,);
-				double d = SmartDashboard.getNumber(,);
-				double R = SmartDashboard.getNumber(,);
-				double m = SmartDashboard.getNumber(,);
-				return (d / Math.abs(d)) * Math.sqrt(8*T*G*Math.abs(d)) / (R*m);
+			protected double calculateFeedForward() {		
+				double feedForwardConst = dt.getPIDMoveConstant();
+				return (targ / Math.abs(targ)) * feedForwardConst * Math.sqrt(Math.abs(targ));
 			}
 		};
 	}
