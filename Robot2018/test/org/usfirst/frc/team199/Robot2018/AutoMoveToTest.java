@@ -102,7 +102,7 @@ class AutoMoveToTest {
 		SmartDashboardInterface sd = mock(SmartDashboardInterface.class);
 		PIDSource pidMoveSrc = mock(PIDSource.class);
 
-		AutoMoveTo testAMT = new AutoMoveTo(args, dt, sd, pidMoveSrc);
+		AutoMoveTo testAMT = new AutoMoveTo(args, dt, sd, pidMoveSrc, pidGyroSrc);
 
 		assertEquals(90, AutoUtils.position.getRot());
 		assertEquals(12, AutoUtils.position.getX());
@@ -124,7 +124,7 @@ class AutoMoveToTest {
 		SmartDashboardInterface sd = mock(SmartDashboardInterface.class);
 		PIDSource pidMoveSrc = mock(PIDSource.class);
 
-		AutoMoveTo testAMT = new AutoMoveTo(args, dt, sd, pidMoveSrc);
+		AutoMoveTo testAMT = new AutoMoveTo(args, dt, sd, pidMoveSrc, pidGyroSrc);
 
 		assertEquals(0, AutoUtils.position.getRot());
 		assertEquals(0, AutoUtils.position.getX());
