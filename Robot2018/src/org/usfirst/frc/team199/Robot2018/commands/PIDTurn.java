@@ -19,6 +19,7 @@ public class PIDTurn extends Command implements PIDOutput {
 
 	private double target;
 	private DrivetrainInterface dt;
+	private SmartDashboardInterface sd;
 	private PIDController turnController;
 	private PIDSource ahrs;
 	private Timer tim;
@@ -46,6 +47,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		// Use requires() here to declare subsystem dependencies
 		target = targ;
 		this.dt = dt;
+		this.sd = sd;
 		this.ahrs = ahrs;
 
 		if (Robot.dt != null) {
@@ -53,10 +55,25 @@ public class PIDTurn extends Command implements PIDOutput {
 		}
 		// calculates the maximum turning speed in degrees/sec based on the max linear
 		// speed in inches/s and the distance (inches) between sides of the DT
-		double maxTurnSpeed = dt.getCurrentMaxSpeed() * 360 / (Math.PI * sd.getConst("Distance Between Wheels", 26.25));
+		double maxTurnSpeed = dt.getCurrentMaxSpeed() * 360 / (Math.PI * getDistanceBetweenWheels());
 		double kf = 1 / (maxTurnSpeed * sd.getConst("Default PID Update Time", 0.05));
 		turnController = new PIDController(sd.getConst("TurnkP", 1), sd.getConst("TurnkI", 0), sd.getConst("TurnkD", 0),
-				kf, ahrs, this);
+				kf, ahrs, this) {
+			/**
+			 * Turn Velocity: V = 4r sqrt((T*G*theta) / (R*m))
+			 * where r = half of distance between wheels
+			 * T = max torque of wheels
+			 * G = gear ratio
+			 * theta = rotational distance to end of turn
+			 * R = radius of wheels
+			 * m = mass
+			 */
+			@Override
+			protected double calculateFeedForward() {
+				double feedForwardConst = dt.getPIDTurnConstant();
+				return feedForwardConst * (getDistanceBetweenWheels()/2) * (targ / Math.abs(targ)) * Math.sqrt(Math.abs(targ));
+			}
+		};
 		// tim = new Timer();
 		SmartDashboard.putData("Turn PID", turnController);
 	}
@@ -161,5 +178,13 @@ public class PIDTurn extends Command implements PIDOutput {
 	public void pidWrite(double output) {
 		dt.arcadeDrive(0, output);
 		SmartDashboard.putNumber("Turn PID Output", output);
+	}
+	
+	/**
+	 * Gets the distance between the two middle wheels.
+	 * @return that distance
+	 */
+	private double getDistanceBetweenWheels() {
+		return sd.getConst("Distance Between Wheels", 26.25);
 	}
 }
