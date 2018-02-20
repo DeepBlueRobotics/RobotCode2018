@@ -125,7 +125,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	}
 
 	/**
-	 * Toggles the left intake between open and closed
+	 * <<<<<<< HEAD Toggles the left intake between open and closed
 	 */
 	public void toggleLeftIntake() {
 		boolean open = Robot.getBool("Left Horizontal Solenoid Open", true);

@@ -24,6 +24,11 @@ public class PIDTurn extends Command implements PIDOutput {
 	private PIDSource ahrs;
 	private Timer tim;
 	private double lastTime;
+	private SmartDashboardInterface sd;
+	private double pointX;
+	private double pointY;
+	private boolean turnToPoint;
+	private boolean absoluteRotation;
 
 	/**
 	 * Constructs this command with a new PIDController. Sets all of the
@@ -49,12 +54,11 @@ public class PIDTurn extends Command implements PIDOutput {
 		// Use requires() here to declare subsystem dependencies
 		this.dt = dt;
 		this.ahrs = ahrs;
+		this.sd = sd;
 
-		if (absolute) {
-			target = targ - AutoUtils.position.getRot();
-		} else {
-			target = targ;
-		}
+		turnToPoint = false;
+		target = targ;
+		absoluteRotation = absolute;
 
 		if (Robot.dt != null) {
 			requires(Robot.dt);
@@ -111,12 +115,12 @@ public class PIDTurn extends Command implements PIDOutput {
 	public PIDTurn(double[] point, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
 		this.dt = dt;
 		this.ahrs = ahrs;
+		this.sd = sd;
 
-		double dx = point[0] - AutoUtils.position.getX();
-		double dy = point[1] - AutoUtils.position.getY();
+		pointX = point[0];
+		pointY = point[1];
 
-		double absTurn = Math.toDegrees(Math.atan2(dy, dx));
-		target = absTurn - AutoUtils.position.getRot();
+		turnToPoint = true;
 
 		if (Robot.dt != null) {
 			requires(Robot.dt);
@@ -128,7 +132,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		turnController = new PIDController(sd.getConst("TurnkP", 1), sd.getConst("TurnkI", 0), sd.getConst("TurnkD", 0),
 				kf, ahrs, this);
 		// tim = new Timer();
-		SmartDashboard.putData("Turn PID", turnController);
+		sd.putData("Turn PID", turnController);
 	}
 
 	/**
@@ -137,6 +141,26 @@ public class PIDTurn extends Command implements PIDOutput {
 	 */
 	@Override
 	protected void initialize() {
+
+		if (!turnToPoint) {
+			if (absoluteRotation) {
+				target -= AutoUtils.position.getRot();
+			}
+		} else {
+			double dx = pointX - AutoUtils.position.getX();
+			double dy = pointY - AutoUtils.position.getY();
+
+			System.out.println("x = " + dx + ", y = " + dy);
+
+			// x and y are switched because we are using bearings
+			double absTurn = Math.toDegrees(Math.atan2(dx, dy));
+			target = absTurn - AutoUtils.position.getRot();
+			System.out.println("current bearing = " + AutoUtils.position.getRot());
+			System.out.println("target bearing = " + target);
+		}
+
+		System.out.println("Turn to point: " + turnToPoint);
+
 		turnController.disable();
 		// dt.enableVelocityPIDs();
 		System.out.println("initialize2s");
@@ -153,6 +177,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		while (Math.abs(newSetPoint) > 180) {
 			newSetPoint = newSetPoint - Math.signum(newSetPoint) * 360;
 		}
+		System.out.println("set point = " + newSetPoint);
 		turnController.setSetpoint(newSetPoint);
 
 		turnController.enable();
@@ -203,11 +228,11 @@ public class PIDTurn extends Command implements PIDOutput {
 	protected void end() {
 		turnController.disable();
 		System.out.println("end");
-		SmartDashboard.putNumber("Turn PID Result", turnController.get());
-		SmartDashboard.putNumber("Turn PID Error", turnController.getError());
+		sd.putNumber("Turn PID Result", turnController.get());
+		sd.putNumber("Turn PID Error", turnController.getError());
 		// turnController.free();
 
-		AutoUtils.position.changeRot(dt.getAHRSAngle());
+		AutoUtils.position.setRot(dt.getAHRSAngle());
 	}
 
 	/**
