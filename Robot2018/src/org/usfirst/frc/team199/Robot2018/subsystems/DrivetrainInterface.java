@@ -172,4 +172,16 @@ public interface DrivetrainInterface {
 	 * Put left and right velocity controllers (PID) on SmartDashboard.
 	 */
 	public void putVelocityControllersToDashboard();
+	
+	/**
+	 * Calculates a constant for calculating feed forward in PIDMove
+	 * @return the constant
+	 */
+	public double getPIDMoveConstant();
+	
+	/**
+	 * Calculates a constant for calculating feed forward in PIDTurn
+	 * @return the constant
+	 */
+	public double getPIDTurnConstant();
 }
