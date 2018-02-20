@@ -153,10 +153,13 @@ public class PIDMove extends Command implements PIDOutput {
 
 		double angle = Math.toRadians(AutoUtils.position.getRot());
 		double dist = avg.pidGet();
-		double x = Math.cos(angle) * dist;
-		double y = Math.sin(angle) * dist;
+		// x and y are switched because we are using bearings
+		double y = Math.cos(angle) * dist;
+		double x = Math.sin(angle) * dist;
 		AutoUtils.position.changeX(x);
 		AutoUtils.position.changeY(y);
+
+		AutoUtils.position.setRot(dt.getAHRSAngle());
 	}
 
 	/**

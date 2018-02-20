@@ -249,7 +249,7 @@ public class AutoUtils {
 		double[] point = new double[2];
 		String parentheseless;
 		String[] pointparts;
-		if (AutoUtils.isPoint(cmdArgs)) {
+		if (isPoint(cmdArgs)) {
 			parentheseless = cmdArgs.substring(1, cmdArgs.length() - 1);
 			pointparts = parentheseless.split(",");
 			try {

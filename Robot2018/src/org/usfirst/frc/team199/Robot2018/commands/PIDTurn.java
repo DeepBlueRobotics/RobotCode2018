@@ -152,10 +152,11 @@ public class PIDTurn extends Command implements PIDOutput {
 
 			System.out.println("x = " + dx + ", y = " + dy);
 
+			// x and y are switched because we are using bearings
 			double absTurn = Math.toDegrees(Math.atan2(dx, dy));
 			target = absTurn - AutoUtils.position.getRot();
-			System.out.println("position rotation = " + AutoUtils.position.getRot());
-			System.out.println("target = " + target);
+			System.out.println("current bearing = " + AutoUtils.position.getRot());
+			System.out.println("target bearing = " + target);
 		}
 
 		System.out.println("Turn to point: " + turnToPoint);
