@@ -26,6 +26,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
+	/*
+	 * WHENEVER YOU ADD OR CHANGE WHAT A BUTTON OR JOYSTICK DOES, indicate in
+	 * /docs/controllers.txt to keep that reference up to date.
+	 */
 
 	public Joystick leftJoy;
 	private JoystickButton shiftLowGearButton;
@@ -86,7 +90,7 @@ public class OI {
 		MoveLiftUpButton.whileHeld(new RunLift(Robot.lift, true));
 		MoveLiftDownButton.whileHeld(new RunLift(Robot.lift, false));
 
-		// manipulator = new Joystick(2);
+		manipulator = new Joystick(2);
 		// closeIntake = new JoystickButton(manipulator, getButton("Close Intake
 		// Button", 1));
 		// closeIntake.whenPressed(new CloseIntake());

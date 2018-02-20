@@ -21,6 +21,8 @@ public class PIDMove extends Command implements PIDOutput {
 	private PIDController moveController;
 	private PIDSource avg;
 	private SmartDashboardInterface sd;
+	private double pointX;
+	private double pointY;
 
 	/**
 	 * Constructs this command with a new PIDController. Sets all of the
@@ -71,12 +73,9 @@ public class PIDMove extends Command implements PIDOutput {
 	 *            the PIDSorceAverage of the DT's two Encoders
 	 */
 	public PIDMove(double[] point, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource avg) {
-		double dx = point[0] - AutoUtils.position.getX();
-		double dy = point[1] - AutoUtils.position.getY();
+		pointX = point[0];
+		pointY = point[1];
 
-		double dist = Math.sqrt(dx * dx + dy * dy); // pythagorean theorem to find distance
-
-		this.target = dist;
 		this.dt = dt;
 		this.avg = avg;
 		this.sd = sd;
@@ -86,6 +85,7 @@ public class PIDMove extends Command implements PIDOutput {
 		double kf = 1 / (dt.getCurrentMaxSpeed() * sd.getConst("Default PID Update Time", 0.05));
 		moveController = new PIDController(sd.getConst("MovekP", 1), sd.getConst("MovekI", 0), sd.getConst("MovekD", 0),
 				kf, avg, this);
+		sd.putData("Move PID", moveController);
 	}
 
 	/**
@@ -94,6 +94,12 @@ public class PIDMove extends Command implements PIDOutput {
 	 */
 	@Override
 	public void initialize() {
+		double dx = pointX - AutoUtils.position.getX();
+		double dy = pointY - AutoUtils.position.getY();
+
+		double dist = Math.sqrt(dx * dx + dy * dy); // pythagorean theorem to find distance
+		this.target = dist;
+
 		dt.resetDistEncs();
 		moveController.disable();
 		// input is in inches
@@ -102,6 +108,7 @@ public class PIDMove extends Command implements PIDOutput {
 		moveController.setOutputRange(-1.0, 1.0);
 		moveController.setContinuous(false);
 		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 0.1));
+		System.out.println("move target = " + target);
 		moveController.setSetpoint(target);
 
 		moveController.enable();
@@ -146,10 +153,13 @@ public class PIDMove extends Command implements PIDOutput {
 
 		double angle = Math.toRadians(AutoUtils.position.getRot());
 		double dist = avg.pidGet();
-		double x = Math.cos(angle) * dist;
-		double y = Math.sin(angle) * dist;
+		// x and y are switched because we are using bearings
+		double y = Math.cos(angle) * dist;
+		double x = Math.sin(angle) * dist;
 		AutoUtils.position.changeX(x);
 		AutoUtils.position.changeY(y);
+
+		AutoUtils.position.setRot(dt.getAHRSAngle());
 	}
 
 	/**
