@@ -9,7 +9,6 @@ package org.usfirst.frc.team199.Robot2018;
 
 import org.usfirst.frc.team199.Robot2018.commands.CloseIntake;
 import org.usfirst.frc.team199.Robot2018.commands.IntakeCube;
-import org.usfirst.frc.team199.Robot2018.commands.LowerIntake;
 import org.usfirst.frc.team199.Robot2018.commands.OpenIntake;
 import org.usfirst.frc.team199.Robot2018.commands.OutakeCube;
 import org.usfirst.frc.team199.Robot2018.commands.PIDMove;
@@ -109,7 +108,7 @@ public class OI {
 		// raiseIntake.whenPressed(new RaiseIntake());
 		// lowerIntake = new JoystickButton(manipulator, getButton("Lower Intake
 		// Button", 4));
-		lowerIntake.whenPressed(new LowerIntake());
+		// lowerIntake.whenPressed(new LowerIntake());
 		intake = new JoystickButton(manipulator, getButton("Intake Button", 5));
 		intake.whenPressed(new IntakeCube());
 		outake = new JoystickButton(manipulator, getButton("Outake Button", 6));
