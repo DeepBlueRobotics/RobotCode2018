@@ -238,19 +238,42 @@ public class RobotMap {
 		 * be converted from rpm to radians per second, so divide by 60 and multiply to
 		 * get radians.
 		 */
-		double gearReduction = Robot.getBool("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
-				: Robot.getConst("Low Gear Gear Reduction", 12.255);
-		double radius = Robot.getConst("Radius of Drivetrain Wheel", 0.0635);
-		double timeConstant = Robot.getConst("Omega Max", 5330) / gearReduction / 60 * 2 * Math.PI
-				* convertNtokG(Robot.getConst("Weight of Robot", 342)) / 2 * radius * radius
-				/ (Robot.getConst("Stall Torque", 2.41) * gearReduction * 2);
-		double cycleTime = Robot.getConst("Code cycle time", 0.05);
+		double gearReduction = getGearRatio();
+		double radius = getRadius();
+		double timeConstant = getOmegaMax() / gearReduction / 60 * 2 * Math.PI * convertNtokG(getWeight()) / 2 * radius
+				* radius / (getStallTorque() * gearReduction * 2);
+		double cycleTime = getCycleTime();
 		/*
 		 * The denominator of kD is 1-(e ^ -cycleTime / timeConstant). The numerator is
 		 * one.
 		 */
 		double denominator = Math.pow(Math.E, 1 * cycleTime / timeConstant) - 1;
 		return 1 / denominator / maxSpeed;
+	}
+
+	public double getGearRatio() {
+		return Robot.getBool("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
+				: Robot.getConst("Low Gear Gear Reduction", 12.255);
+	}
+
+	public double getRadius() {
+		return Robot.getConst("Radius of Drivetrain Wheel", 0.0635);
+	}
+
+	public double getOmegaMax() {
+		return Robot.getConst("Omega Max", 5330);
+	}
+
+	public double getWeight() {
+		return Robot.getConst("Weight of Robot", 342);
+	}
+
+	public double getCycleTime() {
+		return Robot.getConst("Code cycle time", 0.05);
+	}
+
+	public double getStallTorque() {
+		return Robot.getConst("Stall Torque", 2.41);
 	}
 
 	private double convertLbsTokG(double lbs) {

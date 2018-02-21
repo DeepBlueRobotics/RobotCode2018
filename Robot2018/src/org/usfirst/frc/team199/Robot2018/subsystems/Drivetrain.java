@@ -150,14 +150,26 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void teleopDrive() {
+		boolean squareJoy = Robot.getBool("Square Joystick Values", true);
 		if (Robot.getBool("Arcade Drive", true)) {
+			double forw;
+			double turn;
 			if (Robot.getBool("Arcade Drive Default Setup", true)) {
-				Robot.dt.arcadeDrive(-Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getX());
+				forw = -Robot.oi.leftJoy.getY();
+				turn = Robot.oi.rightJoy.getX();
+				Robot.dt.arcadeDrive(squareJoy ? Robot.oi.squareValueKeepSign(forw) : forw,
+						squareJoy ? Robot.oi.squareValueKeepSign(turn) : turn);
 			} else {
-				Robot.dt.arcadeDrive(-Robot.oi.rightJoy.getY(), Robot.oi.leftJoy.getX());
+				forw = -Robot.oi.rightJoy.getY();
+				turn = Robot.oi.leftJoy.getX();
+				Robot.dt.arcadeDrive(squareJoy ? Robot.oi.squareValueKeepSign(forw) : forw,
+						squareJoy ? Robot.oi.squareValueKeepSign(turn) : turn);
 			}
 		} else {
-			Robot.dt.tankDrive(-Robot.oi.leftJoy.getY(), -Robot.oi.rightJoy.getY());
+			double left = -Robot.oi.leftJoy.getY();
+			double right = -Robot.oi.rightJoy.getY();
+			Robot.dt.tankDrive(squareJoy ? Robot.oi.squareValueKeepSign(left) : left,
+					squareJoy ? Robot.oi.squareValueKeepSign(right) : right);
 		}
 		SmartDashboard.putNumber("Drivetrain/Left VPID Targ", leftVelocityController.getSetpoint());
 		SmartDashboard.putNumber("Drivetrain/Right VPID Targ", rightVelocityController.getSetpoint());
@@ -222,8 +234,10 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void updatePidConstants() {
-		leftVelocityController.setPID(Robot.getConst("VelocityLeftkI", 0), 0, calcDefkD(getCurrentMaxSpeed()));
-		rightVelocityController.setPID(Robot.getConst("VelocityRightkI", 0), 0, calcDefkD(getCurrentMaxSpeed()));
+		leftVelocityController.setPID(Robot.getConst("VelocityLeftkI", 0), 0,
+				Robot.rmap.calcDefkD(getCurrentMaxSpeed()));
+		rightVelocityController.setPID(Robot.getConst("VelocityRightkI", 0), 0,
+				Robot.rmap.calcDefkD(getCurrentMaxSpeed()));
 		resetVelocityPIDkFConsts();
 	}
 
@@ -403,31 +417,20 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		SmartDashboard.putData("Right PID Controller", rightVelocityController);
 	}
 
-	/**
-	 * Uses SmartDashboard and math to calculate a *great* default kD
-	 */
-	public double calcDefkD(double maxSpeed) {
-		/*
-		 * timeConstant is proportional to max speed of the shaft (which is the max
-		 * speed of the cim divided by the gear reduction), half the mass (because the
-		 * half of the drivetrain only has to support half of the robot), and radius of
-		 * the drivetrain wheels squared. It's inversely proportional to the stall
-		 * torque of the shaft, which is found by multiplying the stall torque of the
-		 * motor with the gear reduction by the amount of motors.
-		 */
-		double gearReduction = Robot.getBool("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
-				: Robot.getConst("Low Gear Gear Reduction", 12.255);
-		double radius = Robot.getConst("Radius of Drivetrain Wheel", 0.0635);
-		double timeConstant = Robot.getConst("Omega Max", 5330) / gearReduction / 60 * 2 * Math.PI
-				* convertNtokG(Robot.getConst("Weight of Robot", 342)) / 2 * radius * radius
-				/ (Robot.getConst("Stall Torque", 2.41) * gearReduction * 2);
-		double cycleTime = Robot.getConst("Code cycle time", 0.05);
-		/*
-		 * The denominator of kD is 1-(e ^ -cycleTime / timeConstant). The numerator is
-		 * one.
-		 */
-		double denominator = Math.pow(Math.E, 1 * cycleTime / timeConstant) - 1;
-		return 1 / denominator / maxSpeed;
+	public double getPIDMoveConstant() {
+		double G = Robot.rmap.getGearRatio();
+		double T = Robot.rmap.getStallTorque();
+		double R = Robot.rmap.getRadius();
+		double M = Robot.rmap.getWeight();
+		return Math.sqrt((8 * T * G) / (R * M));
+	}
+
+	public double getPIDTurnConstant() {
+		double G = Robot.rmap.getGearRatio();
+		double T = Robot.rmap.getStallTorque();
+		double R = Robot.rmap.getRadius();
+		double M = Robot.rmap.getWeight();
+		return 4 * Math.sqrt((T * G) / (R * M));
 	}
 
 	private double convertNtokG(double newtons) {

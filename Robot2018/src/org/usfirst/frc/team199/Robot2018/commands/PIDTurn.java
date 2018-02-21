@@ -68,7 +68,21 @@ public class PIDTurn extends Command implements PIDOutput {
 		double maxTurnSpeed = dt.getCurrentMaxSpeed() * 360 / (Math.PI * sd.getConst("Distance Between Wheels", 26.25));
 		double kf = 1 / (maxTurnSpeed * sd.getConst("Default PID Update Time", 0.05));
 		turnController = new PIDController(sd.getConst("TurnkP", 1), sd.getConst("TurnkI", 0), sd.getConst("TurnkD", 0),
-				kf, ahrs, this);
+				kf, ahrs, this) {
+			/**
+			 * Turn Velocity: V = 4r sqrt((T*G*theta) / (R*m)) where r = half of distance
+			 * between wheels T = max torque of wheels G = gear ratio theta = rotational
+			 * distance to end of turn R = radius of wheels m = mass
+			 */
+			@Override
+			protected double calculateFeedForward() {
+				double originalFF = super.calculateFeedForward();
+				double feedForwardConst = dt.getPIDTurnConstant();
+				double error = getError();
+				return feedForwardConst * (getDistanceBetweenWheels() / 2) * Math.signum(error)
+						* Math.sqrt(Math.abs(error)) + originalFF;
+			}
+		};
 		// tim = new Timer();
 	}
 
@@ -114,6 +128,7 @@ public class PIDTurn extends Command implements PIDOutput {
 	 */
 	public PIDTurn(double[] point, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
 		this.dt = dt;
+		this.sd = sd;
 		this.ahrs = ahrs;
 		this.sd = sd;
 
@@ -127,10 +142,24 @@ public class PIDTurn extends Command implements PIDOutput {
 		}
 		// calculates the maximum turning speed in degrees/sec based on the max linear
 		// speed in inches/s and the distance (inches) between sides of the DT
-		double maxTurnSpeed = dt.getCurrentMaxSpeed() * 360 / (Math.PI * sd.getConst("Distance Between Wheels", 26.25));
+		double maxTurnSpeed = dt.getCurrentMaxSpeed() * 360 / (Math.PI * getDistanceBetweenWheels());
 		double kf = 1 / (maxTurnSpeed * sd.getConst("Default PID Update Time", 0.05));
 		turnController = new PIDController(sd.getConst("TurnkP", 1), sd.getConst("TurnkI", 0), sd.getConst("TurnkD", 0),
-				kf, ahrs, this);
+				kf, ahrs, this) {
+			/**
+			 * Turn Velocity: V = 4r sqrt((T*G*theta) / (R*m)) where r = half of distance
+			 * between wheels T = max torque of wheels G = gear ratio theta = rotational
+			 * distance to end of turn R = radius of wheels m = mass
+			 */
+			@Override
+			protected double calculateFeedForward() {
+				double originalFF = super.calculateFeedForward();
+				double feedForwardConst = dt.getPIDTurnConstant();
+				double error = getError();
+				return feedForwardConst * (getDistanceBetweenWheels() / 2) * Math.signum(error)
+						* Math.sqrt(Math.abs(error)) + originalFF;
+			}
+		};
 		// tim = new Timer();
 		sd.putData("Turn PID", turnController);
 	}
@@ -162,7 +191,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		System.out.println("Turn to point: " + turnToPoint);
 
 		turnController.disable();
-		// dt.enableVelocityPIDs();
+		dt.enableVelocityPIDs();
 		System.out.println("initialize2s");
 		// dt.resetAHRS();
 		System.out.println("after reset");
@@ -233,6 +262,8 @@ public class PIDTurn extends Command implements PIDOutput {
 		// turnController.free();
 
 		AutoUtils.state.setRot(dt.getAHRSAngle());
+
+		dt.disableVelocityPIDs();
 	}
 
 	/**
@@ -258,5 +289,14 @@ public class PIDTurn extends Command implements PIDOutput {
 	public void pidWrite(double output) {
 		dt.arcadeDrive(0, output);
 		SmartDashboard.putNumber("Turn PID Output", output);
+	}
+
+	/**
+	 * Gets the distance between the two middle wheels.
+	 * 
+	 * @return that distance
+	 */
+	private double getDistanceBetweenWheels() {
+		return sd.getConst("Distance Between Wheels", 26.25);
 	}
 }

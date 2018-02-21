@@ -51,7 +51,19 @@ public class PIDMove extends Command implements PIDOutput {
 		}
 		double kf = 1 / (dt.getCurrentMaxSpeed() * sd.getConst("Default PID Update Time", 0.05));
 		moveController = new PIDController(sd.getConst("MovekP", 0.1), sd.getConst("MovekI", 0),
-				sd.getConst("MovekD", 0), kf, avg, this);
+				sd.getConst("MovekD", 0), kf, avg, this) {
+			/**
+			 * Move Velocity: V = sqrt(8TGd) / (R*m) where T = max torque of wheels G = gear
+			 * ratio d = distance remaining R = radius of wheels m = mass
+			 */
+			@Override
+			protected double calculateFeedForward() {
+				double originalFF = super.calculateFeedForward();
+				double feedForwardConst = dt.getPIDMoveConstant();
+				double error = getError();
+				return Math.signum(error) * feedForwardConst * Math.sqrt(Math.abs(error)) + originalFF;
+			}
+		};
 		sd.putData("Move PID", moveController);
 	}
 
@@ -86,6 +98,21 @@ public class PIDMove extends Command implements PIDOutput {
 		moveController = new PIDController(sd.getConst("MovekP", 1), sd.getConst("MovekI", 0), sd.getConst("MovekD", 0),
 				kf, avg, this);
 		sd.putData("Move PID", moveController);
+		moveController = new PIDController(sd.getConst("MovekP", 0.1), sd.getConst("MovekI", 0),
+				sd.getConst("MovekD", 0), kf, avg, this) {
+			/**
+			 * Move Velocity: V = sqrt(8TGd) / (R*m) where T = max torque of wheels G = gear
+			 * ratio d = distance remaining R = radius of wheels m = mass
+			 */
+			@Override
+			protected double calculateFeedForward() {
+				double originalFF = super.calculateFeedForward();
+				double feedForwardConst = dt.getPIDMoveConstant();
+				double error = getError();
+				return Math.signum(error) * feedForwardConst * Math.sqrt(Math.abs(error)) + originalFF;
+			}
+		};
+		sd.putData("Move PID", moveController);
 	}
 
 	/**
@@ -112,7 +139,7 @@ public class PIDMove extends Command implements PIDOutput {
 		moveController.setSetpoint(target);
 
 		moveController.enable();
-		// dt.enableVelocityPIDs();
+		dt.enableVelocityPIDs();
 	}
 
 	/**
@@ -160,6 +187,8 @@ public class PIDMove extends Command implements PIDOutput {
 		AutoUtils.state.changeY(y);
 
 		AutoUtils.state.setRot(dt.getAHRSAngle());
+
+		dt.disableVelocityPIDs();
 	}
 
 	/**
