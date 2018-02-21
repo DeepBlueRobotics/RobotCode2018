@@ -195,10 +195,9 @@ public class RobotMap {
 		rightVelocityController.setContinuous(false);
 		rightVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceRight", 2));
 
-		// robotDrive = new DifferentialDrive(leftVelocityController,
-		// rightVelocityController);
-		// robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
-		robotDrive = new DifferentialDrive(dtLeft, dtRight);
+		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
+		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
+		// robotDrive = new DifferentialDrive(dtLeft, dtRight);
 
 		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
 		fancyGyro = new AHRS(SPI.Port.kMXP);

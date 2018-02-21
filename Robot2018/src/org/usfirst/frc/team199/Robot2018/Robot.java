@@ -15,6 +15,7 @@ import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.autonomous.State;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Strategy;
+import org.usfirst.frc.team199.Robot2018.commands.CloseIntake;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
@@ -168,6 +169,7 @@ public class Robot extends IterativeRobot {
 		dt.resetAHRS();
 		AutoUtils.state = new State(0, 0, 0);
 		Scheduler.getInstance().add(new ShiftLowGear());
+		Scheduler.getInstance().add(new CloseIntake());
 		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
 		Autonomous.Position startPos = posChooser.getSelected();
 		double autoDelay = SmartDashboard.getNumber("Auto Delay", 0);
@@ -223,6 +225,8 @@ public class Robot extends IterativeRobot {
 		// SmartDashboard.putNumber("Avg Enc Dist", dt.getEncAvgDist());
 		//
 		SmartDashboard.putNumber("Angle", dt.getAHRSAngle());
+		SmartDashboard.putNumber("Left Current draw", rmap.pdp.getCurrent(4));
+		SmartDashboard.putNumber("Right Current draw", rmap.pdp.getCurrent(11));
 	}
 
 	boolean firstTime = true;
