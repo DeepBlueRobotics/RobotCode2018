@@ -76,10 +76,11 @@ public class PIDTurn extends Command implements PIDOutput {
 			 */
 			@Override
 			protected double calculateFeedForward() {
+				double originalFF = super.calculateFeedForward();
 				double feedForwardConst = dt.getPIDTurnConstant();
-				double setpt = getSetpoint();
-				return feedForwardConst * (getDistanceBetweenWheels() / 2) * (setpt / Math.abs(setpt))
-						* Math.sqrt(Math.abs(setpt));
+				double error = getError();
+				return feedForwardConst * (getDistanceBetweenWheels() / 2) * Math.signum(error)
+						* Math.sqrt(Math.abs(error)) + originalFF;
 			}
 		};
 		// tim = new Timer();
@@ -152,10 +153,11 @@ public class PIDTurn extends Command implements PIDOutput {
 			 */
 			@Override
 			protected double calculateFeedForward() {
+				double originalFF = super.calculateFeedForward();
 				double feedForwardConst = dt.getPIDTurnConstant();
-				double setpt = getSetpoint();
-				return feedForwardConst * (getDistanceBetweenWheels() / 2) * (setpt / Math.abs(setpt))
-						* Math.sqrt(Math.abs(setpt));
+				double error = getError();
+				return feedForwardConst * (getDistanceBetweenWheels() / 2) * Math.signum(error)
+						* Math.sqrt(Math.abs(error)) + originalFF;
 			}
 		};
 		// tim = new Timer();
@@ -189,7 +191,7 @@ public class PIDTurn extends Command implements PIDOutput {
 		System.out.println("Turn to point: " + turnToPoint);
 
 		turnController.disable();
-		// dt.enableVelocityPIDs();
+		dt.enableVelocityPIDs();
 		System.out.println("initialize2s");
 		// dt.resetAHRS();
 		System.out.println("after reset");
@@ -260,6 +262,8 @@ public class PIDTurn extends Command implements PIDOutput {
 		// turnController.free();
 
 		AutoUtils.position.setRot(dt.getAHRSAngle());
+
+		dt.disableVelocityPIDs();
 	}
 
 	/**

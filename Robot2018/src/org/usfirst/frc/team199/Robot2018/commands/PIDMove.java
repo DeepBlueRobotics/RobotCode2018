@@ -58,9 +58,10 @@ public class PIDMove extends Command implements PIDOutput {
 			 */
 			@Override
 			protected double calculateFeedForward() {
+				double originalFF = super.calculateFeedForward();
 				double feedForwardConst = dt.getPIDMoveConstant();
-				double setPt = getSetpoint();
-				return (setPt / Math.abs(setPt)) * feedForwardConst * Math.sqrt(Math.abs(setPt));
+				double error = getError();
+				return Math.signum(error) * feedForwardConst * Math.sqrt(Math.abs(error)) + originalFF;
 			}
 		};
 		sd.putData("Move PID", moveController);
@@ -105,9 +106,10 @@ public class PIDMove extends Command implements PIDOutput {
 			 */
 			@Override
 			protected double calculateFeedForward() {
+				double originalFF = super.calculateFeedForward();
 				double feedForwardConst = dt.getPIDMoveConstant();
-				double setPt = getSetpoint();
-				return (setPt / Math.abs(setPt)) * feedForwardConst * Math.sqrt(Math.abs(setPt));
+				double error = getError();
+				return Math.signum(error) * feedForwardConst * Math.sqrt(Math.abs(error)) + originalFF;
 			}
 		};
 		sd.putData("Move PID", moveController);
@@ -137,7 +139,7 @@ public class PIDMove extends Command implements PIDOutput {
 		moveController.setSetpoint(target);
 
 		moveController.enable();
-		// dt.enableVelocityPIDs();
+		dt.enableVelocityPIDs();
 	}
 
 	/**
@@ -185,6 +187,8 @@ public class PIDMove extends Command implements PIDOutput {
 		AutoUtils.position.changeY(y);
 
 		AutoUtils.position.setRot(dt.getAHRSAngle());
+
+		dt.disableVelocityPIDs();
 	}
 
 	/**

@@ -108,4 +108,51 @@ public class OI {
 		// outake = new JoystickButton(manipulator, getButton("Outake Button", 6));
 		// outake.whenPressed(new OutakeCube());
 	}
+
+	// /**
+	// * Returns the getY from leftJoy squared (preserving sign)
+	// *
+	// * @return The y value squared
+	// */
+	// public double squareLeftY() {
+	// return leftJoy.getY() * leftJoy.getY() * Math.signum(leftJoy.getY());
+	// }
+	//
+	// /**
+	// * Returns the getY from rightJoy squared (preserving sign)
+	// *
+	// * @return The y value squared
+	// */
+	// public double squareRightY() {
+	// return rightJoy.getY() * rightJoy.getY() * Math.signum(rightJoy.getY());
+	// }
+	//
+	// /**
+	// * Returns the getX from leftJoy squared (preserving sign)
+	// *
+	// * @return The x value squared
+	// */
+	// public double squareLeftX() {
+	// return leftJoy.getX() * leftJoy.getX() * Math.signum(leftJoy.getX());
+	// }
+	//
+	// /**
+	// * Returns the getX from rightJoy squared (preserving sign)
+	// *
+	// * @return The x value squared
+	// */
+	// public double squareRightX() {
+	// return rightJoy.getX() * rightJoy.getX() * Math.signum(rightJoy.getX());
+	// }
+
+	/**
+	 * Used to square joystick values while keeping sign
+	 * 
+	 * @param joyVal
+	 *            The joystick value to stick
+	 * @return The squared joystick value with same sign
+	 */
+	public double squareValueKeepSign(double joyVal) {
+		return joyVal * joyVal * Math.signum(joyVal);
+	}
 }

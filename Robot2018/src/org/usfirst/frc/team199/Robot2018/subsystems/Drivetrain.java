@@ -44,7 +44,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	private final DifferentialDrive robotDrive = RobotMap.robotDrive;
 	private final VelocityPIDController leftVelocityController = RobotMap.leftVelocityController;
 	private final VelocityPIDController rightVelocityController = RobotMap.rightVelocityController;
-	
+
 	private final AHRS fancyGyro = RobotMap.fancyGyro;
 	private final DoubleSolenoid dtGear = RobotMap.dtGear;
 
@@ -150,14 +150,26 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void teleopDrive() {
+		boolean squareJoy = Robot.getBool("Square Joystick Values", true);
 		if (Robot.getBool("Arcade Drive", true)) {
+			double forw;
+			double turn;
 			if (Robot.getBool("Arcade Drive Default Setup", true)) {
-				Robot.dt.arcadeDrive(-Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getX());
+				forw = -Robot.oi.leftJoy.getY();
+				turn = Robot.oi.rightJoy.getX();
+				Robot.dt.arcadeDrive(squareJoy ? Robot.oi.squareValueKeepSign(forw) : forw,
+						squareJoy ? Robot.oi.squareValueKeepSign(turn) : turn);
 			} else {
-				Robot.dt.arcadeDrive(-Robot.oi.rightJoy.getY(), Robot.oi.leftJoy.getX());
+				forw = -Robot.oi.rightJoy.getY();
+				turn = Robot.oi.leftJoy.getX();
+				Robot.dt.arcadeDrive(squareJoy ? Robot.oi.squareValueKeepSign(forw) : forw,
+						squareJoy ? Robot.oi.squareValueKeepSign(turn) : turn);
 			}
 		} else {
-			Robot.dt.tankDrive(-Robot.oi.leftJoy.getY(), -Robot.oi.rightJoy.getY());
+			double left = -Robot.oi.leftJoy.getY();
+			double right = -Robot.oi.rightJoy.getY();
+			Robot.dt.tankDrive(squareJoy ? Robot.oi.squareValueKeepSign(left) : left,
+					squareJoy ? Robot.oi.squareValueKeepSign(right) : right);
 		}
 		SmartDashboard.putNumber("Drivetrain/Left VPID Targ", leftVelocityController.getSetpoint());
 		SmartDashboard.putNumber("Drivetrain/Right VPID Targ", rightVelocityController.getSetpoint());
@@ -222,8 +234,10 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void updatePidConstants() {
-		leftVelocityController.setPID(Robot.getConst("VelocityLeftkI", 0), 0, Robot.rmap.calcDefkD(getCurrentMaxSpeed()));
-		rightVelocityController.setPID(Robot.getConst("VelocityRightkI", 0), 0, Robot.rmap.calcDefkD(getCurrentMaxSpeed()));
+		leftVelocityController.setPID(Robot.getConst("VelocityLeftkI", 0), 0,
+				Robot.rmap.calcDefkD(getCurrentMaxSpeed()));
+		rightVelocityController.setPID(Robot.getConst("VelocityRightkI", 0), 0,
+				Robot.rmap.calcDefkD(getCurrentMaxSpeed()));
 		resetVelocityPIDkFConsts();
 	}
 
@@ -408,17 +422,17 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		double T = Robot.rmap.getStallTorque();
 		double R = Robot.rmap.getRadius();
 		double M = Robot.rmap.getWeight();
-		return Math.sqrt((8*T*G)/(R*M));
+		return Math.sqrt((8 * T * G) / (R * M));
 	}
-	
+
 	public double getPIDTurnConstant() {
 		double G = Robot.rmap.getGearRatio();
 		double T = Robot.rmap.getStallTorque();
 		double R = Robot.rmap.getRadius();
 		double M = Robot.rmap.getWeight();
-		return 4 * Math.sqrt((T*G) / (R*M));
+		return 4 * Math.sqrt((T * G) / (R * M));
 	}
-	
+
 	private double convertNtokG(double newtons) {
 		// weight / accel due to grav = kg
 		return newtons / 9.81;

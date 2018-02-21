@@ -195,10 +195,9 @@ public class RobotMap {
 		rightVelocityController.setContinuous(false);
 		rightVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceRight", 2));
 
-		// robotDrive = new DifferentialDrive(leftVelocityController,
-		// rightVelocityController);
-		// robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
-		robotDrive = new DifferentialDrive(dtLeft, dtRight);
+		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
+		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
+		// robotDrive = new DifferentialDrive(dtLeft, dtRight);
 
 		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
 		fancyGyro = new AHRS(SPI.Port.kMXP);
@@ -241,9 +240,8 @@ public class RobotMap {
 		 */
 		double gearReduction = getGearRatio();
 		double radius = getRadius();
-		double timeConstant = getOmegaMax() / gearReduction / 60 * 2 * Math.PI
-				* convertNtokG(getWeight()) / 2 * radius * radius
-				/ (getStallTorque() * gearReduction * 2);
+		double timeConstant = getOmegaMax() / gearReduction / 60 * 2 * Math.PI * convertNtokG(getWeight()) / 2 * radius
+				* radius / (getStallTorque() * gearReduction * 2);
 		double cycleTime = getCycleTime();
 		/*
 		 * The denominator of kD is 1-(e ^ -cycleTime / timeConstant). The numerator is
@@ -252,28 +250,28 @@ public class RobotMap {
 		double denominator = Math.pow(Math.E, 1 * cycleTime / timeConstant) - 1;
 		return 1 / denominator / maxSpeed;
 	}
-	
+
 	public double getGearRatio() {
 		return Robot.getBool("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
 				: Robot.getConst("Low Gear Gear Reduction", 12.255);
 	}
-	
+
 	public double getRadius() {
 		return Robot.getConst("Radius of Drivetrain Wheel", 0.0635);
 	}
-	
+
 	public double getOmegaMax() {
 		return Robot.getConst("Omega Max", 5330);
 	}
-	
+
 	public double getWeight() {
 		return Robot.getConst("Weight of Robot", 342);
 	}
-	
+
 	public double getCycleTime() {
 		return Robot.getConst("Code cycle time", 0.05);
 	}
-	
+
 	public double getStallTorque() {
 		return Robot.getConst("Stall Torque", 2.41);
 	}
