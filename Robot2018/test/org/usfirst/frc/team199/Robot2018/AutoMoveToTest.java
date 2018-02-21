@@ -91,9 +91,9 @@ class AutoMoveToTest {
 	void testForwardAndRight() {
 		String[] args = { "(0,12)", "(12,12)" };
 
-		AutoUtils.position.setRot(0);
-		AutoUtils.position.setX(0);
-		AutoUtils.position.setY(0);
+		AutoUtils.state.setRot(0);
+		AutoUtils.state.setX(0);
+		AutoUtils.state.setY(0);
 
 		PIDSource pidGyroSrc = mock(PIDSource.class);
 		when(pidGyroSrc.getPIDSourceType()).thenReturn(PIDSourceType.kDisplacement);
@@ -104,18 +104,18 @@ class AutoMoveToTest {
 
 		AutoMoveTo testAMT = new AutoMoveTo(args, dt, sd, pidMoveSrc, pidGyroSrc);
 
-		assertEquals(90, AutoUtils.position.getRot());
-		assertEquals(12, AutoUtils.position.getX());
-		assertEquals(12, AutoUtils.position.getY());
+		assertEquals(90, AutoUtils.state.getRot());
+		assertEquals(12, AutoUtils.state.getX());
+		assertEquals(12, AutoUtils.state.getY());
 	}
 
 	@Test
 	void testForward() {
 		String[] args = { "(0,12)" };
 
-		AutoUtils.position.setRot(0);
-		AutoUtils.position.setX(0);
-		AutoUtils.position.setY(0);
+		AutoUtils.state.setRot(0);
+		AutoUtils.state.setX(0);
+		AutoUtils.state.setY(0);
 
 		PIDSource pidGyroSrc = mock(PIDSource.class);
 		when(pidGyroSrc.getPIDSourceType()).thenReturn(PIDSourceType.kDisplacement);
@@ -126,8 +126,8 @@ class AutoMoveToTest {
 
 		AutoMoveTo testAMT = new AutoMoveTo(args, dt, sd, pidMoveSrc, pidGyroSrc);
 
-		assertEquals(0, AutoUtils.position.getRot());
-		assertEquals(0, AutoUtils.position.getX());
-		assertEquals(12, AutoUtils.position.getY());
+		assertEquals(0, AutoUtils.state.getRot());
+		assertEquals(0, AutoUtils.state.getX());
+		assertEquals(12, AutoUtils.state.getY());
 	}
 }

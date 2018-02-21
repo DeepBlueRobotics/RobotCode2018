@@ -21,17 +21,21 @@ public class PIDMove extends Command implements PIDOutput {
 	private PIDController moveController;
 	private PIDSource avg;
 	private SmartDashboardInterface sd;
-	private double pointX;
-	private double pointY;
+	private double[] point;
+	private boolean absolute;
 
 	/**
 	 * Constructs this command with a new PIDController. Sets all of the
 	 * controller's PID constants based on SD prefs. Sets the controller's PIDSource
 	 * to the encoder average object and sets its PIDOutput to this command which
-	 * implements PIDOutput's pidWrite() method.
+	 * implements PIDOutput's pidWrite() method. Uses either a relative target
+	 * specified with `target` or an absolute point with `point`.
 	 * 
-	 * @param targ
+	 * @param target
 	 *            the target distance (in inches) to move to
+	 * @param point
+	 *            the target point in inches, absolute distance from the starting
+	 *            point
 	 * @param dt
 	 *            the Drivetrain (for actual code) or a DrivetrainInterface (for
 	 *            testing)
@@ -39,10 +43,15 @@ public class PIDMove extends Command implements PIDOutput {
 	 *            the SmartDashboard
 	 * @param avg
 	 *            the PIDSourceAverage of the DT's two Encoders
+	 * @param absolute
+	 *            whether to use the absolute variable `point` or the relative
+	 *            variable `target`
 	 */
-	public PIDMove(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource avg) {
-		// Use requires() here to declare subsystem dependencies
-		target = targ;
+	public PIDMove(double target, double[] point, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource avg,
+			boolean absolute) {
+		this.point = point;
+		this.target = target;
+		this.absolute = absolute;
 		this.dt = dt;
 		this.avg = avg;
 		this.sd = sd;
@@ -66,6 +75,26 @@ public class PIDMove extends Command implements PIDOutput {
 			}
 		};
 		sd.putData("Move PID", moveController);
+	}
+
+	/**
+	 * Constructs this command with a new PIDController. Sets all of the
+	 * controller's PID constants based on SD prefs. Sets the controller's PIDSource
+	 * to the encoder average object and sets its PIDOutput to this command which
+	 * implements PIDOutput's pidWrite() method.
+	 * 
+	 * @param target
+	 *            the target distance (in inches) to move to
+	 * @param dt
+	 *            the Drivetrain (for actual code) or a DrivetrainInterface (for
+	 *            testing)
+	 * @param sd
+	 *            the SmartDashboard
+	 * @param avg
+	 *            the PIDSourceAverage of the DT's two Encoders
+	 */
+	public PIDMove(double target, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource avg) {
+		this(target, null, dt, sd, avg, false);
 	}
 
 	/**
@@ -86,35 +115,7 @@ public class PIDMove extends Command implements PIDOutput {
 	 *            the PIDSorceAverage of the DT's two Encoders
 	 */
 	public PIDMove(double[] point, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource avg) {
-		pointX = point[0];
-		pointY = point[1];
-
-		this.dt = dt;
-		this.avg = avg;
-		this.sd = sd;
-		if (Robot.dt != null) {
-			requires(Robot.dt);
-		}
-		double kf = 1 / (dt.getCurrentMaxSpeed() * sd.getConst("Default PID Update Time", 0.05));
-		moveController = new PIDController(sd.getConst("MovekP", 1), sd.getConst("MovekI", 0), sd.getConst("MovekD", 0),
-				kf, avg, this);
-		sd.putData("Move PID", moveController);
-		moveController = new PIDController(sd.getConst("MovekP", 0.1), sd.getConst("MovekI", 0),
-				sd.getConst("MovekD", 0), kf, avg, this) {
-			/**
-			 * Move Velocity: V = sqrt(8TGd) / (R*m) where T = max torque of wheels G = gear
-			 * ratio d = distance remaining R = radius of wheels m = mass
-			 */
-			@Override
-			protected double calculateFeedForward() {
-				double originalFF = super.calculateFeedForward();
-				double feedForwardConst = dt.getPIDMoveConstant();
-				double error = getError();
-				return (Math.signum(error) * feedForwardConst * Math.sqrt(Math.abs(error)) + originalFF)
-						/ dt.getCurrentMaxSpeed();
-			}
-		};
-		sd.putData("Move PID", moveController);
+		this(0, point, dt, sd, avg, true);
 	}
 
 	/**
@@ -123,11 +124,13 @@ public class PIDMove extends Command implements PIDOutput {
 	 */
 	@Override
 	public void initialize() {
-		double dx = pointX - AutoUtils.position.getX();
-		double dy = pointY - AutoUtils.position.getY();
+		if (absolute) {
+			double dx = point[0] - AutoUtils.state.getX();
+			double dy = point[1] - AutoUtils.state.getY();
 
-		double dist = Math.sqrt(dx * dx + dy * dy); // pythagorean theorem to find distance
-		this.target = dist;
+			double dist = Math.sqrt(dx * dx + dy * dy); // pythagorean theorem to find distance
+			this.target = dist;
+		}
 
 		dt.resetDistEncs();
 		moveController.disable();
@@ -180,15 +183,15 @@ public class PIDMove extends Command implements PIDOutput {
 		System.out.println("End");
 		// moveController.free();
 
-		double angle = Math.toRadians(AutoUtils.position.getRot());
+		double angle = Math.toRadians(AutoUtils.state.getRot());
 		double dist = avg.pidGet();
 		// x and y are switched because we are using bearings
 		double y = Math.cos(angle) * dist;
 		double x = Math.sin(angle) * dist;
-		AutoUtils.position.changeX(x);
-		AutoUtils.position.changeY(y);
+		AutoUtils.state.changeX(x);
+		AutoUtils.state.changeY(y);
 
-		AutoUtils.position.setRot(dt.getAHRSAngle());
+		AutoUtils.state.setRot(dt.getAHRSAngle());
 
 		dt.disableVelocityPIDs();
 	}
