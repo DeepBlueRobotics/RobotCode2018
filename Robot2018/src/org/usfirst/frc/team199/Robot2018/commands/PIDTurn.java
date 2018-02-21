@@ -25,8 +25,7 @@ public class PIDTurn extends Command implements PIDOutput {
 	private Timer tim;
 	private double lastTime;
 	private SmartDashboardInterface sd;
-	private double pointX;
-	private double pointY;
+	private double[] point;
 	private boolean turnToPoint;
 	private boolean absoluteRotation;
 
@@ -36,84 +35,9 @@ public class PIDTurn extends Command implements PIDOutput {
 	 * to the AHRS (gyro) object and sets its PIDOutput to this command which
 	 * implements PIDOutput's pidWrite() method.
 	 * 
-	 * @param targ
+	 * @param target
 	 *            the target bearing (in degrees) to turn to (so negative if turning
 	 *            left, positive if turning right)
-	 * @param dt
-	 *            the Drivetrain (for actual code) or a DrivetrainInterface (for
-	 *            testing)
-	 * @param ahrs
-	 *            the AHRS (gyro)
-	 * @param sd
-	 *            the Smart Dashboard reference, or a SmartDashboardInterface for
-	 *            testing
-	 * @param absolute
-	 *            whether the target passed is absolute or relative
-	 */
-	public PIDTurn(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs, boolean absolute) {
-		// Use requires() here to declare subsystem dependencies
-		this.dt = dt;
-		this.ahrs = ahrs;
-		this.sd = sd;
-
-		turnToPoint = false;
-		target = targ;
-		absoluteRotation = absolute;
-
-		if (Robot.dt != null) {
-			requires(Robot.dt);
-		}
-		// calculates the maximum turning speed in degrees/sec based on the max linear
-		// speed in inches/s and the distance (inches) between sides of the DT
-		double maxTurnSpeed = dt.getCurrentMaxSpeed() * 360 / (Math.PI * sd.getConst("Distance Between Wheels", 26.25));
-		double kf = 1 / (maxTurnSpeed * sd.getConst("Default PID Update Time", 0.05));
-		turnController = new PIDController(sd.getConst("TurnkP", 1), sd.getConst("TurnkI", 0), sd.getConst("TurnkD", 0),
-				kf, ahrs, this) {
-			/**
-			 * Turn Velocity: V = 4r sqrt((T*G*theta) / (R*m)) where r = half of distance
-			 * between wheels T = max torque of wheels G = gear ratio theta = rotational
-			 * distance to end of turn R = radius of wheels m = mass
-			 */
-			@Override
-			protected double calculateFeedForward() {
-				double originalFF = super.calculateFeedForward();
-				double feedForwardConst = dt.getPIDTurnConstant();
-				double error = getError();
-				return feedForwardConst * (getDistanceBetweenWheels() / 2) * Math.signum(error)
-						* Math.sqrt(Math.abs(error)) + originalFF;
-			}
-		};
-		// tim = new Timer();
-	}
-
-	/**
-	 * Constructs this command with a new PIDController. Sets all of the
-	 * controller's PID constants based on SD prefs. Sets the controller's PIDSource
-	 * to the AHRS (gyro) object and sets its PIDOutput to this command which
-	 * implements PIDOutput's pidWrite() method.
-	 * 
-	 * @param targ
-	 *            the target bearing (in degrees) to turn to (so negative if turning
-	 *            left, positive if turning right)
-	 * @param dt
-	 *            the Drivetrain (for actual code) or a DrivetrainInterface (for
-	 *            testing)
-	 * @param ahrs
-	 *            the AHRS (gyro)
-	 * @param sd
-	 *            the Smart Dashboard reference, or a SmartDashboardInterface for
-	 *            testing
-	 */
-	public PIDTurn(double targ, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
-		this(targ, dt, sd, ahrs, false);
-	}
-
-	/**
-	 * Constructs this command with a new PIDController. Sets all of the
-	 * controller's PID constants based on SD prefs. Sets the controller's PIDSource
-	 * to the AHRS (gyro) object and sets its PIDOutput to this command which
-	 * implements PIDOutput's pidWrite() method.
-	 * 
 	 * @param point
 	 *            the target point (in inches) to turn to, relative to the starting
 	 *            position
@@ -125,17 +49,21 @@ public class PIDTurn extends Command implements PIDOutput {
 	 * @param sd
 	 *            the Smart Dashboard reference, or a SmartDashboardInterface for
 	 *            testing
+	 * @param absoluteRotation
+	 *            whether the target passed is absolute or relative
+	 * @param turnToPoint
+	 *            whether to use the point or the target for turning
 	 */
-	public PIDTurn(double[] point, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
+	public PIDTurn(double target, double[] point, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs,
+			boolean absoluteRotation, boolean turnToPoint) {
+		this.target = target;
+		this.point = point;
 		this.dt = dt;
-		this.sd = sd;
 		this.ahrs = ahrs;
 		this.sd = sd;
-
-		pointX = point[0];
-		pointY = point[1];
-
-		turnToPoint = true;
+		this.turnToPoint = turnToPoint;
+		this.target = target;
+		this.absoluteRotation = absoluteRotation;
 
 		if (Robot.dt != null) {
 			requires(Robot.dt);
@@ -165,6 +93,75 @@ public class PIDTurn extends Command implements PIDOutput {
 	}
 
 	/**
+	 * Constructs this command with a new PIDController. Sets all of the
+	 * controller's PID constants based on SD prefs. Sets the controller's PIDSource
+	 * to the AHRS (gyro) object and sets its PIDOutput to this command which
+	 * implements PIDOutput's pidWrite() method.
+	 * 
+	 * @param target
+	 *            the target bearing (in degrees) to turn to (so negative if turning
+	 *            left, positive if turning right)
+	 * @param dt
+	 *            the Drivetrain (for actual code) or a DrivetrainInterface (for
+	 *            testing)
+	 * @param ahrs
+	 *            the AHRS (gyro)
+	 * @param sd
+	 *            the Smart Dashboard reference, or a SmartDashboardInterface for
+	 *            testing
+	 * @param absoluteRotation
+	 *            whether the target passed is absolute or relative
+	 */
+	public PIDTurn(double target, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs,
+			boolean absoluteRotation) {
+		this(target, null, dt, sd, ahrs, absoluteRotation, false);
+	}
+
+	/**
+	 * Constructs this command with a new PIDController. Sets all of the
+	 * controller's PID constants based on SD prefs. Sets the controller's PIDSource
+	 * to the AHRS (gyro) object and sets its PIDOutput to this command which
+	 * implements PIDOutput's pidWrite() method.
+	 * 
+	 * @param target
+	 *            the target bearing (in degrees) to turn to (so negative if turning
+	 *            left, positive if turning right)
+	 * @param dt
+	 *            the Drivetrain (for actual code) or a DrivetrainInterface (for
+	 *            testing)
+	 * @param ahrs
+	 *            the AHRS (gyro)
+	 * @param sd
+	 *            the Smart Dashboard reference, or a SmartDashboardInterface for
+	 *            testing
+	 */
+	public PIDTurn(double target, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
+		this(target, dt, sd, ahrs, false);
+	}
+
+	/**
+	 * Constructs this command with a new PIDController. Sets all of the
+	 * controller's PID constants based on SD prefs. Sets the controller's PIDSource
+	 * to the AHRS (gyro) object and sets its PIDOutput to this command which
+	 * implements PIDOutput's pidWrite() method.
+	 * 
+	 * @param point
+	 *            the target point (in inches) to turn to, relative to the starting
+	 *            position
+	 * @param dt
+	 *            the Drivetrain (for actual code) or a DrivetrainInterface (for
+	 *            testing)
+	 * @param ahrs
+	 *            the AHRS (gyro)
+	 * @param sd
+	 *            the Smart Dashboard reference, or a SmartDashboardInterface for
+	 *            testing
+	 */
+	public PIDTurn(double[] point, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs) {
+		this(0, point, dt, sd, ahrs, true, true);
+	}
+
+	/**
 	 * Called just before this Command runs the first time. Resets the gyro, sets
 	 * the turnController's settings, and then enables it.
 	 */
@@ -176,8 +173,8 @@ public class PIDTurn extends Command implements PIDOutput {
 				target -= AutoUtils.state.getRot();
 			}
 		} else {
-			double dx = pointX - AutoUtils.state.getX();
-			double dy = pointY - AutoUtils.state.getY();
+			double dx = point[0] - AutoUtils.state.getX();
+			double dy = point[1] - AutoUtils.state.getY();
 
 			System.out.println("x = " + dx + ", y = " + dy);
 

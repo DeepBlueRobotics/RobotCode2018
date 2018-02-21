@@ -109,21 +109,21 @@ public class AutoUtils {
 		// moveto takes in a set of points, and the last arg can be a number
 		if (instruction.equals("moveto")) {
 			if (args == "") {
-				logWarning(lineNumber, "The command `moveto` requires at least one argument.");
+				logError(lineNumber, "The command `moveto` requires at least one argument.");
 				return false;
 			}
 
 			String[] splitArgs = args.split(" ");
 			for (int i = 0; i < splitArgs.length - 1; i++) {
 				if (!isPoint(splitArgs[i])) {
-					logWarning(lineNumber,
+					logError(lineNumber,
 							"The arguments for command `moveto` should be points formatted like this: " + "`(x,y)`.");
 					return false;
 				}
 			}
 
 			if (!isDouble(splitArgs[splitArgs.length - 1]) && !isPoint(splitArgs[splitArgs.length - 1])) {
-				logWarning(lineNumber, "The last argument for command `moveto` should be a number, or a point "
+				logError(lineNumber, "The last argument for command `moveto` should be a number, or a point "
 						+ "formatted like this: `(x,y)`.");
 				return false;
 			}
@@ -132,12 +132,12 @@ public class AutoUtils {
 		// turn can take a number or point
 		else if (instruction.equals("turn")) {
 			if (args.contains(" ")) {
-				logWarning(lineNumber, "Command `turn` only accepts one argument.");
+				logError(lineNumber, "Command `turn` only accepts one argument.");
 				return false;
 			}
 
 			if (!isDouble(args) && !isPoint(args)) {
-				logWarning(lineNumber, "The argument for command `turn` should be a number or a point formatted like "
+				logError(lineNumber, "The argument for command `turn` should be a number or a point formatted like "
 						+ "this: `(x,y)`.");
 				return false;
 			}
@@ -146,12 +146,12 @@ public class AutoUtils {
 		// move and wait can take only a number
 		else if (instruction.equals("move") || instruction.equals("wait")) {
 			if (args.contains(" ")) {
-				logWarning(lineNumber, "Command `move` only accepts one argument.");
+				logError(lineNumber, "Command `move` only accepts one argument.");
 				return false;
 			}
 
 			if (!isDouble(args)) {
-				logWarning(lineNumber, "The argument for command `move` should be a number.");
+				logError(lineNumber, "The argument for command `move` should be a number.");
 				return false;
 			}
 		}
@@ -160,7 +160,7 @@ public class AutoUtils {
 		else if (instruction.equals("switch") || instruction.equals("scale") || instruction.equals("exchange")
 				|| instruction.equals("intake") || instruction.equals("end")) {
 			if (!args.equals("")) {
-				logWarning(lineNumber, "Command `" + instruction + "` does not accept any arguments.");
+				logError(lineNumber, "Command `" + instruction + "` does not accept any arguments.");
 				return false;
 			}
 		}
@@ -168,14 +168,14 @@ public class AutoUtils {
 		// Jump only takes one argument
 		else if (instruction.equals("jump")) {
 			if (args.contains(" ")) {
-				logWarning(lineNumber, "Command `jump` only accepts one argument.");
+				logError(lineNumber, "Command `jump` only accepts one argument.");
 				return false;
 			}
 		}
 
 		// if it's not even a valid instruction
 		else {
-			logWarning(lineNumber, "`" + instruction + "` is not a valid command.");
+			logError(lineNumber, "`" + instruction + "` is not a valid command.");
 			return false;
 		}
 
@@ -193,7 +193,7 @@ public class AutoUtils {
 	 *            the message to log
 	 */
 
-	private static void logWarning(int lineNumber, String message) {
+	private static void logError(int lineNumber, String message) {
 		System.err.println("[ERROR] Line " + lineNumber + ": " + message);
 	}
 
