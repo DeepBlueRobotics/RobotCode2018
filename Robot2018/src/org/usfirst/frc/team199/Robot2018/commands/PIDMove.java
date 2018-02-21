@@ -61,7 +61,8 @@ public class PIDMove extends Command implements PIDOutput {
 				double originalFF = super.calculateFeedForward();
 				double feedForwardConst = dt.getPIDMoveConstant();
 				double error = getError();
-				return Math.signum(error) * feedForwardConst * Math.sqrt(Math.abs(error)) + originalFF;
+				return (Math.signum(error) * feedForwardConst * Math.sqrt(Math.abs(error)) + originalFF)
+						/ dt.getCurrentMaxSpeed();
 			}
 		};
 		sd.putData("Move PID", moveController);
@@ -109,7 +110,8 @@ public class PIDMove extends Command implements PIDOutput {
 				double originalFF = super.calculateFeedForward();
 				double feedForwardConst = dt.getPIDMoveConstant();
 				double error = getError();
-				return Math.signum(error) * feedForwardConst * Math.sqrt(Math.abs(error)) + originalFF;
+				return (Math.signum(error) * feedForwardConst * Math.sqrt(Math.abs(error)) + originalFF)
+						/ dt.getCurrentMaxSpeed();
 			}
 		};
 		sd.putData("Move PID", moveController);

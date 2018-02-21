@@ -285,4 +285,8 @@ public class RobotMap {
 		// weight / accel due to grav = kg
 		return newtons / 9.81;
 	}
+
+	public double convertMtoIn(double meters) {
+		return meters * 39.37;
+	}
 }

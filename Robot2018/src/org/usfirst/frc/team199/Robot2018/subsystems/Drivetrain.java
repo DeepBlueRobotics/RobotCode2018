@@ -420,9 +420,12 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	public double getPIDMoveConstant() {
 		double G = Robot.rmap.getGearRatio();
 		double T = Robot.rmap.getStallTorque();
+		double fudge = Robot.getConst("PID Move Fudge Factor", 0.25);
+		T *= fudge;
 		double R = Robot.rmap.getRadius();
 		double M = Robot.rmap.getWeight();
-		return Math.sqrt((8 * T * G) / (R * M));
+		M = convertNtokG(M);
+		return Math.sqrt(Robot.rmap.convertMtoIn((8 * T * G) / (R * M)));
 	}
 
 	public double getPIDTurnConstant() {
@@ -430,7 +433,8 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		double T = Robot.rmap.getStallTorque();
 		double R = Robot.rmap.getRadius();
 		double M = Robot.rmap.getWeight();
-		return 4 * Math.sqrt((T * G) / (R * M));
+		M = convertNtokG(M);
+		return 4 * Math.sqrt(Robot.rmap.convertMtoIn((T * G) / (R * M)));
 	}
 
 	private double convertNtokG(double newtons) {

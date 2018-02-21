@@ -1,5 +1,5 @@
 {
-  "dividerPosition": 0.45234604105571846,
+  "dividerPosition": 0.4530791788856305,
   "tabPane": [
     {
       "title": "PID Testing",
@@ -541,7 +541,7 @@
       }
     },
     {
-      "title": "Tab 5",
+      "title": "PID Constants",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
       "widgetPane": {
@@ -583,7 +583,7 @@
               "_title": "Preferences/Const/TurnkP"
             }
           },
-          "1,0": {
+          "4,0": {
             "size": [
               1,
               1
@@ -592,6 +592,72 @@
               "_type": "Text View",
               "_source0": "network_table:///Preferences/Const/Output",
               "_title": "Preferences/Const/Output"
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/MovekP",
+              "_title": "Preferences/Const/MovekP"
+            }
+          },
+          "2,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/MovekI",
+              "_title": "Preferences/Const/MovekI"
+            }
+          },
+          "2,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/MovekD",
+              "_title": "/Preferences/Const/MovekD"
+            }
+          },
+          "2,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/MoveTolerance",
+              "_title": "Preferences/Const/MoveTolerance"
+            }
+          },
+          "0,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/TurnTolerance",
+              "_title": "Preferences/Const/TurnTolerance"
+            }
+          },
+          "4,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/Weight of Robot",
+              "_title": "Preferences/Const/Weight of Robot"
             }
           }
         }
