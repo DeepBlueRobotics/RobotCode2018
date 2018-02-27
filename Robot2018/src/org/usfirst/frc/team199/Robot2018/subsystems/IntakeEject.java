@@ -2,6 +2,7 @@ package org.usfirst.frc.team199.Robot2018.subsystems;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.RobotMap;
+import org.usfirst.frc.team199.Robot2018.commands.DefaultIntake;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -24,6 +25,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * Set the default command for a subsystem here.
 	 */
 	public void initDefaultCommand() {
+		setDefaultCommand(new DefaultIntake());
 	}
 
 	/**
@@ -46,9 +48,9 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * 
 	 */
 	public boolean hasCube() {
-		return pdp.getCurrent(Robot.rmap.getPort("PDP Intake Left Channel", 4)) > Robot.getConst("Max Current", 38)
-				&& pdp.getCurrent(Robot.rmap.getPort("PDP Intake Right Channel", 11)) > Robot.getConst("Max Current",
-						38);
+		return pdp.getCurrent(Robot.rmap.getPort("PDP Intake Left Channel", 4)) > Robot.getConst("Max Current", 39)
+				|| pdp.getCurrent(Robot.rmap.getPort("PDP Intake Right Channel", 11)) > Robot.getConst("Max Current",
+						39);
 	}
 
 	/**
@@ -61,15 +63,36 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	}
 
 	/**
+	 * Sets the left roller to run at the specified speed
+	 * 
+	 * @param speed
+	 *            Speed the left motor should run at
+	 */
+	public void runLeftIntake(double speed) {
+		double actualSpeed = speed * Robot.getConst("Intake Motor Left Speed Multiplier", 1);
+		leftIntakeMotor.set(actualSpeed);
+	}
+
+	/**
+	 * Sets the left roller to run at the specified speed
+	 * 
+	 * @param speed
+	 *            Speed the left motor should run at
+	 */
+	public void runRightIntake(double speed) {
+		double actualSpeed = speed * Robot.getConst("Intake Motor Right Speed Multiplier", 1);
+		rightIntakeMotor.set(actualSpeed);
+	}
+
+	/**
 	 * Spins the rollers
 	 * 
 	 * @param speed
 	 *            - positive -> rollers in, negative -> rollers out
 	 */
 	public void runIntake(double speed) {
-		double actualSpeed = speed * Robot.getConst("Intake Motor Speed Multiplier", 1);
-		leftIntakeMotor.set(actualSpeed);
-		rightIntakeMotor.set(actualSpeed);
+		runLeftIntake(speed);
+		runRightIntake(speed);
 	}
 
 	/**
@@ -101,9 +124,9 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	}
 
 	/**
-	 * Opens the intake
+	 * Closes the intake
 	 */
-	public void openIntake() {
+	public void closeIntake() {
 		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false)
 				? DoubleSolenoid.Value.kReverse
 				: DoubleSolenoid.Value.kForward;
@@ -115,9 +138,9 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	}
 
 	/**
-	 * Closes the intake
+	 * Opens the intake
 	 */
-	public void closeIntake() {
+	public void openIntake() {
 		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false)
 				? DoubleSolenoid.Value.kForward
 				: DoubleSolenoid.Value.kReverse;

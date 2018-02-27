@@ -94,19 +94,23 @@ public class OI {
 		moveLiftDownButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Down", 11));
 		moveLiftUpButton.whileHeld(new RunLift(Robot.lift, true));
 		moveLiftDownButton.whileHeld(new RunLift(Robot.lift, false));
-
-// 		manipulator = new Joystick(2);
-// 		closeIntakeButton = new JoystickButton(manipulator, getButton("Close Intake Button", 1));
-// 		closeIntakeButton.whenPressed(new CloseIntake());
-// 		openIntakeButton = new JoystickButton(manipulator, getButton("Open Intake Button", 2));
-// 		openIntakeButton.whenPressed(new OpenIntake());
-// 		raiseIntakeButton = new JoystickButton(manipulator, getButton("Raise Intake Button", 3));
-// 		raiseIntakeButton.whenPressed(new RaiseIntake());
-// 		lowerIntakeButton = new JoystickButton(manipulator, getButton("Lower Intake Button", 4));
-// 		lowerIntakeButton.whenPressed(new LowerIntake());
-// 		intakeCubeButton = new JoystickButton(manipulator, getButton("Intake Button", 5));
-// 		intakeCubeButton.whenPressed(new IntakeCube());
-// 		outtakeCubeButton = new JoystickButton(manipulator, getButton("Outtake Button", 6));
-// 		outtakeCubeButton.whenPressed(new OuttakeCube());
+		
+		manipulator = new Joystick(2);
+		// closeIntake = new JoystickButton(manipulator, getButton("Close Intake
+		// Button", 1));
+		// closeIntake.whenPressed(new CloseIntake());
+		// openIntake = new JoystickButton(manipulator, getButton("Open Intake Button",
+		// 2));
+		// openIntake.whenPressed(new OpenIntake());
+		// raiseIntake = new JoystickButton(manipulator, getButton("Raise Intake
+		// Button", 3));
+		// raiseIntake.whenPressed(new RaiseIntake());
+		// lowerIntake = new JoystickButton(manipulator, getButton("Lower Intake
+		// Button", 4));
+		// lowerIntake.whenPressed(new LowerIntake());
+		// intake = new JoystickButton(manipulator, getButton("Intake Button", 5));
+		// intake.whenPressed(new IntakeCube());
+		// outake = new JoystickButton(manipulator, getButton("Outake Button", 6));
+		// outake.whenPressed(new OutakeCube());
 	}
 }
