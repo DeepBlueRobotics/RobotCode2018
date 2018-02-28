@@ -1,5 +1,5 @@
 {
-  "dividerPosition": 0.4530791788856305,
+  "dividerPosition": 0.28519061583577715,
   "tabPane": [
     {
       "title": "PID Testing",
@@ -87,7 +87,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Left VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Left VPID Targ",
+              "_title": "/SmartDashboard/Drivetrain/Left VPID Targ",
               "Visible time": 30.0,
               "SmartDashboard/Drivetrain/Left VPID Targ visible": true
             }
@@ -100,7 +100,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Right VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Right VPID Targ",
+              "_title": "/SmartDashboard/Drivetrain/Right VPID Targ",
               "Visible time": 30.0,
               "SmartDashboard/Drivetrain/Right VPID Targ visible": true
             }
@@ -240,6 +240,28 @@
               "colorWhenTrue": "#7CFC00FF",
               "colorWhenFalse": "#8B0000FF"
             }
+          },
+          "2,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///Preferences/Bool/Square Drive Values",
+              "_title": "Preferences/Bool/Square Drive Values"
+            }
+          },
+          "2,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///Preferences/Bool/Square Joystick Values",
+              "_title": "Preferences/Bool/Square Joystick Values"
+            }
           }
         }
       }
@@ -363,7 +385,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Left VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Left VPID Targ",
+              "_title": "/SmartDashboard/Drivetrain/Left VPID Targ",
               "Visible time": 10.0,
               "SmartDashboard/Drivetrain/Left VPID Targ visible": true
             }
@@ -376,7 +398,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Right VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Right VPID Targ",
+              "_title": "/SmartDashboard/Drivetrain/Right VPID Targ",
               "Visible time": 10.0,
               "SmartDashboard/Drivetrain/Right VPID Targ visible": true
             }
@@ -759,6 +781,151 @@
               "_type": "Text View",
               "_source0": "network_table:///Preferences/Const/MoveTolerance",
               "_title": "Preferences/Const/MoveTolerance"
+            }
+          },
+          "0,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/Stall Torque",
+              "_title": "Preferences/Const/Stall Torque"
+            }
+          },
+          "1,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/PID Move Fudge Factor",
+              "_title": "Preferences/Const/PID Move Fudge Factor"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "VPID Testing 2",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/VelocityLeftkD",
+              "_title": "Preferences/Const/VelocityLeftkD"
+            }
+          },
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/VelocityLeftkI",
+              "_title": "Preferences/Const/VelocityLeftkI"
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/VelocityRightkD",
+              "_title": "Preferences/Const/VelocityRightkD"
+            }
+          },
+          "1,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/VelocityRightkI",
+              "_title": "Preferences/Const/VelocityRightkI"
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/VPID Test Set",
+              "_title": "Preferences/Const/VPID Test Set"
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/kTimeoutMs",
+              "_title": "Preferences/Const/kTimeoutMs"
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/Motor Deadband",
+              "_title": "Preferences/Const/Motor Deadband"
+            }
+          },
+          "0,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/VelocityLeftkF",
+              "_title": "Preferences/Const/VelocityLeftkF"
+            }
+          },
+          "1,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/VelocityRightkF",
+              "_title": "Preferences/Const/VelocityRightkF"
+            }
+          },
+          "3,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Time Const (kD)",
+              "_title": "SmartDashboard/Time Const (kD)"
             }
           }
         }

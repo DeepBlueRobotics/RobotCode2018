@@ -98,6 +98,8 @@ public class RobotMap {
 		// so if we went above 40, the motors would stop completely
 		mc.configContinuousCurrentLimit(40, 0);
 		mc.enableCurrentLimit(true);
+
+		mc.configNeutralDeadband(Robot.getConst("Motor Deadband", 0.001), kTimeout);
 	}
 
 	/**
@@ -114,6 +116,8 @@ public class RobotMap {
 		mc.configNominalOutputReverse(0, kTimeout);
 		mc.configPeakOutputForward(1, kTimeout);
 		mc.configPeakOutputReverse(-1, kTimeout);
+
+		mc.configNeutralDeadband(Robot.getConst("Motor Deadband", 0.001), kTimeout);
 	}
 
 	public RobotMap() {
@@ -159,8 +163,12 @@ public class RobotMap {
 		dtLeft.setInverted(true);
 
 		leftVelocityController = new VelocityPIDController(Robot.getConst("VelocityLeftkI", 0), 0,
-				Robot.getConst("VelocityLeftkD", calcDefkD(Robot.getConst("Max Low Speed", 84))),
-				1 / Robot.getConst("Max Low Speed", 84), leftEncRate, dtLeft);
+				/*
+				 * Robot.getConst("VelocityLeftkD", calcDefkD(Robot.getConst("Max Low Speed",
+				 * 84)))
+				 */ 0, /* 1 / Robot.getConst("Max Low Speed", 84) */Robot.getConst("VelocityLeftkF",
+						1 / Robot.getConst("Max Low Speed", 84)),
+				leftEncRate, dtLeft);
 		leftVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
 				Robot.getConst("Max High Speed", 204));
 		leftVelocityController.setOutputRange(-1.0, 1.0);
@@ -187,8 +195,12 @@ public class RobotMap {
 		dtRight.setInverted(true);
 
 		rightVelocityController = new VelocityPIDController(Robot.getConst("VelocityRightkI", 0), 0,
-				Robot.getConst("VelocityRightkD", calcDefkD(Robot.getConst("Max Low Speed", 84))),
-				1 / Robot.getConst("Max Low Speed", 84), rightEncRate, dtRight);
+				/*
+				 * Robot.getConst("VelocityRightkD", calcDefkD(Robot.getConst("Max Low Speed",
+				 * 84)))
+				 */0, /* 1 / Robot.getConst("Max Low Speed", 84) */Robot.getConst("VelocityRightkF",
+						1 / Robot.getConst("Max Low Speed", 84)),
+				rightEncRate, dtRight);
 		rightVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
 				Robot.getConst("Max High Speed", 204));
 		rightVelocityController.setOutputRange(-1.0, 1.0);
@@ -202,6 +214,8 @@ public class RobotMap {
 		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
 		fancyGyro = new AHRS(SPI.Port.kMXP);
 		dtGear = new DoubleSolenoid(getPort("1dtGearSolenoid", 0), getPort("2dtGearSolenoid", 1));
+
+		calcDefkD(Robot.getConst("Max Low Speed", 84));
 	}
 
 	/**
@@ -242,6 +256,7 @@ public class RobotMap {
 		double radius = getRadius();
 		double timeConstant = getOmegaMax() / gearReduction / 60 * 2 * Math.PI * convertNtokG(getWeight()) / 2 * radius
 				* radius / (getStallTorque() * gearReduction * 2);
+		SmartDashboard.putNumber("Time Const (kD)", timeConstant);
 		double cycleTime = getCycleTime();
 		/*
 		 * The denominator of kD is 1-(e ^ -cycleTime / timeConstant). The numerator is

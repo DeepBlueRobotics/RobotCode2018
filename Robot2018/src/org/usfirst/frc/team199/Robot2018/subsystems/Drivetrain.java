@@ -93,11 +93,11 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		return rightVelocityController.getError();
 	}
 
-	public double getLeftVPIDSetpoint() {
+	public double getLeftVPIDOutput() {
 		return leftVelocityController.get();
 	}
 
-	public double getRightVPIDSetpoint() {
+	public double getRightVPIDOutput() {
 		return rightVelocityController.get();
 	}
 
@@ -143,6 +143,14 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		double setValue = value * Robot.getConst("Units per 100ms", 3413);
 		dtRightMaster.set(ControlMode.Velocity, setValue);
 		dtRightSlave.set(ControlMode.Velocity, setValue);
+	}
+
+	public VelocityPIDController getLeftVPID() {
+		return leftVelocityController;
+	}
+
+	public VelocityPIDController getRightVPID() {
+		return rightVelocityController;
 	}
 
 	/**

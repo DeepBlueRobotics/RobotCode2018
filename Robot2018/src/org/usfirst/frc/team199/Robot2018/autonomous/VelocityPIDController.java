@@ -55,6 +55,13 @@ public class VelocityPIDController extends PIDController implements SpeedControl
 		setSetpoint(speed);
 	}
 
+	public void setConsts(double kP, double kI, double kD, double kF) {
+		super.setP(kP);
+		super.setI(kI);
+		super.setD(kD);
+		super.setF(kF);
+	}
+
 	/**
 	 * Gets the current set voltage (setpoint) sent to the output
 	 * SpeedControllerGroup
