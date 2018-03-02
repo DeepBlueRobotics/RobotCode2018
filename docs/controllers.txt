@@ -1,4 +1,4 @@
-left joystick [0]
+0 left joystick
 	buttons
 		1
 		2	toggle drive type (arcade/tank) [ShiftDriveType]
@@ -15,7 +15,7 @@ left joystick [0]
 		0	X axis	if NOT default: arcade turn
 		1	Y axis	tank left, arcade forward (if default)
 		2	Z axis
-right joystick [1]
+1 right joystick
 	buttons
 		1
 		2	shift drivetrain to low gear [ShiftLowGear]
@@ -32,7 +32,7 @@ right joystick [1]
 		0	X axis	arcade turn (if default)
 		1	Y axis	tank right, if NOT default: arcade forward
 		2	Z axis
-manipulator [3]
+2 manipulator
 	buttons
 		1	A	close intake [CloseIntake]
 		2	B	open intake [OpenIntake]
