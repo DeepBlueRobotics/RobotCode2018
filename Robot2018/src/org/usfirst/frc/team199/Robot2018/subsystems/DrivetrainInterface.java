@@ -161,6 +161,12 @@ public interface DrivetrainInterface {
 	 */
 	public double resetVelocityPIDkFConsts();
 
+	public void resetVelocityPIDkIConsts();
+
+	public void resetVelocityPIDkDConsts();
+
+	public void resetAllVelocityPIDConsts();
+
 	/**
 	 * Gets the current max speed of the DT based on gearing (high or low gear)
 	 * 
@@ -172,15 +178,17 @@ public interface DrivetrainInterface {
 	 * Put left and right velocity controllers (PID) on SmartDashboard.
 	 */
 	public void putVelocityControllersToDashboard();
-	
+
 	/**
 	 * Calculates a constant for calculating feed forward in PIDMove
+	 * 
 	 * @return the constant
 	 */
 	public double getPIDMoveConstant();
-	
+
 	/**
 	 * Calculates a constant for calculating feed forward in PIDTurn
+	 * 
 	 * @return the constant
 	 */
 	public double getPIDTurnConstant();

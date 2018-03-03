@@ -21,6 +21,6 @@ public class ShiftHighGear extends InstantCommand {
 	protected void initialize() {
 		Robot.dt.shiftGears(true);
 		SmartDashboard.putBoolean("High Gear", true);
-		Robot.dt.resetVelocityPIDkFConsts();
+		Robot.dt.resetAllVelocityPIDConsts();
 	}
 }

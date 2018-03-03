@@ -99,24 +99,28 @@ public class OI {
 		MoveLiftDownButton.whileHeld(new RunLift(Robot.lift, false));
 
 		manipulator = new Joystick(2);
-		closeIntake = new JoystickButton(manipulator, getButton("Close Intake Button", 1));
-		closeIntake.whenPressed(new CloseIntake());
-		openIntake = new JoystickButton(manipulator, getButton("Open Intake Button", 2));
-		openIntake.whenPressed(new OpenIntake());
-		// raiseIntake = new JoystickButton(manipulator, getButton("Raise Intake
-		// Button", 3));
-		// raiseIntake.whenPressed(new RaiseIntake());
-		// lowerIntake = new JoystickButton(manipulator, getButton("Lower Intake
-		// Button", 4));
-		// lowerIntake.whenPressed(new LowerIntake());
-		intake = new JoystickButton(manipulator, getButton("Intake Button", 5));
-		intake.whenPressed(new IntakeCube());
-		outake = new JoystickButton(manipulator, getButton("Outake Button", 6));
-		outake.whenPressed(new OutakeCube());
-		toggleLeftIntake = new JoystickButton(manipulator, getButton("Toggle Left Intake Button", 3));
-		toggleLeftIntake.whenPressed(new ToggleLeftIntake());
-		toggleRightIntake = new JoystickButton(manipulator, getButton("Toggle Right Intake Button", 4));
-		toggleRightIntake.whenPressed(new ToggleRightIntake());
+		if (manipulator.getButtonCount() == 0) {
+			System.out.println("Manipulator not plugged in!");
+		} else {
+			closeIntake = new JoystickButton(manipulator, getButton("Close Intake Button", 1));
+			closeIntake.whenPressed(new CloseIntake());
+			openIntake = new JoystickButton(manipulator, getButton("Open Intake Button", 2));
+			openIntake.whenPressed(new OpenIntake());
+			// raiseIntake = new JoystickButton(manipulator, getButton("Raise Intake
+			// Button", 3));
+			// raiseIntake.whenPressed(new RaiseIntake());
+			// lowerIntake = new JoystickButton(manipulator, getButton("Lower Intake
+			// Button", 4));
+			// lowerIntake.whenPressed(new LowerIntake());
+			intake = new JoystickButton(manipulator, getButton("Intake Button", 5));
+			intake.whenPressed(new IntakeCube());
+			outake = new JoystickButton(manipulator, getButton("Outake Button", 6));
+			outake.whenPressed(new OutakeCube());
+			toggleLeftIntake = new JoystickButton(manipulator, getButton("Toggle Left Intake Button", 3));
+			toggleLeftIntake.whenPressed(new ToggleLeftIntake());
+			toggleRightIntake = new JoystickButton(manipulator, getButton("Toggle Right Intake Button", 4));
+			toggleRightIntake.whenPressed(new ToggleRightIntake());
+		}
 	}
 
 	// /**

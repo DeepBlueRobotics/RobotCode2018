@@ -8,7 +8,6 @@
 package org.usfirst.frc.team199.Robot2018;
 
 import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
-import org.usfirst.frc.team199.Robot2018.autonomous.VelocityPIDController;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -23,7 +22,6 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -57,7 +55,6 @@ public class RobotMap {
 	public static WPI_TalonSRX dtLeftMaster;
 	public static WPI_VictorSPX dtLeftSlave;
 	public static SpeedControllerGroup dtLeft;
-	public static VelocityPIDController leftVelocityController;
 
 	public static DigitalSource rightEncPort1;
 	public static DigitalSource rightEncPort2;
@@ -66,9 +63,7 @@ public class RobotMap {
 	public static WPI_TalonSRX dtRightMaster;
 	public static WPI_VictorSPX dtRightSlave;
 	public static SpeedControllerGroup dtRight;
-	public static VelocityPIDController rightVelocityController;
 
-	public static DifferentialDrive robotDrive;
 	public static PIDSourceAverage distEncAvg;
 
 	public static AHRS fancyGyro;
@@ -162,20 +157,6 @@ public class RobotMap {
 		// inverted bc gear boxes invert from input to output
 		dtLeft.setInverted(true);
 
-		leftVelocityController = new VelocityPIDController(Robot.getConst("VelocityLeftkI", 0), 0,
-				/*
-				 * Robot.getConst("VelocityLeftkD", calcDefkD(Robot.getConst("Max Low Speed",
-				 * 84)))
-				 */ 0, /* 1 / Robot.getConst("Max Low Speed", 84) */Robot.getConst("VelocityLeftkF",
-						1 / Robot.getConst("Max Low Speed", 84)),
-				leftEncRate, dtLeft);
-		leftVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
-				Robot.getConst("Max High Speed", 204));
-		leftVelocityController.setOutputRange(-1.0, 1.0);
-		leftVelocityController.setContinuous(false);
-		leftVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceLeft", 2));
-		SmartDashboard.putData(leftVelocityController);
-
 		rightEncPort1 = new DigitalInput(getPort("1RightEnc", 1));
 		rightEncPort2 = new DigitalInput(getPort("2RightEnc", 0));
 		rightEncDist = new Encoder(rightEncPort1, rightEncPort2);
@@ -193,23 +174,6 @@ public class RobotMap {
 		dtRight = new SpeedControllerGroup(dtRightMaster, dtRightSlave);
 		// inverted bc gear boxes invert from input to output
 		dtRight.setInverted(true);
-
-		rightVelocityController = new VelocityPIDController(Robot.getConst("VelocityRightkI", 0), 0,
-				/*
-				 * Robot.getConst("VelocityRightkD", calcDefkD(Robot.getConst("Max Low Speed",
-				 * 84)))
-				 */0, /* 1 / Robot.getConst("Max Low Speed", 84) */Robot.getConst("VelocityRightkF",
-						1 / Robot.getConst("Max Low Speed", 84)),
-				rightEncRate, dtRight);
-		rightVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
-				Robot.getConst("Max High Speed", 204));
-		rightVelocityController.setOutputRange(-1.0, 1.0);
-		rightVelocityController.setContinuous(false);
-		rightVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceRight", 2));
-
-		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
-		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
-		// robotDrive = new DifferentialDrive(dtLeft, dtRight);
 
 		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
 		fancyGyro = new AHRS(SPI.Port.kMXP);
@@ -304,4 +268,5 @@ public class RobotMap {
 	public double convertMtoIn(double meters) {
 		return meters * 39.37;
 	}
+
 }

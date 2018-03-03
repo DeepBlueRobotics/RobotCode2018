@@ -63,15 +63,13 @@ public class VelocityPIDController extends PIDController implements SpeedControl
 	}
 
 	/**
-	 * Gets the current set voltage (setpoint) sent to the output
-	 * SpeedControllerGroup
+	 * Gets the current setpoint sent to the PID
 	 * 
-	 * @return the current set voltage (setpoint/target/goal) sent to the output
-	 *         SpeedControllerGroup
+	 * @return the current set setpoint/target/goal sent to the PID
 	 */
 	@Override
 	public double get() {
-		return out.get();
+		return getSetpoint();
 	}
 
 	/**
