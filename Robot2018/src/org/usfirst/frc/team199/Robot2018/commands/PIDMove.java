@@ -58,31 +58,39 @@ public class PIDMove extends Command implements PIDOutput {
 		if (Robot.dt != null) {
 			requires(Robot.dt);
 		}
-		double kf = 1 / (dt.getCurrentMaxSpeed() * sd.getConst("Default PID Update Time", 0.05));
 
-		System.out.println("proposed p = " + (dt.getPIDMoveConstant() / dt.getCurrentMaxSpeed()));
+		double maxSpeed = dt.getCurrentMaxSpeed();
 
-		moveController = new PIDController(sd.getConst("MovekP", 0.1), sd.getConst("MovekI", 0),
-				sd.getConst("MovekD", 0), kf, avg, this) {
-			/**
-			 * Move Velocity: V = sqrt(8TGd) / (R*m) where T = max torque of wheels G = gear
-			 * ratio d = distance remaining R = radius of wheels m = mass
-			 */
-			// @Override
-			// protected double calculateFeedForward() {
-			// double originalFF = super.calculateFeedForward();
-			// double feedForwardConst = dt.getPIDMoveConstant();
-			// double error = getError();
-			// return (Math.signum(error) * feedForwardConst * Math.sqrt(Math.abs(error)) +
-			// originalFF)
-			// / dt.getCurrentMaxSpeed();
-			// }
+		System.out.println("proposed p = " + (dt.getPIDMoveConstant() / maxSpeed));
 
-			@Override
-			protected double getContinuousError(double error) {
-				return Math.signum(error) * Math.sqrt(Math.abs(super.getContinuousError(error)));
-			}
-		};
+		double r = Robot.getConst("DistancePidR", 3.0);
+		double kP = r / Robot.rmap.getDrivetrainTimeConstant() / maxSpeed;
+		double kI = 0;
+		double kD = r / maxSpeed;
+		double kF = 1 / (maxSpeed * sd.getConst("Default PID Update Time", 0.05)) / maxSpeed;
+
+		moveController = new PIDController(kP, kI, kD, kF, avg, this);
+		// {
+		/**
+		 * Move Velocity: V = sqrt(8TGd) / (R*m) where T = max torque of wheels G = gear
+		 * ratio d = distance remaining R = radius of wheels m = mass
+		 */
+		// @Override
+		// protected double calculateFeedForward() {
+		// double originalFF = super.calculateFeedForward();
+		// double feedForwardConst = dt.getPIDMoveConstant();
+		// double error = getError();
+		// return (Math.signum(error) * feedForwardConst * Math.sqrt(Math.abs(error)) +
+		// originalFF)
+		// / dt.getCurrentMaxSpeed();
+		// }
+
+		// @Override
+		// protected double getContinuousError(double error) {
+		// return Math.signum(error) *
+		// Math.sqrt(Math.abs(super.getContinuousError(error)));
+		// }
+		// };
 		sd.putData("Move PID", moveController);
 	}
 
@@ -144,7 +152,7 @@ public class PIDMove extends Command implements PIDOutput {
 		dt.resetDistEncs();
 		moveController.disable();
 		// input is in inches
-		moveController.setInputRange(-Robot.getConst("Max High Speed", 204), Robot.getConst("Max High Speed", 204));
+		moveController.setInputRange(-dt.getCurrentMaxSpeed(), dt.getCurrentMaxSpeed());
 		// output in "motor units" (arcade and tank only accept values [-1, 1]
 		moveController.setOutputRange(-1.0, 1.0);
 		moveController.setContinuous(false);
@@ -153,7 +161,7 @@ public class PIDMove extends Command implements PIDOutput {
 		moveController.setSetpoint(target);
 
 		moveController.enable();
-		dt.enableVelocityPIDs();
+		// dt.enableVelocityPIDs();
 	}
 
 	/**
