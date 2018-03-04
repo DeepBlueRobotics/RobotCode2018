@@ -18,6 +18,6 @@ public class UpdatePIDConstants extends InstantCommand {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		Robot.dt.updatePidConstants();
+		Robot.dt.resetAllVelocityPIDConsts();
 	}
 }

@@ -68,9 +68,12 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		rightVelocityController.setContinuous(false);
 		rightVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceRight", 2));
 
-		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
+		if (Robot.getBool("Teleop velocity PID", false)) {
+			robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
+		} else {
+			robotDrive = new DifferentialDrive(dtLeft, dtRight);
+		}
 		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
-		// robotDrive = new DifferentialDrive(dtLeft, dtRight);
 	}
 
 	@Override
@@ -184,7 +187,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	@Override
 	public void teleopDrive() {
 		boolean squareJoy = Robot.getBool("Square Joystick Values", true);
-		if (Robot.getBool("Arcade Drive", true)) {
+		if (SmartDashboard.getBoolean("Arcade Drive", true)) {
 			double forw;
 			double turn;
 			if (Robot.getBool("Arcade Drive Default Setup", true)) {
@@ -263,18 +266,6 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	}
 
 	/**
-	 * Updates the PIDControllers' PIDConstants based on SmartDashboard values
-	 */
-	@Override
-	public void updatePidConstants() {
-		leftVelocityController.setPID(Robot.getConst("VelocityLeftkI", 0), 0,
-				Robot.rmap.calcDefkD(getCurrentMaxSpeed()));
-		rightVelocityController.setPID(Robot.getConst("VelocityRightkI", 0), 0,
-				Robot.rmap.calcDefkD(getCurrentMaxSpeed()));
-		resetVelocityPIDkFConsts();
-	}
-
-	/**
 	 * Enable the VelocityPIDControllers used for velocity control on each side of
 	 * the DT
 	 */
@@ -290,8 +281,10 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void disableVelocityPIDs() {
-		leftVelocityController.disable();
-		rightVelocityController.disable();
+		// reset disables and also clears the error so that it isn't used when they
+		// are reenabled.
+		leftVelocityController.reset();
+		rightVelocityController.reset();
 	}
 
 	/**
@@ -405,7 +398,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	@Override
 	public void resetAllVelocityPIDConsts() {
 		resetVelocityPIDkFConsts();
-		resetVelocityPIDkDConsts();
+		resetVelocityPIDkPConsts();
 		resetVelocityPIDkIConsts();
 	}
 
@@ -419,14 +412,13 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 * @return the new kF value as 1 / correct max speed
 	 */
 	@Override
-	public double resetVelocityPIDkFConsts() {
+	public void resetVelocityPIDkFConsts() {
 		// double newKF = 1 / getCurrentMaxSpeed();
 		// for this way of doing velocity PID, kF should always be 0
 		double newKF = 0;
 		leftVelocityController.setF(newKF);
 		rightVelocityController.setF(newKF);
 		SmartDashboard.putNumber("VPID kF", newKF);
-		return newKF;
 	}
 
 	/**
@@ -437,8 +429,10 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	public void resetVelocityPIDkIConsts() {
 		// 0.011 was calculated manually. 84 is the low gear max speed, to which we
 		// scale the constants.
-		double newLeftkI = Robot.getConst("VelocityLeftkI", 0.011 * 84) / getCurrentMaxSpeed();
-		double newRightkI = Robot.getConst("VelocityRightkI", 0.011 * 84) / getCurrentMaxSpeed();
+		double defaultkI = Robot.getConst("VelocityPidR", 3) / Robot.rmap.getDrivetrainTimeConstant()
+				* Robot.rmap.getCycleTime();
+		double newLeftkI = Robot.getConst("VelocityLeftkI", defaultkI) / getCurrentMaxSpeed();
+		double newRightkI = Robot.getConst("VelocityRightkI", defaultkI) / getCurrentMaxSpeed();
 		// I is P because wpilib is dumb
 		leftVelocityController.setP(newLeftkI);
 		rightVelocityController.setP(newRightkI);
@@ -451,15 +445,15 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 * gearing (high or low gear).
 	 */
 	@Override
-	public void resetVelocityPIDkDConsts() {
+	public void resetVelocityPIDkPConsts() {
 		// 0.012 was calculated manually. 84 is the low gear max speed, to which we
 		// scale the constants.
-		double newLeftkD = Robot.getConst("VelocityLeftkD", 0.012 * 84) / getCurrentMaxSpeed();
-		double newRightkD = Robot.getConst("VelocityRightkD", 0.012 * 84) / getCurrentMaxSpeed();
-		leftVelocityController.setD(newLeftkD);
-		rightVelocityController.setD(newRightkD);
-		SmartDashboard.putNumber("VPID Left kD", newLeftkD);
-		SmartDashboard.putNumber("VPID Right kD", newRightkD);
+		double newkP = Robot.getConst("VelocityPidR", 3) / getCurrentMaxSpeed();
+		// P is D because wpilib is dumb
+		leftVelocityController.setD(newkP);
+		rightVelocityController.setD(newkP);
+		SmartDashboard.putNumber("VPID Left kP", newkP);
+		SmartDashboard.putNumber("VPID Right kP", newkP);
 	}
 
 	public double resetVPIDInputRanges() {
@@ -476,7 +470,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public double getCurrentMaxSpeed() {
-		if (Robot.getBool("High Gear", true)) {
+		if (SmartDashboard.getBoolean("High Gear", true)) {
 			return Robot.getConst("Max High Speed", 204);
 		} else {
 			return Robot.getConst("Max Low Speed", 84);

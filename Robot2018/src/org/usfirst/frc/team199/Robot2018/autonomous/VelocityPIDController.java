@@ -1,5 +1,7 @@
 package org.usfirst.frc.team199.Robot2018.autonomous;
 
+import org.usfirst.frc.team199.Robot2018.Robot;
+
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -29,7 +31,8 @@ public class VelocityPIDController extends PIDController implements SpeedControl
 	 */
 	public VelocityPIDController(double kp, double ki, double kd, double kf, PIDSource source,
 			SpeedControllerGroup output) {
-		super(kp, ki, kd, kf, source, output);
+		super(kp, ki, kd, kf, /* LinearDigitalFilter.singlePoleIIR(source, 0.1, Robot.rmap.getCycleTime()) */source,
+				output, Robot.rmap.getCycleTime());
 		out = output;
 	}
 

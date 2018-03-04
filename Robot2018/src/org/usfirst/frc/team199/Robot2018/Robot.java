@@ -151,7 +151,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-
+		dt.disableVelocityPIDs();
 	}
 
 	@Override
@@ -195,6 +195,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		System.out.println("In teleopInit()");
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
@@ -225,7 +226,7 @@ public class Robot extends IterativeRobot {
 		// SmartDashboard.putNumber("Avg Enc Dist", dt.getEncAvgDist());
 		//
 
-		System.out.printf("Left: %1$f4.2; Right: %1$f4.2\n", RobotMap.dtLeft.get(), RobotMap.dtRight.get());
+		System.out.printf("Left: %1$5.2f; Right: %2$5.2f\n", RobotMap.dtLeft.get(), RobotMap.dtRight.get());
 
 		SmartDashboard.putNumber("Angle", dt.getAHRSAngle());
 		SmartDashboard.putNumber("Left Current draw", rmap.pdp.getCurrent(4));
@@ -247,15 +248,15 @@ public class Robot extends IterativeRobot {
 		// Robot.dt.enableVelocityPIDs();
 		// firstTime = false;
 		//// }
-
-		dt.getLeftVPID().setConsts(getConst("VelocityLeftkI", 0), 0,
-				getConst("VelocityLeftkD", rmap.calcDefkD(dt.getCurrentMaxSpeed())),
-				/* 1 / dt.getCurrentMaxSpeed() */Robot.getConst("VelocityLeftkF",
-						1 / Robot.getConst("Max Low Speed", 84)));
-		dt.getRightVPID().setConsts(getConst("VelocityRightkI", 0), 0,
-				getConst("VelocityRightkD", rmap.calcDefkD(dt.getCurrentMaxSpeed())),
-				/* 1 / dt.getCurrentMaxSpeed() */Robot.getConst("VelocityRightkF",
-						1 / Robot.getConst("Max Low Speed", 84)));
+		// dt.getLeftVPID().setConsts(getConst("VelocityLeftkI", 0), 0,
+		// getConst("VelocityLeftkD", rmap.calcDefkD(dt.getCurrentMaxSpeed())),
+		// /* 1 / dt.getCurrentMaxSpeed() */Robot.getConst("VelocityLeftkF",
+		// 1 / Robot.getConst("Max Low Speed", 84)));
+		// dt.getRightVPID().setConsts(getConst("VelocityRightkI", 0), 0,
+		// getConst("VelocityRightkD", rmap.calcDefkD(dt.getCurrentMaxSpeed())),
+		// /* 1 / dt.getCurrentMaxSpeed() */Robot.getConst("VelocityRightkF",
+		// 1 / Robot.getConst("Max Low Speed", 84)));
+		dt.resetAllVelocityPIDConsts();
 
 		dt.setVPIDs(getConst("VPID Test Set", 0.5));
 

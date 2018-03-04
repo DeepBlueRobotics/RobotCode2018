@@ -1,7 +1,5 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
-import org.usfirst.frc.team199.Robot2018.Robot;
-
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -19,7 +17,7 @@ public class ShiftDriveType extends InstantCommand {
 	// Called once when the command executes
 	@Override
 	protected void initialize() {
-		SmartDashboard.putBoolean("Bool/Arcade Drive", !Robot.getBool("Arcade Drive", true));
+		SmartDashboard.putBoolean("Arcade Drive", !SmartDashboard.getBoolean("Arcade Drive", true));
 	}
 
 }

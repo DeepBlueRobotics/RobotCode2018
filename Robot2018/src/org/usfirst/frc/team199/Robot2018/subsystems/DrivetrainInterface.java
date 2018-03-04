@@ -62,11 +62,6 @@ public interface DrivetrainInterface {
 	public double getDtRightSpeed();
 
 	/**
-	 * Updates the PIDControllers' PIDConstants based on SmartDashboard values
-	 */
-	public void updatePidConstants();
-
-	/**
 	 * Enable the VelocityPIDControllers used for velocity control on each side of
 	 * the DT
 	 */
@@ -159,11 +154,11 @@ public interface DrivetrainInterface {
 	 *            be 1 / max speed
 	 * @return the new kF value as 1 / correct max speed
 	 */
-	public double resetVelocityPIDkFConsts();
+	public void resetVelocityPIDkFConsts();
 
 	public void resetVelocityPIDkIConsts();
 
-	public void resetVelocityPIDkDConsts();
+	public void resetVelocityPIDkPConsts();
 
 	public void resetAllVelocityPIDConsts();
 

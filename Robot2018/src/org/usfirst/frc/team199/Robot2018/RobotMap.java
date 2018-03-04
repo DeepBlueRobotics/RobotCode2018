@@ -216,11 +216,7 @@ public class RobotMap {
 		 * be converted from rpm to radians per second, so divide by 60 and multiply to
 		 * get radians.
 		 */
-		double gearReduction = getGearRatio();
-		double radius = getRadius();
-		double timeConstant = getOmegaMax() / gearReduction / 60 * 2 * Math.PI * convertNtokG(getWeight()) / 2 * radius
-				* radius / (getStallTorque() * gearReduction * 2);
-		SmartDashboard.putNumber("Time Const (kD)", timeConstant);
+		double timeConstant = getDrivetrainTimeConstant();
 		double cycleTime = getCycleTime();
 		/*
 		 * The denominator of kD is 1-(e ^ -cycleTime / timeConstant). The numerator is
@@ -230,8 +226,22 @@ public class RobotMap {
 		return 1 / denominator / maxSpeed;
 	}
 
+	/**
+	 * Gets the time constant of the drivetrain, which is used to calculate PID
+	 * constants.
+	 * 
+	 * @return time constant
+	 */
+	public double getDrivetrainTimeConstant() {
+		double gearReduction = getGearRatio();
+		double radius = getRadius();
+		double timeConstant = getOmegaMax() / gearReduction / 60 * 2 * Math.PI * convertNtokG(getWeight()) / 2 * radius
+				* radius / (getStallTorque() * gearReduction * 2);
+		return timeConstant;
+	}
+
 	public double getGearRatio() {
-		return Robot.getBool("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
+		return SmartDashboard.getBoolean("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
 				: Robot.getConst("Low Gear Gear Reduction", 12.255);
 	}
 
