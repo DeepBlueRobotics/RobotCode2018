@@ -22,6 +22,9 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	private final DoubleSolenoid leftHorizontalSolenoid = RobotMap.leftIntakeHorizontalSolenoid;
 	private final DoubleSolenoid rightHorizontalSolenoid = RobotMap.rightIntakeHorizontalSolenoid;
 
+	private boolean leftOpen = false;
+	private boolean rightOpen = leftOpen;
+
 	/**
 	 * Set the default command for a subsystem here.
 	 */
@@ -100,93 +103,98 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * Raises the intake
 	 */
 	public void raiseIntake() {
-		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Vertical Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kReverse
-				: DoubleSolenoid.Value.kForward;
-		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Vertical Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kReverse
-				: DoubleSolenoid.Value.kForward;
-		leftVerticalSolenoid.set(leftSet);
-		rightVerticalSolenoid.set(rightSet);
+		leftVerticalSolenoid.set(solenoidSet(true, true));
+		rightVerticalSolenoid.set(solenoidSet(false, true));
 	}
 
 	/**
 	 * Lowers the intake
 	 */
 	public void lowerIntake() {
-		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Vertical Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kForward
-				: DoubleSolenoid.Value.kReverse;
-		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Vertical Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kForward
-				: DoubleSolenoid.Value.kReverse;
-		leftVerticalSolenoid.set(leftSet);
-		rightVerticalSolenoid.set(rightSet);
+		leftVerticalSolenoid.set(solenoidSet(true, false));
+		rightVerticalSolenoid.set(solenoidSet(false, false));
+	}
+
+	/**
+	 * Takes into account SmartDashboard keys to set the position of one of the
+	 * vertical solenoids
+	 * 
+	 * @param left
+	 *            Whether or not the solenoid to toggle is the left solenoid
+	 * @param up
+	 *            Whether or not the solenoid should be set to raised
+	 * @return The DoubleSolenoid.Value that the solenoid should be set to
+	 */
+	public DoubleSolenoid.Value solenoidSet(boolean left, boolean up) {
+		String side = left ? "Left" : "Right";
+		String key = "Intake " + side + " Vertical Solenoid Inverted";
+		boolean inverted = Robot.getBool(key, false);
+		if ((up && inverted) || (!up && !inverted)) {
+			return DoubleSolenoid.Value.kReverse;
+		} else {
+			return DoubleSolenoid.Value.kForward;
+		}
+	}
+
+	/**
+	 * Takes into account SmartDashboard keys and current position to toggle the
+	 * position of one of the horizontal solenoids
+	 * 
+	 * @param left
+	 *            Whether or not the solenoid to toggle is the left solenoid
+	 * @return The DoubleSolenoid.Value that the solenoid should be set to
+	 */
+	public DoubleSolenoid.Value toggleHorizontal(boolean left) {
+		boolean open = left ? leftOpen : rightOpen;
+		String side = left ? "Left" : "Right";
+		String key = "Intake " + side + " Horizontal Solenoid Inverted";
+		boolean inverted = Robot.getBool(key, false);
+		if ((open && inverted) || (!open && !inverted)) {
+			return DoubleSolenoid.Value.kForward;
+		} else {
+			return DoubleSolenoid.Value.kReverse;
+		}
 	}
 
 	/**
 	 * Toggles the left intake between open and closed
 	 */
 	public void toggleLeftIntake() {
-		boolean open = SmartDashboard.getBoolean("Left Horizontal Solenoid Open", true);
-		DoubleSolenoid.Value set;
-		if (open) {
-			set = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false) ? DoubleSolenoid.Value.kForward
-					: DoubleSolenoid.Value.kReverse;
-		} else {
-			set = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false) ? DoubleSolenoid.Value.kReverse
-					: DoubleSolenoid.Value.kForward;
-		}
-		leftHorizontalSolenoid.set(set);
-		SmartDashboard.putBoolean("Left Horizontal Solenoid Open", !open);
+		leftHorizontalSolenoid.set(toggleHorizontal(true));
+		leftOpen = !leftOpen;
+		SmartDashboard.putBoolean("Left Horizontal Solenoid Open", leftOpen);
 	}
 
 	/**
 	 * Toggles the right intake between open and closed
 	 */
 	public void toggleRightIntake() {
-		boolean open = SmartDashboard.getBoolean("Right Horizontal Solenoid Open", true);
-		DoubleSolenoid.Value set;
-		if (open) {
-			set = Robot.getBool("Intake Right Horizontal Solenoid Inverted", false) ? DoubleSolenoid.Value.kForward
-					: DoubleSolenoid.Value.kReverse;
-		} else {
-			set = Robot.getBool("Intake Right Horizontal Solenoid Inverted", false) ? DoubleSolenoid.Value.kReverse
-					: DoubleSolenoid.Value.kForward;
-		}
-		rightHorizontalSolenoid.set(set);
-		SmartDashboard.putBoolean("Right Horizontal Solenoid Open", !open);
+		rightHorizontalSolenoid.set(toggleHorizontal(false));
+		rightOpen = !rightOpen;
+		SmartDashboard.putBoolean("Right Horizontal Solenoid Open", rightOpen);
 	}
 
 	/**
 	 * Closes the intake
 	 */
 	public void closeIntake() {
-		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kReverse
-				: DoubleSolenoid.Value.kForward;
-		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Horizontal Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kReverse
-				: DoubleSolenoid.Value.kForward;
-		SmartDashboard.putBoolean("Left Horizontal Solenoid Open", false);
-		SmartDashboard.putBoolean("Right Horizontal Solenoid Open", false);
-		leftHorizontalSolenoid.set(leftSet);
-		rightHorizontalSolenoid.set(rightSet);
+		if (leftOpen) {
+			toggleLeftIntake();
+		}
+		if (rightOpen) {
+			toggleRightIntake();
+		}
 	}
 
 	/**
 	 * Opens the intake
 	 */
 	public void openIntake() {
-		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kForward
-				: DoubleSolenoid.Value.kReverse;
-		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Horizontal Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kForward
-				: DoubleSolenoid.Value.kReverse;
-		SmartDashboard.putBoolean("Left Horizontal Solenoid Open", true);
-		SmartDashboard.putBoolean("Right Horizontal Solenoid Open", true);
-		leftHorizontalSolenoid.set(leftSet);
-		rightHorizontalSolenoid.set(rightSet);
+		if (!leftOpen) {
+			toggleLeftIntake();
+		}
+		if (!rightOpen) {
+			toggleRightIntake();
+		}
 	}
 }
