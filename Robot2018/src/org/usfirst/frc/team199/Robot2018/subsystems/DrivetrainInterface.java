@@ -6,6 +6,8 @@ public interface DrivetrainInterface {
 
 	public void initDefaultCommand();
 
+	public boolean isVPIDUsed();
+
 	/**
 	 * Returns the getRate() of the left encoder
 	 * 

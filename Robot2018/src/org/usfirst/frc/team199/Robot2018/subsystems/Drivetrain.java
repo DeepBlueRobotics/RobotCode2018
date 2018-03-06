@@ -90,6 +90,10 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		setDefaultCommand(new TeleopDrive());
 	}
 
+	public boolean isVPIDUsed() {
+		return Robot.getBool("Teleop velocity PID", false);
+	}
+
 	public PIDSourceAverage getDistEncAvg() {
 		return distEncAvg;
 	}

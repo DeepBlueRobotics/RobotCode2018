@@ -188,7 +188,9 @@ public class PIDTurn extends Command implements PIDOutput {
 		System.out.println("Turn to point: " + turnToPoint);
 
 		turnController.disable();
-		dt.enableVelocityPIDs();
+		if (dt.isVPIDUsed()) {
+			dt.enableVelocityPIDs();
+		}
 		System.out.println("initialize2s");
 		// dt.resetAHRS();
 		System.out.println("after reset");
