@@ -32,8 +32,13 @@ public class TeleopDrive extends Command {
 	@Override
 	protected void execute() {
 		if (Robot.getBool("Teleop velocity PID", false)) {
-			Robot.dt.resetVPIDInputRanges();
+			Robot.dt.resetVPIDAndRobotDriveRanges();
 			Robot.dt.resetAllVelocityPIDConsts();
+			if (Robot.dt.VPIDsOnTarg()) {
+				Robot.dt.disableVelocityPIDs();
+			} else {
+				Robot.dt.enableVelocityPIDs();
+			}
 		}
 		Robot.dt.teleopDrive();
 	}

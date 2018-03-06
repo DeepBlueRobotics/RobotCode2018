@@ -78,6 +78,11 @@ public class Robot extends IterativeRobot {
 		public void putNumber(String string, double d) {
 			SmartDashboard.putNumber(string, d);
 		}
+
+		public void putBoolean(String string, boolean b) {
+			SmartDashboard.putBoolean(string, b);
+		}
+
 		/*
 		 * if (!SmartDashboard.containsKey("Const/" + key)) { if
 		 * (!SmartDashboard.putNumber("Const/" + key, def)) {
@@ -114,7 +119,7 @@ public class Robot extends IterativeRobot {
 		climberAssist = new ClimberAssist();
 		intakeEject = new IntakeEject();
 		lift = new Lift();
-		dt = new Drivetrain();
+		dt = new Drivetrain(sd);
 		oi = new OI();
 
 		// auto position chooser

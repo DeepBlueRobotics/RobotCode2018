@@ -9,6 +9,7 @@ package org.usfirst.frc.team199.Robot2018.subsystems;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.RobotMap;
+import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
 import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
 import org.usfirst.frc.team199.Robot2018.autonomous.VelocityPIDController;
 import org.usfirst.frc.team199.Robot2018.commands.TeleopDrive;
@@ -48,7 +49,15 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	private final AHRS fancyGyro = RobotMap.fancyGyro;
 	private final DoubleSolenoid dtGear = RobotMap.dtGear;
 
-	public Drivetrain() {
+	private SmartDashboardInterface sd;
+
+	private boolean highGear;
+
+	public Drivetrain(SmartDashboardInterface sd) {
+		this.sd = sd;
+
+		highGear = false;
+
 		// all 0s for controller construction because they all get set to right values
 		// by resetAllVelocityPIDConsts
 		leftVelocityController = new VelocityPIDController(0, 0, 0, 0, leftEncRate, dtLeft);
@@ -73,9 +82,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 			robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
 		} else {
 			robotDrive = new DifferentialDrive(dtLeft, dtRight);
-
 		}
-
 	}
 
 	@Override
@@ -129,6 +136,10 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 
 	public double getRightVPIDOutput() {
 		return dtRight.get();
+	}
+
+	public boolean VPIDsOnTarg() {
+		return leftVelocityController.onTarget() && rightVelocityController.onTarget();
 	}
 
 	/**
@@ -374,12 +385,17 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 *            low gear (false, kForward)
 	 */
 	@Override
-	public void shiftGears(boolean highGear) {
-		if (highGear ^ Robot.getBool("Drivetrain Gear Shift Low", false)) {
+	public void shiftGears(boolean shiftToHighGear) {
+		if (shiftToHighGear ^ Robot.getBool("Drivetrain Gear Shift Low", false)) {
 			dtGear.set(DoubleSolenoid.Value.kReverse);
+			highGear = true;
 		} else {
 			dtGear.set(DoubleSolenoid.Value.kForward);
+			highGear = false;
 		}
+		sd.putBoolean("High Gear", highGear);
+		resetAllVelocityPIDConsts();
+		resetVPIDAndRobotDriveRanges();
 	}
 
 	/**
@@ -458,10 +474,13 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		SmartDashboard.putNumber("VPID Right kP", newkP);
 	}
 
-	public double resetVPIDInputRanges() {
+	public double resetVPIDAndRobotDriveRanges() {
 		double currentMaxSpd = getCurrentMaxSpeed();
 		leftVelocityController.setInputRange(-currentMaxSpd, currentMaxSpd);
 		rightVelocityController.setInputRange(-currentMaxSpd, currentMaxSpd);
+		if (Robot.getBool("Teleop velocity PID", false)) {
+			robotDrive.setMaxOutput(currentMaxSpd);
+		}
 		return currentMaxSpd;
 	}
 
@@ -472,7 +491,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public double getCurrentMaxSpeed() {
-		if (SmartDashboard.getBoolean("High Gear", true)) {
+		if (highGear) {
 			return Robot.getConst("Max High Speed", 204);
 		} else {
 			return Robot.getConst("Max Low Speed", 84);

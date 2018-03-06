@@ -8,4 +8,6 @@ public interface SmartDashboardInterface {
 	public void putData(String string, PIDController controller);
 
 	public void putNumber(String string, double d);
+
+	public void putBoolean(String string, boolean b);
 }

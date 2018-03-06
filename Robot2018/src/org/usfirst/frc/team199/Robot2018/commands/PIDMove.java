@@ -151,12 +151,10 @@ public class PIDMove extends Command implements PIDOutput {
 
 		dt.resetDistEncs();
 		moveController.disable();
-		// input is in inches
-		moveController.setInputRange(-dt.getCurrentMaxSpeed(), dt.getCurrentMaxSpeed());
 		// output in "motor units" (arcade and tank only accept values [-1, 1]
 		moveController.setOutputRange(-1.0, 1.0);
 		moveController.setContinuous(false);
-		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 0.1));
+		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 0.5));
 		System.out.println("move target = " + target);
 		moveController.setSetpoint(target);
 
