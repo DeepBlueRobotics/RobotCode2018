@@ -1,5 +1,5 @@
 {
-  "dividerPosition": 0.28519061583577715,
+  "dividerPosition": 0.28486646884273,
   "tabPane": [
     {
       "title": "PID Testing",
@@ -87,7 +87,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Left VPID Targ",
-              "_title": "/SmartDashboard/Drivetrain/Left VPID Targ",
+              "_title": "SmartDashboard/Drivetrain/Left VPID Targ",
               "Visible time": 30.0,
               "SmartDashboard/Drivetrain/Left VPID Targ visible": true
             }
@@ -100,7 +100,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Right VPID Targ",
-              "_title": "/SmartDashboard/Drivetrain/Right VPID Targ",
+              "_title": "SmartDashboard/Drivetrain/Right VPID Targ",
               "Visible time": 30.0,
               "SmartDashboard/Drivetrain/Right VPID Targ visible": true
             }
@@ -262,6 +262,17 @@
               "_source0": "network_table:///Preferences/Bool/Square Joystick Values",
               "_title": "Preferences/Bool/Square Joystick Values"
             }
+          },
+          "1,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///Preferences/Bool/Teleop velocity PID",
+              "_title": "Preferences/Bool/Teleop velocity PID"
+            }
           }
         }
       }
@@ -276,17 +287,6 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "0,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Const/Move Targ",
-              "_title": "SmartDashboard/Const/Move Targ"
-            }
-          },
           "3,0": {
             "size": [
               2,
@@ -385,7 +385,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Left VPID Targ",
-              "_title": "/SmartDashboard/Drivetrain/Left VPID Targ",
+              "_title": "SmartDashboard/Drivetrain/Left VPID Targ",
               "Visible time": 10.0,
               "SmartDashboard/Drivetrain/Left VPID Targ visible": true
             }
@@ -398,7 +398,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Right VPID Targ",
-              "_title": "/SmartDashboard/Drivetrain/Right VPID Targ",
+              "_title": "SmartDashboard/Drivetrain/Right VPID Targ",
               "Visible time": 10.0,
               "SmartDashboard/Drivetrain/Right VPID Targ visible": true
             }
@@ -423,6 +423,17 @@
               "_type": "PID Controller",
               "_source0": "network_table:///SmartDashboard/Move PID",
               "_title": "SmartDashboard/Move PID"
+            }
+          },
+          "0,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Preferences/Const/Move Targ",
+              "_title": "Preferences/Const/Move Targ"
             }
           }
         }

@@ -70,10 +70,12 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 
 		if (Robot.getBool("Teleop velocity PID", false)) {
 			robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
+			robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
 		} else {
 			robotDrive = new DifferentialDrive(dtLeft, dtRight);
+
 		}
-		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
+
 	}
 
 	@Override
