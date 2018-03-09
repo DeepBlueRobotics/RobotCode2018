@@ -70,27 +70,6 @@ public class PIDMove extends Command implements PIDOutput {
 		double kF = 1 / (maxSpeed * sd.getConst("Default PID Update Time", 0.05)) / maxSpeed;
 
 		moveController = new PIDController(kP, kI, kD, kF, avg, this);
-		// {
-		/**
-		 * Move Velocity: V = sqrt(8TGd) / (R*m) where T = max torque of wheels G = gear
-		 * ratio d = distance remaining R = radius of wheels m = mass
-		 */
-		// @Override
-		// protected double calculateFeedForward() {
-		// double originalFF = super.calculateFeedForward();
-		// double feedForwardConst = dt.getPIDMoveConstant();
-		// double error = getError();
-		// return (Math.signum(error) * feedForwardConst * Math.sqrt(Math.abs(error)) +
-		// originalFF)
-		// / dt.getCurrentMaxSpeed();
-		// }
-
-		// @Override
-		// protected double getContinuousError(double error) {
-		// return Math.signum(error) *
-		// Math.sqrt(Math.abs(super.getContinuousError(error)));
-		// }
-		// };
 		sd.putData("Move PID", moveController);
 	}
 

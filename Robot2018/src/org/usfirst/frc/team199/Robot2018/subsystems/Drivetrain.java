@@ -244,6 +244,21 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void arcadeDrive(double speed, double turn) {
+		if (Robot.getBool("Arcade Drive Default Setup", true)) {
+			if (Robot.oi.leftJoy.getRawButton(1)) {
+				speed *= Robot.getConst("Speed Slow Ratio", 0.5);
+			}
+			if (Robot.oi.rightJoy.getRawButton(1)) {
+				turn *= Robot.getConst("Turn Slow Ratio", 0.5);
+			}
+		} else {
+			if (Robot.oi.rightJoy.getRawButton(1)) {
+				speed *= Robot.getConst("Speed Slow Ratio", 0.5);
+			}
+			if (Robot.oi.leftJoy.getRawButton(1)) {
+				turn *= Robot.getConst("Turn Slow Ratio", 0.5);
+			}
+		}
 		robotDrive.arcadeDrive(speed, turn, Robot.getBool("Square Drive Values", false));
 	}
 
@@ -257,6 +272,10 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void tankDrive(double leftSpeed, double rightSpeed) {
+		if (Robot.oi.leftJoy.getRawButton(1) || Robot.oi.rightJoy.getRawButton(1)) {
+			leftSpeed *= Robot.getConst("Speed Slow Ratio", 0.5);
+			rightSpeed *= Robot.getConst("Speed Slow Ratio", 0.5);
+		}
 		robotDrive.tankDrive(leftSpeed, rightSpeed, Robot.getBool("Square Drive Values", false));
 	}
 

@@ -8,6 +8,7 @@
 package org.usfirst.frc.team199.Robot2018;
 
 import org.usfirst.frc.team199.Robot2018.commands.CloseIntake;
+import org.usfirst.frc.team199.Robot2018.commands.FindTurnTimeConstant;
 import org.usfirst.frc.team199.Robot2018.commands.IntakeCube;
 import org.usfirst.frc.team199.Robot2018.commands.OpenIntake;
 import org.usfirst.frc.team199.Robot2018.commands.OutakeCube;
@@ -38,6 +39,7 @@ public class OI {
 	 */
 
 	public Joystick leftJoy;
+	public Joystick rightJoy;
 	private JoystickButton shiftLowGearButton;
 	private JoystickButton shiftHighGearButton;
 	private JoystickButton shiftDriveTypeButton;
@@ -46,9 +48,10 @@ public class OI {
 	private JoystickButton resetEncButton;
 	private JoystickButton MoveLiftUpButton;
 	private JoystickButton MoveLiftDownButton;
-	public Joystick rightJoy;
+	private JoystickButton findTurnTimeConstantButton;
 	private JoystickButton updatePIDConstantsButton;
 	private JoystickButton updateEncoderDPPButton;
+
 	public Joystick manipulator;
 	private JoystickButton closeIntake;
 	private JoystickButton openIntake;
@@ -69,7 +72,7 @@ public class OI {
 		return (int) SmartDashboard.getNumber("Button/" + key, def);
 	}
 
-	public OI() {
+	public OI(Robot robot) {
 		leftJoy = new Joystick(0);
 		shiftDriveTypeButton = new JoystickButton(leftJoy, getButton("Shift Drive Type", 2));
 		shiftDriveTypeButton.whenPressed(new ShiftDriveType());
@@ -83,6 +86,10 @@ public class OI {
 				.whenReleased(new PIDTurn(Robot.getConst("Turn Targ", 90), Robot.dt, Robot.sd, RobotMap.fancyGyro));
 		resetEncButton = new JoystickButton(leftJoy, getButton("Reset Dist Enc", 10));
 		resetEncButton.whenPressed(new ResetEncoders());
+		findTurnTimeConstantButton = new JoystickButton(leftJoy, getButton("Find Turn Time Constant", 11));
+		// the command will only run in test mode
+		findTurnTimeConstantButton
+				.whenPressed(new FindTurnTimeConstant(robot, Robot.dt, Robot.rmap.fancyGyro, Robot.sd));
 
 		rightJoy = new Joystick(1);
 		shiftHighGearButton = new JoystickButton(rightJoy, getButton("Shift High Gear", 3));

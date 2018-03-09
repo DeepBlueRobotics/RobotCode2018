@@ -26,7 +26,7 @@ controller indices
 			fake news
 	left joystick
 		buttons
-			1
+			1	Slow forward-backward movement in arcade, or all movement in tank
 			2
 			3
 			4
@@ -36,14 +36,14 @@ controller indices
 			8
 			9
 			10
-			11
+			11	Run expirement to find turning time constant (FindTurnTimeConstant)
 		axes
 			0	X axis
 			1	Y axis (forward is negative)
 			2	Z axis (knob at base)
 	right joystick
 		buttons
-			1
+			1	Slow turning movement in arcade, or all movement in tank
 			2
 			3
 			4

@@ -71,6 +71,14 @@ public class Robot extends IterativeRobot {
 			return pref.getDouble("Const/" + key, def);
 		}
 
+		public void putConst(String key, double def) {
+			Preferences pref = Preferences.getInstance();
+			pref.putDouble("Const/" + key, def);
+			if (pref.getDouble("Const/ + key", def) != def) {
+				System.err.println("pref Key" + "Const/" + key + "already taken by a different type");
+			}
+		}
+
 		public void putData(String string, PIDController controller) {
 			SmartDashboard.putData(string, controller);
 		}
@@ -94,6 +102,10 @@ public class Robot extends IterativeRobot {
 
 	public static double getConst(String key, double def) {
 		return sd.getConst(key, def);
+	}
+
+	public static void putConst(String key, double def) {
+		sd.putConst(key, def);
 	}
 
 	public static boolean getBool(String key, boolean def) {
@@ -120,7 +132,7 @@ public class Robot extends IterativeRobot {
 		intakeEject = new IntakeEject();
 		lift = new Lift();
 		dt = new Drivetrain(sd);
-		oi = new OI();
+		oi = new OI(this);
 
 		// auto position chooser
 		for (Autonomous.Position p : Autonomous.Position.values()) {
@@ -242,8 +254,11 @@ public class Robot extends IterativeRobot {
 
 	boolean firstTime = true;
 
+	@Override
 	public void testInit() {
-		dt.enableVelocityPIDs();
+		System.out.println("In testInit()");
+		dt.resetAHRS();
+		AutoUtils.state = new State(0, 0, 0);
 	}
 
 	/**
@@ -263,21 +278,21 @@ public class Robot extends IterativeRobot {
 		// getConst("VelocityRightkD", rmap.calcDefkD(dt.getCurrentMaxSpeed())),
 		// /* 1 / dt.getCurrentMaxSpeed() */Robot.getConst("VelocityRightkF",
 		// 1 / Robot.getConst("Max Low Speed", 84)));
-		dt.resetAllVelocityPIDConsts();
+		// dt.resetAllVelocityPIDConsts();
 
-		dt.setVPIDs(getConst("VPID Test Set", 0.5));
+		// dt.setVPIDs(getConst("VPID Test Set", 0.5));
 
-		// Scheduler.getInstance().run();
+		Scheduler.getInstance().run();
 
-		System.out.println("Left VPID Targ:     " + dt.getLeftVPIDOutput());
-		System.out.println("Right VPID Targ:     " + dt.getRightVPIDOutput());
-		System.out.println("Left VPID Error:     " + dt.getLeftVPIDerror());
-		System.out.println("Right VPID Error:     " + dt.getRightVPIDerror());
-		System.out.println("Left Enc Rate:     " + dt.getLeftEncRate());
-		System.out.println("Right Enc Rate:     " + dt.getRightEncRate());
-
-		System.out.println("Left Talon Speed:     " + rmap.dtLeftMaster.get());
-		System.out.println("Right Talon Speed:     " + rmap.dtRightMaster.get());
+		// System.out.println("Left VPID Targ: " + dt.getLeftVPIDOutput());
+		// System.out.println("Right VPID Targ: " + dt.getRightVPIDOutput());
+		// System.out.println("Left VPID Error: " + dt.getLeftVPIDerror());
+		// System.out.println("Right VPID Error: " + dt.getRightVPIDerror());
+		// System.out.println("Left Enc Rate: " + dt.getLeftEncRate());
+		// System.out.println("Right Enc Rate: " + dt.getRightEncRate());
+		//
+		// System.out.println("Left Talon Speed: " + rmap.dtLeftMaster.get());
+		// System.out.println("Right Talon Speed: " + rmap.dtRightMaster.get());
 
 		// System.out.println("Left Enc Dist " + dt.getLeftDist());
 		// System.out.println("Right Enc Dist " + dt.getRightDist());
