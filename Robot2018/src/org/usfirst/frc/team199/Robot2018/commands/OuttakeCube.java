@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class OutakeCube extends Command {
+public class OuttakeCube extends Command {
 
 	Timer tim;
 
-	public OutakeCube() {
+	public OuttakeCube() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 	}

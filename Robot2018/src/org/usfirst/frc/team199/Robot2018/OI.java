@@ -11,7 +11,7 @@ import org.usfirst.frc.team199.Robot2018.commands.CloseIntake;
 import org.usfirst.frc.team199.Robot2018.commands.FindTurnTimeConstant;
 import org.usfirst.frc.team199.Robot2018.commands.IntakeCube;
 import org.usfirst.frc.team199.Robot2018.commands.OpenIntake;
-import org.usfirst.frc.team199.Robot2018.commands.OutakeCube;
+import org.usfirst.frc.team199.Robot2018.commands.OuttakeCube;
 import org.usfirst.frc.team199.Robot2018.commands.PIDMove;
 import org.usfirst.frc.team199.Robot2018.commands.PIDTurn;
 import org.usfirst.frc.team199.Robot2018.commands.ResetEncoders;
@@ -43,24 +43,24 @@ public class OI {
 	private JoystickButton shiftLowGearButton;
 	private JoystickButton shiftHighGearButton;
 	private JoystickButton shiftDriveTypeButton;
-	private JoystickButton PIDMoveButton;
-	private JoystickButton PIDTurnButton;
+	private JoystickButton pIDMoveButton;
+	private JoystickButton pIDTurnButton;
 	private JoystickButton resetEncButton;
-	private JoystickButton MoveLiftUpButton;
-	private JoystickButton MoveLiftDownButton;
+	private JoystickButton moveLiftUpButton;
+	private JoystickButton moveLiftDownButton;
 	private JoystickButton findTurnTimeConstantButton;
 	private JoystickButton updatePIDConstantsButton;
 	private JoystickButton updateEncoderDPPButton;
 
 	public Joystick manipulator;
-	private JoystickButton closeIntake;
-	private JoystickButton openIntake;
-	private JoystickButton raiseIntake;
-	private JoystickButton lowerIntake;
-	private JoystickButton intake;
-	private JoystickButton outake;
-	private JoystickButton toggleLeftIntake;
-	private JoystickButton toggleRightIntake;
+	private JoystickButton closeIntakeButton;
+	private JoystickButton openIntakeButton;
+	private JoystickButton raiseIntakeButton;
+	private JoystickButton lowerIntakeButton;
+	private JoystickButton intakeCubeButton;
+	private JoystickButton outakeCubeButton;
+	private JoystickButton toggleLeftIntakeButton;
+	private JoystickButton toggleRightIntakeButton;
 
 	public int getButton(String key, int def) {
 		if (!SmartDashboard.containsKey("Button/" + key)) {
@@ -76,13 +76,13 @@ public class OI {
 		leftJoy = new Joystick(0);
 		shiftDriveTypeButton = new JoystickButton(leftJoy, getButton("Shift Drive Type", 2));
 		shiftDriveTypeButton.whenPressed(new ShiftDriveType());
-		PIDMoveButton = new JoystickButton(leftJoy, getButton("PID Move", 7));
-		PIDMoveButton
+		pIDMoveButton = new JoystickButton(leftJoy, getButton("PID Move", 7));
+		pIDMoveButton
 				.whenPressed(new PIDMove(Robot.sd.getConst("Move Targ", 24), Robot.dt, Robot.sd, RobotMap.distEncAvg));
-		PIDTurnButton = new JoystickButton(leftJoy, getButton("PID Turn", 8));
+		pIDTurnButton = new JoystickButton(leftJoy, getButton("PID Turn", 8));
 		// PIDTurnButton.whenPressed(new PIDTurn(Robot.getConst("Turn Targ", 90),
 		// Robot.dt, Robot.sd RobotMap.fancyGyro));
-		PIDTurnButton
+		pIDTurnButton
 				.whenReleased(new PIDTurn(Robot.getConst("Turn Targ", 90), Robot.dt, Robot.sd, RobotMap.fancyGyro));
 		resetEncButton = new JoystickButton(leftJoy, getButton("Reset Dist Enc", 10));
 		resetEncButton.whenPressed(new ResetEncoders());
@@ -100,33 +100,33 @@ public class OI {
 		updatePIDConstantsButton.whenPressed(new UpdatePIDConstants());
 		updateEncoderDPPButton = new JoystickButton(rightJoy, getButton("Get Encoder Dist Per Pulse", 9));
 		updateEncoderDPPButton.whenPressed(new SetDistancePerPulse());
-		MoveLiftUpButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Up", 10));
-		MoveLiftDownButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Down", 11));
-		MoveLiftUpButton.whileHeld(new RunLift(Robot.lift, true));
-		MoveLiftDownButton.whileHeld(new RunLift(Robot.lift, false));
+		moveLiftUpButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Up", 10));
+		moveLiftDownButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Down", 11));
+		moveLiftUpButton.whileHeld(new RunLift(Robot.lift, true));
+		moveLiftDownButton.whileHeld(new RunLift(Robot.lift, false));
 
 		manipulator = new Joystick(2);
 		if (manipulator.getButtonCount() == 0) {
 			System.out.println("Manipulator not plugged in!");
 		} else {
-			closeIntake = new JoystickButton(manipulator, getButton("Close Intake Button", 1));
-			closeIntake.whenPressed(new CloseIntake());
-			openIntake = new JoystickButton(manipulator, getButton("Open Intake Button", 2));
-			openIntake.whenPressed(new OpenIntake());
+			closeIntakeButton = new JoystickButton(manipulator, getButton("Close Intake Button", 1));
+			closeIntakeButton.whenPressed(new CloseIntake());
+			openIntakeButton = new JoystickButton(manipulator, getButton("Open Intake Button", 2));
+			openIntakeButton.whenPressed(new OpenIntake());
 			// raiseIntake = new JoystickButton(manipulator, getButton("Raise Intake
 			// Button", 3));
 			// raiseIntake.whenPressed(new RaiseIntake());
 			// lowerIntake = new JoystickButton(manipulator, getButton("Lower Intake
 			// Button", 4));
 			// lowerIntake.whenPressed(new LowerIntake());
-			intake = new JoystickButton(manipulator, getButton("Intake Button", 5));
-			intake.whenPressed(new IntakeCube());
-			outake = new JoystickButton(manipulator, getButton("Outake Button", 6));
-			outake.whenPressed(new OutakeCube());
-			toggleLeftIntake = new JoystickButton(manipulator, getButton("Toggle Left Intake Button", 3));
-			toggleLeftIntake.whenPressed(new ToggleLeftIntake());
-			toggleRightIntake = new JoystickButton(manipulator, getButton("Toggle Right Intake Button", 4));
-			toggleRightIntake.whenPressed(new ToggleRightIntake());
+			intakeCubeButton = new JoystickButton(manipulator, getButton("Intake Button", 5));
+			intakeCubeButton.whenPressed(new IntakeCube());
+			outakeCubeButton = new JoystickButton(manipulator, getButton("Outake Button", 6));
+			outakeCubeButton.whenPressed(new OuttakeCube());
+			toggleLeftIntakeButton = new JoystickButton(manipulator, getButton("Toggle Left Intake Button", 3));
+			toggleLeftIntakeButton.whenPressed(new ToggleLeftIntake());
+			toggleRightIntakeButton = new JoystickButton(manipulator, getButton("Toggle Right Intake Button", 4));
+			toggleRightIntakeButton.whenPressed(new ToggleRightIntake());
 		}
 	}
 
