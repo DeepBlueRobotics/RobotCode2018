@@ -6,6 +6,8 @@ public interface DrivetrainInterface {
 
 	public void initDefaultCommand();
 
+	public boolean isVPIDUsed();
+
 	/**
 	 * Returns the getRate() of the left encoder
 	 * 
@@ -60,11 +62,6 @@ public interface DrivetrainInterface {
 	 * @return The speed that the right side of the drivetrain is set to [-1, 1]
 	 */
 	public double getDtRightSpeed();
-
-	/**
-	 * Updates the PIDControllers' PIDConstants based on SmartDashboard values
-	 */
-	public void updatePidConstants();
 
 	/**
 	 * Enable the VelocityPIDControllers used for velocity control on each side of
@@ -159,7 +156,13 @@ public interface DrivetrainInterface {
 	 *            be 1 / max speed
 	 * @return the new kF value as 1 / correct max speed
 	 */
-	public double resetVelocityPIDkFConsts();
+	public void resetVelocityPIDkFConsts();
+
+	public void resetVelocityPIDkIConsts();
+
+	public void resetVelocityPIDkPConsts();
+
+	public void resetAllVelocityPIDConsts();
 
 	/**
 	 * Gets the current max speed of the DT based on gearing (high or low gear)
@@ -172,4 +175,18 @@ public interface DrivetrainInterface {
 	 * Put left and right velocity controllers (PID) on SmartDashboard.
 	 */
 	public void putVelocityControllersToDashboard();
+
+	/**
+	 * Calculates a constant for calculating feed forward in PIDMove
+	 * 
+	 * @return the constant
+	 */
+	public double getPIDMoveConstant();
+
+	/**
+	 * Calculates a constant for calculating feed forward in PIDTurn
+	 * 
+	 * @return the constant
+	 */
+	public double getPIDTurnConstant();
 }

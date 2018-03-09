@@ -5,18 +5,20 @@ import org.usfirst.frc.team199.Robot2018.Robot;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- * Resets left and right drivetrain encoders to 0
+ *
  */
-public class ResetEncoders extends InstantCommand {
+public class ToggleLeftIntake extends InstantCommand {
 
-	public ResetEncoders() {
+	public ToggleLeftIntake() {
+		super();
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
-		super();
+		requires(Robot.intakeEject);
 	}
 
-	// Called just before this Command runs the first time
+	// Called once when the command executes
 	protected void initialize() {
-		Robot.dt.resetDistEncs();
+		Robot.intakeEject.toggleLeftIntake();
 	}
+
 }

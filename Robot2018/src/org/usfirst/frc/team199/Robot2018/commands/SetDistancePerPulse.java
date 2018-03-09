@@ -5,7 +5,8 @@ import org.usfirst.frc.team199.Robot2018.Robot;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Sets distance per pulse for left and right drivetrain encoders from
+ * SmartDashboard "Distance Per Pulse Left" & "Distance Per Pulse Right"
  */
 public class SetDistancePerPulse extends InstantCommand {
 

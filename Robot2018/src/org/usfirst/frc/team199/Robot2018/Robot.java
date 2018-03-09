@@ -12,9 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
-import org.usfirst.frc.team199.Robot2018.autonomous.Position;
+import org.usfirst.frc.team199.Robot2018.autonomous.State;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Strategy;
+import org.usfirst.frc.team199.Robot2018.commands.CloseIntake;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
@@ -70,6 +71,14 @@ public class Robot extends IterativeRobot {
 			return pref.getDouble("Const/" + key, def);
 		}
 
+		public void putConst(String key, double def) {
+			Preferences pref = Preferences.getInstance();
+			pref.putDouble("Const/" + key, def);
+			if (pref.getDouble("Const/ + key", def) != def) {
+				System.err.println("pref Key" + "Const/" + key + "already taken by a different type");
+			}
+		}
+
 		public void putData(String string, PIDController controller) {
 			SmartDashboard.putData(string, controller);
 		}
@@ -77,6 +86,11 @@ public class Robot extends IterativeRobot {
 		public void putNumber(String string, double d) {
 			SmartDashboard.putNumber(string, d);
 		}
+
+		public void putBoolean(String string, boolean b) {
+			SmartDashboard.putBoolean(string, b);
+		}
+
 		/*
 		 * if (!SmartDashboard.containsKey("Const/" + key)) { if
 		 * (!SmartDashboard.putNumber("Const/" + key, def)) {
@@ -88,6 +102,10 @@ public class Robot extends IterativeRobot {
 
 	public static double getConst(String key, double def) {
 		return sd.getConst(key, def);
+	}
+
+	public static void putConst(String key, double def) {
+		sd.putConst(key, def);
 	}
 
 	public static boolean getBool(String key, boolean def) {
@@ -113,8 +131,8 @@ public class Robot extends IterativeRobot {
 		climberAssist = new ClimberAssist();
 		intakeEject = new IntakeEject();
 		lift = new Lift();
-		dt = new Drivetrain();
-		oi = new OI();
+		dt = new Drivetrain(sd);
+		oi = new OI(this);
 
 		// auto position chooser
 		for (Autonomous.Position p : Autonomous.Position.values()) {
@@ -150,7 +168,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-
+		dt.disableVelocityPIDs();
 	}
 
 	@Override
@@ -166,8 +184,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		dt.resetAHRS();
-		AutoUtils.position = new Position(0, 0, 0);
+		AutoUtils.state = new State(0, 0, 0);
 		Scheduler.getInstance().add(new ShiftLowGear());
+		Scheduler.getInstance().add(new CloseIntake());
 		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
 		Autonomous.Position startPos = posChooser.getSelected();
 		double autoDelay = SmartDashboard.getNumber("Auto Delay", 0);
@@ -193,6 +212,9 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		System.out.println("In teleopInit()");
+		dt.resetAHRS();
+		AutoUtils.state = new State(0, 0, 0);
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
@@ -222,12 +244,21 @@ public class Robot extends IterativeRobot {
 		// SmartDashboard.putNumber("Right Enc Dist", dt.getRightDist());
 		// SmartDashboard.putNumber("Avg Enc Dist", dt.getEncAvgDist());
 		//
+
+		System.out.printf("Left: %1$5.2f; Right: %2$5.2f\n", RobotMap.dtLeft.get(), RobotMap.dtRight.get());
+
 		SmartDashboard.putNumber("Angle", dt.getAHRSAngle());
+		SmartDashboard.putNumber("Left Current draw", rmap.pdp.getCurrent(4));
+		SmartDashboard.putNumber("Right Current draw", rmap.pdp.getCurrent(11));
 	}
 
 	boolean firstTime = true;
 
+	@Override
 	public void testInit() {
+		System.out.println("In testInit()");
+		dt.resetAHRS();
+		AutoUtils.state = new State(0, 0, 0);
 	}
 
 	/**
@@ -239,26 +270,39 @@ public class Robot extends IterativeRobot {
 		// Robot.dt.enableVelocityPIDs();
 		// firstTime = false;
 		//// }
-		// Robot.dt.setVPIDs(Robot.getConst("VPID Test Set", 0.5));
+		// dt.getLeftVPID().setConsts(getConst("VelocityLeftkI", 0), 0,
+		// getConst("VelocityLeftkD", rmap.calcDefkD(dt.getCurrentMaxSpeed())),
+		// /* 1 / dt.getCurrentMaxSpeed() */Robot.getConst("VelocityLeftkF",
+		// 1 / Robot.getConst("Max Low Speed", 84)));
+		// dt.getRightVPID().setConsts(getConst("VelocityRightkI", 0), 0,
+		// getConst("VelocityRightkD", rmap.calcDefkD(dt.getCurrentMaxSpeed())),
+		// /* 1 / dt.getCurrentMaxSpeed() */Robot.getConst("VelocityRightkF",
+		// 1 / Robot.getConst("Max Low Speed", 84)));
+		// dt.resetAllVelocityPIDConsts();
+
+		// dt.setVPIDs(getConst("VPID Test Set", 0.5));
 
 		Scheduler.getInstance().run();
 
-		SmartDashboard.putNumber("Drivetrain/Left VPID Targ", Robot.dt.getLeftVPIDSetpoint());
-		SmartDashboard.putNumber("Drivetrain/Right VPID Targ", Robot.dt.getRightVPIDSetpoint());
-		SmartDashboard.putNumber("Left VPID Error", Robot.dt.getLeftVPIDerror());
-		SmartDashboard.putNumber("Right VPID Error", Robot.dt.getRightVPIDerror());
-		SmartDashboard.putNumber("Left Enc Rate", Robot.dt.getLeftEncRate());
-		SmartDashboard.putNumber("Right Enc Rate", Robot.dt.getRightEncRate());
+		// System.out.println("Left VPID Targ: " + dt.getLeftVPIDOutput());
+		// System.out.println("Right VPID Targ: " + dt.getRightVPIDOutput());
+		// System.out.println("Left VPID Error: " + dt.getLeftVPIDerror());
+		// System.out.println("Right VPID Error: " + dt.getRightVPIDerror());
+		// System.out.println("Left Enc Rate: " + dt.getLeftEncRate());
+		// System.out.println("Right Enc Rate: " + dt.getRightEncRate());
+		//
+		// System.out.println("Left Talon Speed: " + rmap.dtLeftMaster.get());
+		// System.out.println("Right Talon Speed: " + rmap.dtRightMaster.get());
 
-		SmartDashboard.putNumber("Left Enc Dist", dt.getLeftDist());
-		SmartDashboard.putNumber("Right Enc Dist", dt.getRightDist());
-		SmartDashboard.putNumber("Avg Enc Dist", dt.getEncAvgDist());
+		// System.out.println("Left Enc Dist " + dt.getLeftDist());
+		// System.out.println("Right Enc Dist " + dt.getRightDist());
+		// System.out.println("Avg Enc Dist" + dt.getEncAvgDist());
 
 		// dt.dtLeft.set(0.1);
 		// dt.dtRight.set(-oi.rightJoy.getY());
 		// dt.dtLeft.set(-oi.leftJoy.getY());
 		// dt.dtRight.set(-oi.rightJoy.getY());
 
-		dt.putVelocityControllersToDashboard();
+		// dt.putVelocityControllersToDashboard();
 	}
 }
