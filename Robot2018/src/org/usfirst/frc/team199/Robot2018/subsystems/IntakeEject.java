@@ -72,7 +72,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 *            Speed the left motor should run at
 	 */
 	public void runLeftIntake(double speed) {
-		double actualSpeed = speed * Robot.getConst("Intake Motor Left Speed Multiplier", 1);
+		double actualSpeed = speed * Robot.getConst("Intake Motor Speed Multiplier", 0.5);
 		leftIntakeMotor.set(actualSpeed);
 	}
 
@@ -83,7 +83,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 *            Speed the left motor should run at
 	 */
 	public void runRightIntake(double speed) {
-		double actualSpeed = speed * Robot.getConst("Intake Motor Right Speed Multiplier", 1);
+		double actualSpeed = speed * Robot.getConst("Intake Motor Speed Multiplier", 0.5);
 		rightIntakeMotor.set(actualSpeed);
 	}
 
@@ -91,7 +91,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * Spins the rollers
 	 * 
 	 * @param speed
-	 *            - positive -> rollers in, negative -> rollers out
+	 *            - negative -> rollers in, positive -> rollers out
 	 */
 	public void runIntake(double speed) {
 		runLeftIntake(speed);
