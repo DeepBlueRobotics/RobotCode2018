@@ -184,7 +184,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		dt.resetAHRS();
-		AutoUtils.state = new State(0, 0, 0);
+		AutoUtils.state = new State(0, 0, 0, SmartDashboard.getNumber("Center of Rotation", 0));
 		Scheduler.getInstance().add(new ShiftLowGear());
 		Scheduler.getInstance().add(new CloseIntake());
 		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
@@ -214,7 +214,7 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		System.out.println("In teleopInit()");
 		dt.resetAHRS();
-		AutoUtils.state = new State(0, 0, 0);
+		AutoUtils.state = new State(0, 0, 0, SmartDashboard.getNumber("Center of Rotation", 0));
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
@@ -258,7 +258,7 @@ public class Robot extends IterativeRobot {
 	public void testInit() {
 		System.out.println("In testInit()");
 		dt.resetAHRS();
-		AutoUtils.state = new State(0, 0, 0);
+		AutoUtils.state = new State(0, 0, 0, SmartDashboard.getNumber("Center of Rotation", 0));
 	}
 
 	/**

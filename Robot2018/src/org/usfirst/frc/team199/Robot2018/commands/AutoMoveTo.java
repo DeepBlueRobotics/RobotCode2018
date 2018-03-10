@@ -17,10 +17,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class AutoMoveTo extends CommandGroup {
 
-	public AutoMoveTo(String[] args, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource pidMoveSrc,
+	public AutoMoveTo(String[] args, double centerOfRot, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource pidMoveSrc,
 			PIDSource pidTurnSource) {
 		// requires(Drivetrain);
-		double centerOfRotError = 0;
 		double rotation;
 		double[] point = { 0, 0 };
 		
@@ -28,7 +27,7 @@ public class AutoMoveTo extends CommandGroup {
 			point = AutoUtils.parsePoint(args[i]);
 			addSequential(new PIDTurn(point, dt, sd, pidTurnSource));
 			
-			double dist = Math.sqrt(point[0]*point[0] + point[1]*point[1]) + centerOfRotError; // TODO: subtract rotation error
+			double dist = Math.sqrt(point[0]*point[0] + point[1]*point[1]) + centerOfRot; // TODO: subtract rotation error
 			addSequential(new PIDMove(dist, dt, sd, pidMoveSrc));
 		}
 		
@@ -41,13 +40,13 @@ public class AutoMoveTo extends CommandGroup {
 		} else if (AutoUtils.isDouble(lastArg)) { // move a little after turn to end up in the correct position
 			rotation = Double.valueOf(lastArg);
 			addSequential(new PIDTurn(rotation, dt, sd, pidTurnSource, true));
-			addSequential(new PIDTurn(centerOfRotError, dt, sd, pidTurnSource));
+			addSequential(new PIDTurn(centerOfRot, dt, sd, pidTurnSource));
 		} else {
 			throw new IllegalArgumentException();
 		}
 	}
 
-	public AutoMoveTo(String[] args) {
-		this(args, Robot.dt, Robot.sd, Robot.dt.getDistEncAvg(), Robot.dt.getGyro());
+	public AutoMoveTo(String[] args, double centerOfRot) {
+		this(args, centerOfRot, Robot.dt, Robot.sd, Robot.dt.getDistEncAvg(), Robot.dt.getGyro());
 	}
 }

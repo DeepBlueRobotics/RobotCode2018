@@ -4,11 +4,13 @@ public class State {
 	private double currX;
 	private double currY;
 	private double currRotation;
+	private double centerOfRot;
 
-	public State(double x, double y, double rot) {
+	public State(double x, double y, double rot, double centerOfRot) {
 		currX = x;
 		currY = y;
 		currRotation = rot;
+		this.centerOfRot = centerOfRot;
 	}
 
 	/*
@@ -48,5 +50,9 @@ public class State {
 
 	public void changeRot(double rot) {
 		currRotation += rot;
+	}
+	
+	public double getCenterOfRot() {
+		return centerOfRot;
 	}
 }
