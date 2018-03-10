@@ -9,6 +9,7 @@ package org.usfirst.frc.team199.Robot2018.subsystems;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.RobotMap;
+import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
 import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
 import org.usfirst.frc.team199.Robot2018.autonomous.VelocityPIDController;
 import org.usfirst.frc.team199.Robot2018.commands.TeleopDrive;
@@ -41,16 +42,56 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	private final PIDSourceAverage distEncAvg = RobotMap.distEncAvg;
 	public final SpeedControllerGroup dtLeft = RobotMap.dtLeft;
 	public final SpeedControllerGroup dtRight = RobotMap.dtRight;
-	private final DifferentialDrive robotDrive = RobotMap.robotDrive;
-	private final VelocityPIDController leftVelocityController = RobotMap.leftVelocityController;
-	private final VelocityPIDController rightVelocityController = RobotMap.rightVelocityController;
+	private DifferentialDrive robotDrive;
+	private VelocityPIDController leftVelocityController;
+	private VelocityPIDController rightVelocityController;
 
 	private final AHRS fancyGyro = RobotMap.fancyGyro;
 	private final DoubleSolenoid dtGear = RobotMap.dtGear;
 
+	private SmartDashboardInterface sd;
+
+	private boolean highGear;
+
+	public Drivetrain(SmartDashboardInterface sd) {
+		this.sd = sd;
+
+		highGear = false;
+
+		// all 0s for controller construction because they all get set to right values
+		// by resetAllVelocityPIDConsts
+		leftVelocityController = new VelocityPIDController(0, 0, 0, 0, leftEncRate, dtLeft);
+		rightVelocityController = new VelocityPIDController(0, 0, 0, 0, rightEncRate, dtRight);
+		resetAllVelocityPIDConsts();
+
+		leftVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
+				Robot.getConst("Max High Speed", 204));
+		leftVelocityController.setOutputRange(-1.0, 1.0);
+		leftVelocityController.setContinuous(false);
+		leftVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceLeft", 2));
+		SmartDashboard.putData(leftVelocityController);
+
+		rightVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
+				Robot.getConst("Max High Speed", 204));
+		rightVelocityController.setOutputRange(-1.0, 1.0);
+		rightVelocityController.setContinuous(false);
+		rightVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceRight", 2));
+
+		if (Robot.getBool("Teleop velocity PID", false)) {
+			robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
+			robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
+		} else {
+			robotDrive = new DifferentialDrive(dtLeft, dtRight);
+		}
+	}
+
 	@Override
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleopDrive());
+	}
+
+	public boolean isVPIDUsed() {
+		return Robot.getBool("Teleop velocity PID", false);
 	}
 
 	public PIDSourceAverage getDistEncAvg() {
@@ -93,12 +134,16 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		return rightVelocityController.getError();
 	}
 
-	public double getLeftVPIDSetpoint() {
-		return leftVelocityController.get();
+	public double getLeftVPIDOutput() {
+		return dtLeft.get();
 	}
 
-	public double getRightVPIDSetpoint() {
-		return rightVelocityController.get();
+	public double getRightVPIDOutput() {
+		return dtRight.get();
+	}
+
+	public boolean VPIDsOnTarg() {
+		return leftVelocityController.onTarget() && rightVelocityController.onTarget();
 	}
 
 	/**
@@ -145,13 +190,21 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		dtRightSlave.set(ControlMode.Velocity, setValue);
 	}
 
+	public VelocityPIDController getLeftVPID() {
+		return leftVelocityController;
+	}
+
+	public VelocityPIDController getRightVPID() {
+		return rightVelocityController;
+	}
+
 	/**
 	 * Drives based on joystick input and SmartDashboard values
 	 */
 	@Override
 	public void teleopDrive() {
 		boolean squareJoy = Robot.getBool("Square Joystick Values", true);
-		if (Robot.getBool("Arcade Drive", true)) {
+		if (SmartDashboard.getBoolean("Arcade Drive", true)) {
 			double forw;
 			double turn;
 			if (Robot.getBool("Arcade Drive Default Setup", true)) {
@@ -191,6 +244,21 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void arcadeDrive(double speed, double turn) {
+		if (Robot.getBool("Arcade Drive Default Setup", true)) {
+			if (Robot.oi.leftJoy.getRawButton(1)) {
+				speed *= Robot.getConst("Speed Slow Ratio", 0.5);
+			}
+			if (Robot.oi.rightJoy.getRawButton(1)) {
+				turn *= Robot.getConst("Turn Slow Ratio", 0.5);
+			}
+		} else {
+			if (Robot.oi.rightJoy.getRawButton(1)) {
+				speed *= Robot.getConst("Speed Slow Ratio", 0.5);
+			}
+			if (Robot.oi.leftJoy.getRawButton(1)) {
+				turn *= Robot.getConst("Turn Slow Ratio", 0.5);
+			}
+		}
 		robotDrive.arcadeDrive(speed, turn, Robot.getBool("Square Drive Values", false));
 	}
 
@@ -204,6 +272,10 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void tankDrive(double leftSpeed, double rightSpeed) {
+		if (Robot.oi.leftJoy.getRawButton(1) || Robot.oi.rightJoy.getRawButton(1)) {
+			leftSpeed *= Robot.getConst("Speed Slow Ratio", 0.5);
+			rightSpeed *= Robot.getConst("Speed Slow Ratio", 0.5);
+		}
 		robotDrive.tankDrive(leftSpeed, rightSpeed, Robot.getBool("Square Drive Values", false));
 	}
 
@@ -230,18 +302,6 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	}
 
 	/**
-	 * Updates the PIDControllers' PIDConstants based on SmartDashboard values
-	 */
-	@Override
-	public void updatePidConstants() {
-		leftVelocityController.setPID(Robot.getConst("VelocityLeftkI", 0), 0,
-				Robot.rmap.calcDefkD(getCurrentMaxSpeed()));
-		rightVelocityController.setPID(Robot.getConst("VelocityRightkI", 0), 0,
-				Robot.rmap.calcDefkD(getCurrentMaxSpeed()));
-		resetVelocityPIDkFConsts();
-	}
-
-	/**
 	 * Enable the VelocityPIDControllers used for velocity control on each side of
 	 * the DT
 	 */
@@ -257,8 +317,10 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void disableVelocityPIDs() {
-		leftVelocityController.disable();
-		rightVelocityController.disable();
+		// reset disables and also clears the error so that it isn't used when they
+		// are reenabled.
+		leftVelocityController.reset();
+		rightVelocityController.reset();
 	}
 
 	/**
@@ -346,12 +408,17 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 *            low gear (false, kForward)
 	 */
 	@Override
-	public void shiftGears(boolean highGear) {
-		if (highGear ^ Robot.getBool("Drivetrain Gear Shift Low", false)) {
+	public void shiftGears(boolean shiftToHighGear) {
+		if (shiftToHighGear ^ Robot.getBool("Drivetrain Gear Shift Low", false)) {
 			dtGear.set(DoubleSolenoid.Value.kReverse);
+			highGear = true;
 		} else {
 			dtGear.set(DoubleSolenoid.Value.kForward);
+			highGear = false;
 		}
+		sd.putBoolean("High Gear", highGear);
+		resetAllVelocityPIDConsts();
+		resetVPIDAndRobotDriveRanges();
 	}
 
 	/**
@@ -369,6 +436,13 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		return fancyGyro;
 	}
 
+	@Override
+	public void resetAllVelocityPIDConsts() {
+		resetVelocityPIDkFConsts();
+		resetVelocityPIDkPConsts();
+		resetVelocityPIDkIConsts();
+	}
+
 	/**
 	 * Reset the kf constants for both VelocityPIDControllers based on current DT
 	 * gearing (high or low gear).
@@ -379,18 +453,57 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 * @return the new kF value as 1 / correct max speed
 	 */
 	@Override
-	public double resetVelocityPIDkFConsts() {
-		double newKF = 1 / getCurrentMaxSpeed();
+	public void resetVelocityPIDkFConsts() {
+		// double newKF = 1 / getCurrentMaxSpeed();
+		// for this way of doing velocity PID, kF should always be 0
+		double newKF = 0;
 		leftVelocityController.setF(newKF);
 		rightVelocityController.setF(newKF);
 		SmartDashboard.putNumber("VPID kF", newKF);
-		return newKF;
 	}
 
-	public double resetVPIDInputRanges() {
+	/**
+	 * Reset the kI constants for both VelocityPIDControllers based on current DT
+	 * gearing (high or low gear).
+	 */
+	@Override
+	public void resetVelocityPIDkIConsts() {
+		// 0.011 was calculated manually. 84 is the low gear max speed, to which we
+		// scale the constants.
+		double defaultkI = Robot.getConst("VelocityPidR", 3) / Robot.rmap.getDrivetrainTimeConstant()
+				* Robot.rmap.getCycleTime();
+		double newLeftkI = Robot.getConst("VelocityLeftkI", defaultkI) / getCurrentMaxSpeed();
+		double newRightkI = Robot.getConst("VelocityRightkI", defaultkI) / getCurrentMaxSpeed();
+		// I is P because wpilib is dumb
+		leftVelocityController.setP(newLeftkI);
+		rightVelocityController.setP(newRightkI);
+		SmartDashboard.putNumber("VPID Left kI", newLeftkI);
+		SmartDashboard.putNumber("VPID Right kI", newRightkI);
+	}
+
+	/**
+	 * Reset the kD constants for both VelocityPIDControllers based on current DT
+	 * gearing (high or low gear).
+	 */
+	@Override
+	public void resetVelocityPIDkPConsts() {
+		// 0.012 was calculated manually. 84 is the low gear max speed, to which we
+		// scale the constants.
+		double newkP = Robot.getConst("VelocityPidR", 3) / getCurrentMaxSpeed();
+		// P is D because wpilib is dumb
+		leftVelocityController.setD(newkP);
+		rightVelocityController.setD(newkP);
+		SmartDashboard.putNumber("VPID Left kP", newkP);
+		SmartDashboard.putNumber("VPID Right kP", newkP);
+	}
+
+	public double resetVPIDAndRobotDriveRanges() {
 		double currentMaxSpd = getCurrentMaxSpeed();
 		leftVelocityController.setInputRange(-currentMaxSpd, currentMaxSpd);
 		rightVelocityController.setInputRange(-currentMaxSpd, currentMaxSpd);
+		if (Robot.getBool("Teleop velocity PID", false)) {
+			robotDrive.setMaxOutput(currentMaxSpd);
+		}
 		return currentMaxSpd;
 	}
 
@@ -401,7 +514,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public double getCurrentMaxSpeed() {
-		if (Robot.getBool("High Gear", true)) {
+		if (highGear) {
 			return Robot.getConst("Max High Speed", 204);
 		} else {
 			return Robot.getConst("Max Low Speed", 84);
@@ -420,9 +533,12 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	public double getPIDMoveConstant() {
 		double G = Robot.rmap.getGearRatio();
 		double T = Robot.rmap.getStallTorque();
+		double fudge = Robot.getConst("PID Move Fudge Factor", 0.25);
+		T *= fudge;
 		double R = Robot.rmap.getRadius();
 		double M = Robot.rmap.getWeight();
-		return Math.sqrt((8 * T * G) / (R * M));
+		M = convertNtokG(M);
+		return Math.sqrt(Robot.rmap.convertMtoIn((8 * T * G) / (R * M)));
 	}
 
 	public double getPIDTurnConstant() {
@@ -430,7 +546,8 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		double T = Robot.rmap.getStallTorque();
 		double R = Robot.rmap.getRadius();
 		double M = Robot.rmap.getWeight();
-		return 4 * Math.sqrt((T * G) / (R * M));
+		M = convertNtokG(M);
+		return 4 * Math.sqrt(Robot.rmap.convertMtoIn((T * G) / (R * M)));
 	}
 
 	private double convertNtokG(double newtons) {

@@ -8,7 +8,6 @@
 package org.usfirst.frc.team199.Robot2018;
 
 import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
-import org.usfirst.frc.team199.Robot2018.autonomous.VelocityPIDController;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -23,7 +22,6 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -57,7 +55,6 @@ public class RobotMap {
 	public static WPI_TalonSRX dtLeftMaster;
 	public static WPI_VictorSPX dtLeftSlave;
 	public static SpeedControllerGroup dtLeft;
-	public static VelocityPIDController leftVelocityController;
 
 	public static DigitalSource rightEncPort1;
 	public static DigitalSource rightEncPort2;
@@ -66,9 +63,7 @@ public class RobotMap {
 	public static WPI_TalonSRX dtRightMaster;
 	public static WPI_VictorSPX dtRightSlave;
 	public static SpeedControllerGroup dtRight;
-	public static VelocityPIDController rightVelocityController;
 
-	public static DifferentialDrive robotDrive;
 	public static PIDSourceAverage distEncAvg;
 
 	public static AHRS fancyGyro;
@@ -98,6 +93,8 @@ public class RobotMap {
 		// so if we went above 40, the motors would stop completely
 		mc.configContinuousCurrentLimit(40, 0);
 		mc.enableCurrentLimit(true);
+
+		mc.configNeutralDeadband(Robot.getConst("Motor Deadband", 0.001), kTimeout);
 	}
 
 	/**
@@ -114,6 +111,8 @@ public class RobotMap {
 		mc.configNominalOutputReverse(0, kTimeout);
 		mc.configPeakOutputForward(1, kTimeout);
 		mc.configPeakOutputReverse(-1, kTimeout);
+
+		mc.configNeutralDeadband(Robot.getConst("Motor Deadband", 0.001), kTimeout);
 	}
 
 	public RobotMap() {
@@ -158,16 +157,6 @@ public class RobotMap {
 		// inverted bc gear boxes invert from input to output
 		dtLeft.setInverted(true);
 
-		leftVelocityController = new VelocityPIDController(Robot.getConst("VelocityLeftkI", 0), 0,
-				Robot.getConst("VelocityLeftkD", calcDefkD(Robot.getConst("Max Low Speed", 84))),
-				1 / Robot.getConst("Max Low Speed", 84), leftEncRate, dtLeft);
-		leftVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
-				Robot.getConst("Max High Speed", 204));
-		leftVelocityController.setOutputRange(-1.0, 1.0);
-		leftVelocityController.setContinuous(false);
-		leftVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceLeft", 2));
-		SmartDashboard.putData(leftVelocityController);
-
 		rightEncPort1 = new DigitalInput(getPort("1RightEnc", 1));
 		rightEncPort2 = new DigitalInput(getPort("2RightEnc", 0));
 		rightEncDist = new Encoder(rightEncPort1, rightEncPort2);
@@ -186,22 +175,11 @@ public class RobotMap {
 		// inverted bc gear boxes invert from input to output
 		dtRight.setInverted(true);
 
-		rightVelocityController = new VelocityPIDController(Robot.getConst("VelocityRightkI", 0), 0,
-				Robot.getConst("VelocityRightkD", calcDefkD(Robot.getConst("Max Low Speed", 84))),
-				1 / Robot.getConst("Max Low Speed", 84), rightEncRate, dtRight);
-		rightVelocityController.setInputRange(-Robot.getConst("Max High Speed", 204),
-				Robot.getConst("Max High Speed", 204));
-		rightVelocityController.setOutputRange(-1.0, 1.0);
-		rightVelocityController.setContinuous(false);
-		rightVelocityController.setAbsoluteTolerance(Robot.getConst("VelocityToleranceRight", 2));
-
-		robotDrive = new DifferentialDrive(leftVelocityController, rightVelocityController);
-		robotDrive.setMaxOutput(Robot.getConst("Max High Speed", 204));
-		// robotDrive = new DifferentialDrive(dtLeft, dtRight);
-
 		distEncAvg = new PIDSourceAverage(leftEncDist, rightEncDist);
 		fancyGyro = new AHRS(SPI.Port.kMXP);
 		dtGear = new DoubleSolenoid(getPort("1dtGearSolenoid", 0), getPort("2dtGearSolenoid", 1));
+
+		calcDefkD(Robot.getConst("Max Low Speed", 84));
 	}
 
 	/**
@@ -238,10 +216,7 @@ public class RobotMap {
 		 * be converted from rpm to radians per second, so divide by 60 and multiply to
 		 * get radians.
 		 */
-		double gearReduction = getGearRatio();
-		double radius = getRadius();
-		double timeConstant = getOmegaMax() / gearReduction / 60 * 2 * Math.PI * convertNtokG(getWeight()) / 2 * radius
-				* radius / (getStallTorque() * gearReduction * 2);
+		double timeConstant = getDrivetrainTimeConstant();
 		double cycleTime = getCycleTime();
 		/*
 		 * The denominator of kD is 1-(e ^ -cycleTime / timeConstant). The numerator is
@@ -251,8 +226,22 @@ public class RobotMap {
 		return 1 / denominator / maxSpeed;
 	}
 
+	/**
+	 * Gets the time constant of the drivetrain, which is used to calculate PID
+	 * constants.
+	 * 
+	 * @return time constant
+	 */
+	public double getDrivetrainTimeConstant() {
+		double gearReduction = getGearRatio();
+		double radius = getRadius();
+		double timeConstant = getOmegaMax() / gearReduction / 60 * 2 * Math.PI * convertNtokG(getWeight()) / 2 * radius
+				* radius / (getStallTorque() * gearReduction * 2);
+		return timeConstant;
+	}
+
 	public double getGearRatio() {
-		return Robot.getBool("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
+		return SmartDashboard.getBoolean("High Gear", false) ? Robot.getConst("High Gear Gear Reduction", 5.392)
 				: Robot.getConst("Low Gear Gear Reduction", 12.255);
 	}
 
@@ -285,4 +274,9 @@ public class RobotMap {
 		// weight / accel due to grav = kg
 		return newtons / 9.81;
 	}
+
+	public double convertMtoIn(double meters) {
+		return meters * 39.37;
+	}
+
 }

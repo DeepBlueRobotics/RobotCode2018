@@ -71,23 +71,12 @@ public class PIDTurn extends Command implements PIDOutput {
 		// calculates the maximum turning speed in degrees/sec based on the max linear
 		// speed in inches/s and the distance (inches) between sides of the DT
 		double maxTurnSpeed = dt.getCurrentMaxSpeed() * 360 / (Math.PI * getDistanceBetweenWheels());
-		double kf = 1 / (maxTurnSpeed * sd.getConst("Default PID Update Time", 0.05));
-		turnController = new PIDController(sd.getConst("TurnkP", 1), sd.getConst("TurnkI", 0), sd.getConst("TurnkD", 0),
-				kf, ahrs, this) {
-			/**
-			 * Turn Velocity: V = 4r sqrt((T*G*theta) / (R*m)) where r = half of distance
-			 * between wheels T = max torque of wheels G = gear ratio theta = rotational
-			 * distance to end of turn R = radius of wheels m = mass
-			 */
-			@Override
-			protected double calculateFeedForward() {
-				double originalFF = super.calculateFeedForward();
-				double feedForwardConst = dt.getPIDTurnConstant();
-				double error = getError();
-				return feedForwardConst * (getDistanceBetweenWheels() / 2) * Math.signum(error)
-						* Math.sqrt(Math.abs(error)) + originalFF;
-			}
-		};
+		double r = Robot.getConst("TurnPidR", 3.0);
+		double kP = r / Robot.rmap.getDrivetrainTimeConstant() / maxTurnSpeed;
+		double kI = 0;
+		double kD = r / maxTurnSpeed;
+		double kF = 1 / (maxTurnSpeed * sd.getConst("Default PID Update Time", 0.05));
+		turnController = new PIDController(kP, kI, kD, kF, ahrs, this);
 		// tim = new Timer();
 		sd.putData("Turn PID", turnController);
 	}
@@ -188,7 +177,9 @@ public class PIDTurn extends Command implements PIDOutput {
 		System.out.println("Turn to point: " + turnToPoint);
 
 		turnController.disable();
-		dt.enableVelocityPIDs();
+		if (dt.isVPIDUsed()) {
+			dt.enableVelocityPIDs();
+		}
 		System.out.println("initialize2s");
 		// dt.resetAHRS();
 		System.out.println("after reset");

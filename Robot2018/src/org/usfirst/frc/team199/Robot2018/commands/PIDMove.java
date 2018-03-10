@@ -58,21 +58,18 @@ public class PIDMove extends Command implements PIDOutput {
 		if (Robot.dt != null) {
 			requires(Robot.dt);
 		}
-		double kf = 1 / (dt.getCurrentMaxSpeed() * sd.getConst("Default PID Update Time", 0.05));
-		moveController = new PIDController(sd.getConst("MovekP", 0.1), sd.getConst("MovekI", 0),
-				sd.getConst("MovekD", 0), kf, avg, this) {
-			/**
-			 * Move Velocity: V = sqrt(8TGd) / (R*m) where T = max torque of wheels G = gear
-			 * ratio d = distance remaining R = radius of wheels m = mass
-			 */
-			@Override
-			protected double calculateFeedForward() {
-				double originalFF = super.calculateFeedForward();
-				double feedForwardConst = dt.getPIDMoveConstant();
-				double error = getError();
-				return Math.signum(error) * feedForwardConst * Math.sqrt(Math.abs(error)) + originalFF;
-			}
-		};
+
+		double maxSpeed = dt.getCurrentMaxSpeed();
+
+		System.out.println("proposed p = " + (dt.getPIDMoveConstant() / maxSpeed));
+
+		double r = Robot.getConst("DistancePidR", 3.0);
+		double kP = r / Robot.rmap.getDrivetrainTimeConstant() / maxSpeed;
+		double kI = 0;
+		double kD = r / maxSpeed;
+		double kF = 1 / (maxSpeed * sd.getConst("Default PID Update Time", 0.05)) / maxSpeed;
+
+		moveController = new PIDController(kP, kI, kD, kF, avg, this);
 		sd.putData("Move PID", moveController);
 	}
 
@@ -133,17 +130,15 @@ public class PIDMove extends Command implements PIDOutput {
 
 		dt.resetDistEncs();
 		moveController.disable();
-		// input is in inches
-		moveController.setInputRange(-Robot.getConst("Max High Speed", 204), Robot.getConst("Max High Speed", 204));
 		// output in "motor units" (arcade and tank only accept values [-1, 1]
 		moveController.setOutputRange(-1.0, 1.0);
 		moveController.setContinuous(false);
-		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 0.1));
+		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 0.5));
 		System.out.println("move target = " + target);
 		moveController.setSetpoint(target);
 
 		moveController.enable();
-		dt.enableVelocityPIDs();
+		// dt.enableVelocityPIDs();
 	}
 
 	/**
