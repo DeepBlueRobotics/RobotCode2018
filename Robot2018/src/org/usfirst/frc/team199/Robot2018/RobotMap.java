@@ -127,12 +127,12 @@ public class RobotMap {
 		climberMotor = new WPI_TalonSRX(getPort("ClimberTalonSRX", 6));
 		configSRX(climberMotor);
 
-		leftIntakeMotor = new VictorSP(getPort("IntakeLeftVictorSP", 9));
-		rightIntakeMotor = new VictorSP(getPort("IntakeRightVictorSP", 8));
-		leftIntakeHorizontalSolenoid = new DoubleSolenoid(getPort("IntakeLeftHorizontalSolenoidPort1", 2),
-				getPort("IntakeLeftHorizontalSolenoidPort2", 3));
-		rightIntakeHorizontalSolenoid = new DoubleSolenoid(getPort("IntakeRightHorizontalSolenoidPort1", 4),
-				getPort("IntakeRightHorizontalSolenoidPort2", 5));
+		leftIntakeMotor = new VictorSP(getPort("IntakeLeftVictorSP", 8));
+		rightIntakeMotor = new VictorSP(getPort("IntakeRightVictorSP", 9));
+		leftIntakeHorizontalSolenoid = new DoubleSolenoid(getPort("IntakeLeftHorizontalSolenoidPort1", 4),
+				getPort("IntakeLeftHorizontalSolenoidPort2", 5));
+		rightIntakeHorizontalSolenoid = new DoubleSolenoid(getPort("IntakeRightHorizontalSolenoidPort1", 2),
+				getPort("IntakeRightHorizontalSolenoidPort2", 3));
 		// leftIntakeVerticalSolenoid = new
 		// DoubleSolenoid(getPort("IntakeLeftVerticalSolenoidPort1", 6),
 		// getPort("IntakeLeftVerticalSolenoidPort2", 7));
