@@ -55,16 +55,6 @@ public interface IntakeEjectInterface {
 	public void runIntake(double speed);
 
 	/**
-	 * Raises the intake
-	 */
-	public void raiseIntake();
-
-	/**
-	 * Lowers the intake
-	 */
-	public void lowerIntake();
-
-	/**
 	 * Toggles the left intake between open and closed
 	 */
 	public void toggleLeftIntake();

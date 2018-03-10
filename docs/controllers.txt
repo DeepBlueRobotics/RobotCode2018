@@ -1,60 +1,59 @@
-controller indices
-	manipulator
-		buttons
-			1	A
-			2	B
-			3	X
-			4	Y
-			5	LB
-			6	RB
-			7	back
-			8	start
-			9	N/a
-			10	N/a
-		press mode to toggle mode light
-		axes
-			0	left thumbstick X axis (D-pad if mode light on)
-			1	left thumbstick Y axis (D-pad if mode light on)
-			2	left trigger
-			3	right trigger
-			4	right thumbstick X axis
-			5	right thumbstick Y axis
-				mode light off:
-		POV
-			D-pad (left joystick if mode light on)
-		rumble
-			fake news
-	left joystick
-		buttons
-			1
-			2
-			3
-			4
-			5
-			6
-			7
-			8
-			9
-			10
-			11
-		axes
-			0	X axis
-			1	Y axis (forward is negative)
-			2	Z axis (knob at base)
-	right joystick
-		buttons
-			1
-			2
-			3
-			4
-			5
-			6
-			7
-			8
-			9
-			10
-			11
-		axes
-			0	X axis
-			1	Y axis (forward is negative)
-			2	Z axis (knob at base)
+0 left joystick
+	buttons
+		1	slow forward-backward movement in arcade, or all movement in tank
+		2	toggle drive type (arcade/tank) [ShiftDriveType]
+		3
+		4
+		5
+		6
+		7	move with PID by inches from SmartDashboard "Move Targ" [PIDMove]
+		8	turn with PID by degrees from SmartDashboard "Turn Targ" [PIDTurn]
+		9
+		10	reset left and right drivetrain encoders to 0 [ResetEncoders]
+		11	run experiment to find turning time constant (FindTurnTimeConstant)
+	axes
+		0	X axis	if NOT default: arcade turn
+		1	Y axis	tank left, arcade forward (if default)
+		2	Z axis
+1 right joystick
+	buttons
+		1	slow turning movement in arcade, or all movement in tank
+		2	shift drivetrain to low gear [ShiftLowGear]
+		3	shift drivetrain to high gear [ShiftHighGear]
+		4
+		5
+		6
+		7
+		8	update the PIDController constants with SmartDashboard values [UpdatePIDConstants]
+		9	set the left and right encoder distance per pulse with SmartDashboard values [SetDistancePerPulse]
+		10	run lift motor up [RunLift]
+		11	run lift motor down [RunLift]
+	axes
+		0	X axis	arcade turn (if default)
+		1	Y axis	tank right, if NOT default: arcade forward
+		2	Z axis
+2 manipulator
+	buttons
+		1	A	close intake [CloseIntake]
+		2	B	open intake [OpenIntake]
+		3	X	raise intake [RaiseIntake]
+		4	Y	lower intake [LowerIntake]
+		5	LB	take in [IntakeCube]
+		6	RB	take out [OuttakeCube]
+		7	back
+		8	start
+		9	N/a
+		10	N/a
+	press mode to toggle mode light
+	axes
+		0	left thumbstick X axis (D-pad if mode light on)
+		1	left thumbstick Y axis (D-pad if mode light on)
+		2	left trigger
+		3	right trigger
+		4	right thumbstick X axis
+		5	right thumbstick Y axis
+			mode light off:
+	POV
+		D-pad (left joystick if mode light on)
+	rumble
+		fake news

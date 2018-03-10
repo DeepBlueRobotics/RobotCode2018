@@ -3,7 +3,6 @@ package org.usfirst.frc.team199.Robot2018.commands;
 import org.usfirst.frc.team199.Robot2018.Robot;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Shifts the DT to low gear.
@@ -20,7 +19,5 @@ public class ShiftLowGear extends InstantCommand {
 	@Override
 	protected void initialize() {
 		Robot.dt.shiftGears(false);
-		SmartDashboard.putBoolean("High Gear", false);
-		Robot.dt.resetVelocityPIDkFConsts();
 	}
 }

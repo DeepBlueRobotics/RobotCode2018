@@ -1,11 +1,11 @@
 package org.usfirst.frc.team199.Robot2018.autonomous;
 
-public class Position {
+public class State {
 	private double currX;
 	private double currY;
 	private double currRotation;
 
-	public Position(double x, double y, double rot) {
+	public State(double x, double y, double rot) {
 		currX = x;
 		currY = y;
 		currRotation = rot;

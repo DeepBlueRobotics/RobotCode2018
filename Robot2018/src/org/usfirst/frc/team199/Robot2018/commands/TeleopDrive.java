@@ -23,14 +23,23 @@ public class TeleopDrive extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		// Robot.dt.enableVelocityPIDs();
+		if (Robot.getBool("Teleop velocity PID", false)) {
+			Robot.dt.enableVelocityPIDs();
+		}
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.dt.resetVPIDInputRanges();
-		Robot.dt.updatePidConstants();
+		if (Robot.getBool("Teleop velocity PID", false)) {
+			Robot.dt.resetVPIDAndRobotDriveRanges();
+			Robot.dt.resetAllVelocityPIDConsts();
+			if (Robot.dt.VPIDsOnTarg()) {
+				Robot.dt.disableVelocityPIDs();
+			} else {
+				Robot.dt.enableVelocityPIDs();
+			}
+		}
 		Robot.dt.teleopDrive();
 	}
 
