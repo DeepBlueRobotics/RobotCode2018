@@ -10,7 +10,7 @@
 		8	turn with PID by degrees from SmartDashboard "Turn Targ" [PIDTurn]
 		9
 		10	reset left and right drivetrain encoders to 0 [ResetEncoders]
-		11	run experiment to find turning time constant (FindTurnTimeConstant)
+		11	run experiment to find turning time constant [FindTurnTimeConstant]
 	axes
 		0	X axis	if NOT default: arcade turn
 		1	Y axis	tank left, arcade forward (if default)
@@ -18,9 +18,9 @@
 1 right joystick
 	buttons
 		1	slow turning movement in arcade, or all movement in tank
-		2	shift drivetrain to low gear [ShiftLowGear]
-		3	shift drivetrain to high gear [ShiftHighGear]
-		4
+		2	
+		3	shift drivetrain to low gear [ShiftLowGear]
+		4	shift drivetrain to high gear [ShiftHighGear]
 		5
 		6
 		7
