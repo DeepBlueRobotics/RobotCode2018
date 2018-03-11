@@ -87,7 +87,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Left VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Left VPID Targ",
+              "_title": "/SmartDashboard/Drivetrain/Left VPID Targ",
               "Visible time": 30.0,
               "SmartDashboard/Drivetrain/Left VPID Targ visible": true
             }
@@ -100,7 +100,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Right VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Right VPID Targ",
+              "_title": "/SmartDashboard/Drivetrain/Right VPID Targ",
               "Visible time": 30.0,
               "SmartDashboard/Drivetrain/Right VPID Targ visible": true
             }
@@ -385,7 +385,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Left VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Left VPID Targ",
+              "_title": "/SmartDashboard/Drivetrain/Left VPID Targ",
               "Visible time": 10.0,
               "SmartDashboard/Drivetrain/Left VPID Targ visible": true
             }
@@ -398,7 +398,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Right VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Right VPID Targ",
+              "_title": "/SmartDashboard/Drivetrain/Right VPID Targ",
               "Visible time": 10.0,
               "SmartDashboard/Drivetrain/Right VPID Targ visible": true
             }
