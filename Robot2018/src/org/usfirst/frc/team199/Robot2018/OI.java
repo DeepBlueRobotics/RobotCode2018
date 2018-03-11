@@ -107,7 +107,8 @@ public class OI {
 
 		manipulator = new Joystick(2);
 		if (manipulator.getButtonCount() == 0) {
-			System.out.println("Manipulator not plugged in!");
+			System.err.println(
+					"ERROR: manipulator does not appear to be plugged in. Disabling intake code. Restart code with manipulator plugged in to enable intake code");
 		} else {
 			closeIntakeButton = new JoystickButton(manipulator, getButton("Close Intake Button", 1));
 			closeIntakeButton.whenPressed(new CloseIntake());
@@ -128,6 +129,7 @@ public class OI {
 			toggleRightIntakeButton = new JoystickButton(manipulator, getButton("Toggle Right Intake Button", 4));
 			toggleRightIntakeButton.whenPressed(new ToggleRightIntake());
 		}
+
 	}
 
 	// /**
