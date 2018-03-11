@@ -3,7 +3,7 @@ package org.usfirst.frc.team199.Robot2018.commands;
 import java.util.ArrayList;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
-import org.usfirst.frc.team199.Robot2018.RobotMap;
+import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
@@ -14,7 +14,13 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class RunScript extends CommandGroup {
 
 	public RunScript(String scriptName) {
-		ArrayList<String[]> script = Robot.autoScripts.getOrDefault(scriptName, new ArrayList<String[]>());
+		ArrayList<String[]> script;
+		if (Robot.autoScripts.containsKey(scriptName)) {
+			script = Robot.autoScripts.get(scriptName);
+		} else {
+			System.err.println("[ERROR] auto scripts file does not contain script `" + scriptName + "`.");
+			return;
+		}
 
 		outerloop: for (String[] cmd : script) {
 			String cmdName = cmd[0];
@@ -25,10 +31,17 @@ public class RunScript extends CommandGroup {
 				addSequential(new AutoMoveTo(cmdArgs.split(" ")));
 				break;
 			case "turn":
-				addSequential(new PIDTurn(Double.parseDouble(cmdArgs), Robot.dt, RobotMap.fancyGyro));
+				if (AutoUtils.isPoint(cmdArgs)) {
+					double[] point = AutoUtils.parsePoint(cmdArgs);
+					addSequential(new PIDTurn(point, Robot.dt, Robot.sd, Robot.dt.getGyro()));
+				} else {
+					double rotation = Double.parseDouble(cmdArgs);
+					addSequential(new PIDTurn(rotation, Robot.dt, Robot.sd, Robot.dt.getGyro()));
+				}
 				break;
 			case "move":
-				addSequential(new PIDMove(Double.parseDouble(cmdArgs), Robot.dt, RobotMap.distEncAvg));
+				double distance = Double.parseDouble(cmdArgs);
+				addSequential(new PIDMove(distance, Robot.dt, Robot.sd, Robot.dt.getDistEncAvg()));
 				break;
 			case "switch":
 				addSequential(new EjectToSwitch());

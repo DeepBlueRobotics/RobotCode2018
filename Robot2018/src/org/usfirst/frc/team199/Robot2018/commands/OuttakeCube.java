@@ -8,50 +8,40 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class IntakeCube extends Command {
+public class OuttakeCube extends Command {
 
-	private Timer tim;
-	private boolean overDraw;
+	Timer tim;
 
-	public IntakeCube() {
+	public OuttakeCube() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
-		tim = new Timer();
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
+		tim = new Timer();
 		tim.reset();
 		tim.start();
-		overDraw = false;
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		Robot.intakeEject.runIntake(-1);
-		if (Robot.intakeEject.hasCube()) {
-			if (!overDraw) {
-				overDraw = true;
-				tim.start();
-			}
-		} else {
-			overDraw = false;
-			tim.stop();
-			tim.reset();
-		}
+		Robot.intakeEject.runIntake(1);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return tim.get() > Robot.getConst("Has Cube Timeout", 0.5);
+		return tim.get() > Robot.getConst("Outake Time", 0.5);
 	}
 
 	// Called once after isFinished returns true
 	protected void end() {
+		Robot.intakeEject.runIntake(0);
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
+		end();
 	}
 }

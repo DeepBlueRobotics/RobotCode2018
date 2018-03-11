@@ -1,8 +1,26 @@
 package org.usfirst.frc.team199.Robot2018.subsystems;
 
+import edu.wpi.first.wpilibj.PIDSource;
+
 public interface DrivetrainInterface {
 
 	public void initDefaultCommand();
+
+	public boolean isVPIDUsed();
+
+	/**
+	 * Returns the getRate() of the left encoder
+	 * 
+	 * @return the rate of the left encoder
+	 */
+	public double getLeftEncRate();
+
+	/**
+	 * Returns the getRate() of the right encoder
+	 * 
+	 * @return the rate of the right encoder
+	 */
+	public double getRightEncRate();
 
 	/**
 	 * Drives based on joystick input and SmartDashboard values
@@ -46,11 +64,6 @@ public interface DrivetrainInterface {
 	public double getDtRightSpeed();
 
 	/**
-	 * Updates the PIDControllers' PIDConstants based on SmartDashboard values
-	 */
-	public void updatePidConstants();
-
-	/**
 	 * Enable the VelocityPIDControllers used for velocity control on each side of
 	 * the DT
 	 */
@@ -66,6 +79,8 @@ public interface DrivetrainInterface {
 	 * Resets the AHRS value
 	 */
 	public void resetAHRS();
+
+	public double getGyroRate();
 
 	/**
 	 * Used to get the yaw angle (Z-axis in degrees) that the ahrs currently reads
@@ -126,6 +141,13 @@ public interface DrivetrainInterface {
 	public void shiftGearSolenoidOff();
 
 	/**
+	 * Returns the gyroscope
+	 * 
+	 * @return the gyroscope
+	 */
+	public PIDSource getGyro();
+
+	/**
 	 * Reset the kf constants for both VelocityPIDControllers based on current DT
 	 * gearing (high or low gear).
 	 * 
@@ -134,7 +156,13 @@ public interface DrivetrainInterface {
 	 *            be 1 / max speed
 	 * @return the new kF value as 1 / correct max speed
 	 */
-	public double resetVelocityPIDkFConsts();
+	public void resetVelocityPIDkFConsts();
+
+	public void resetVelocityPIDkIConsts();
+
+	public void resetVelocityPIDkPConsts();
+
+	public void resetAllVelocityPIDConsts();
 
 	/**
 	 * Gets the current max speed of the DT based on gearing (high or low gear)
@@ -142,4 +170,23 @@ public interface DrivetrainInterface {
 	 * @return the current max speed of the DT in inches/second
 	 */
 	public double getCurrentMaxSpeed();
+
+	/**
+	 * Put left and right velocity controllers (PID) on SmartDashboard.
+	 */
+	public void putVelocityControllersToDashboard();
+
+	/**
+	 * Calculates a constant for calculating feed forward in PIDMove
+	 * 
+	 * @return the constant
+	 */
+	public double getPIDMoveConstant();
+
+	/**
+	 * Calculates a constant for calculating feed forward in PIDTurn
+	 * 
+	 * @return the constant
+	 */
+	public double getPIDTurnConstant();
 }
