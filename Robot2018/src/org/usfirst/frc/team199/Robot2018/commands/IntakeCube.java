@@ -32,7 +32,7 @@ public class IntakeCube extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		intEj.runIntake(-1);
+		intEj.runIntake(true);
 		if (intEj.hasCube()) {
 			if (!overDraw) {
 				overDraw = true;

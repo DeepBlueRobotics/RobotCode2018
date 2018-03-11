@@ -30,7 +30,7 @@ public class EjectCube extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		intEj.runIntake(1);
+		intEj.runIntake(false);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -42,7 +42,7 @@ public class EjectCube extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		intEj.runIntake(0);
+		intEj.stopIntake();
 	}
 
 	// Called when another command which requires one or more of the same

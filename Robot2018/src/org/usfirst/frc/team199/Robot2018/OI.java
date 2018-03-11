@@ -114,16 +114,12 @@ public class OI {
 			closeIntakeButton.whenPressed(new CloseIntake(Robot.intakeEject));
 			openIntakeButton = new JoystickButton(manipulator, getButton("Open Intake Button", 2));
 			openIntakeButton.whenPressed(new OpenIntake(Robot.intakeEject));
-			// raiseIntake = new JoystickButton(manipulator, getButton("Raise Intake
-			// Button", 3));
-			// raiseIntake.whenPressed(new RaiseIntake());
-			// lowerIntake = new JoystickButton(manipulator, getButton("Lower Intake
-			// Button", 4));
-			// lowerIntake.whenPressed(new LowerIntake());
+
 			intakeCubeButton = new JoystickButton(manipulator, getButton("Intake Button", 5));
 			intakeCubeButton.whenPressed(new IntakeCube(Robot.intakeEject));
 			outakeCubeButton = new JoystickButton(manipulator, getButton("Outake Button", 6));
 			outakeCubeButton.whenPressed(new EjectCube(Robot.intakeEject));
+
 			toggleLeftIntakeButton = new JoystickButton(manipulator, getButton("Toggle Left Intake Button", 3));
 			toggleLeftIntakeButton.whenPressed(new ToggleLeftIntake(Robot.intakeEject));
 			toggleRightIntakeButton = new JoystickButton(manipulator, getButton("Toggle Right Intake Button", 4));

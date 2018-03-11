@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * kForward = intake closed, kReverse = intake open
  */
-public class IntakeEject extends Subsystem implements IntakeEjectInterface {
+public class IntakeEjectBagged extends Subsystem implements IntakeEjectInterface {
 	private final PowerDistributionPanel pdp = RobotMap.pdp;
 	private final VictorSP leftIntakeMotor = RobotMap.leftIntakeMotor;
 	private final VictorSP rightIntakeMotor = RobotMap.rightIntakeMotor;
@@ -44,7 +44,6 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	/**
 	 * @return current left motor value
 	 */
-	@Override
 	public double getLeftIntakeSpeed() {
 		return leftIntakeMotor.get();
 	}
@@ -52,7 +51,6 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	/**
 	 * @return current right motor value
 	 */
-	@Override
 	public double getRightIntakeSpeed() {
 		return rightIntakeMotor.get();
 	}
@@ -80,39 +78,53 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	}
 
 	/**
-	 * Sets the left roller to run at the specified speed
+	 * Sets the left roller to run at the specified speed. For testing purposes only
+	 * (so no speed multiplier, just use joystick input)
 	 * 
 	 * @param speed
 	 *            Speed the left motor should run at
 	 */
 	@Override
 	public void runLeftIntake(double speed) {
-		double actualSpeed = speed * Robot.getConst("Intake Motor Speed Multiplier", 0.5);
-		leftIntakeMotor.set(actualSpeed);
+		leftIntakeMotor.set(speed);
 	}
 
 	/**
-	 * Sets the left roller to run at the specified speed
+	 * Sets the left roller to run at the specified speed. For testing purposes only
+	 * (so no speed multiplier, just use joystick input)
 	 * 
 	 * @param speed
 	 *            Speed the left motor should run at
 	 */
 	@Override
 	public void runRightIntake(double speed) {
-		double actualSpeed = speed * Robot.getConst("Intake Motor Speed Multiplier", 0.5);
-		rightIntakeMotor.set(actualSpeed);
+		rightIntakeMotor.set(speed);
 	}
 
 	/**
-	 * Spins the rollers
+	 * Spins the rollers. If motors not inverted, negative -> intaking, positive ->
+	 * ejecting
 	 * 
-	 * @param speed
-	 *            - negative -> rollers in, positive -> rollers out
+	 * @param intaking
+	 *            - true if intaking, false if ejecting
 	 */
 	@Override
-	public void runIntake(double speed) {
-		runLeftIntake(speed);
-		runRightIntake(speed);
+	public void runIntake(boolean intaking) {
+		int intakeSign;
+
+		if (intaking) {
+			intakeSign = -1;
+		} else {
+			intakeSign = 1;
+		}
+
+		if (Robot.getBool("Intake Motors Inverted", false)) {
+			intakeSign *= -1;
+		}
+
+		double actualSpeed = intakeSign * Robot.getConst("Intake Motor Speed Multiplier", 1);
+		runLeftIntake(actualSpeed);
+		runRightIntake(actualSpeed);
 	}
 
 	/**
