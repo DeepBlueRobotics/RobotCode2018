@@ -18,9 +18,9 @@
 1 right joystick
 	buttons
 		1	slow turning movement in arcade, or all movement in tank
-		2	shift drivetrain to low gear [ShiftLowGear]
-		3	shift drivetrain to high gear [ShiftHighGear]
-		4
+		2	
+		3	shift drivetrain to low gear [ShiftLowGear]
+		4	shift drivetrain to high gear [ShiftHighGear]
 		5
 		6
 		7
