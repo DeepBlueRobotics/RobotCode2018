@@ -18,6 +18,14 @@ public class Lift extends Subsystem implements LiftInterface {
 	private final Encoder liftEnc = RobotMap.liftEnc;
 	private Position currPosition = Position.GROUND;
 
+	private final int NUM_STAGES;
+	private final double WIGGLE_ROOM;
+
+	public Lift() {
+		NUM_STAGES = (int) Robot.getConst("Lift stages", 1);
+		WIGGLE_ROOM = (int) Robot.getConst("Lift wiggle room", 3.0);
+	}
+
 	/**
 	 * Set the default command for a subsystem here.
 	 */
@@ -51,7 +59,7 @@ public class Lift extends Subsystem implements LiftInterface {
 	 * Uses (insert sensor here) to detect the current lift position
 	 */
 	public double getHeight() {
-		return liftEnc.getDistance() * 3;
+		return liftEnc.getDistance() * NUM_STAGES;
 	}
 
 	/**
@@ -94,4 +102,17 @@ public class Lift extends Subsystem implements LiftInterface {
 		liftEnc.reset();
 	}
 
+	/**
+	 * Gets the number of stages variable
+	 */
+	public int getNumStages() {
+		return NUM_STAGES;
+	}
+
+	/**
+	 * Gets the extra distance above the switch or scale we want to lift in inches
+	 */
+	public double getWiggleRoom() {
+		return WIGGLE_ROOM;
+	}
 }
