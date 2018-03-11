@@ -38,7 +38,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 */
 	@Override
 	public void initDefaultCommand() {
-		setDefaultCommand(new DefaultIntake());
+		setDefaultCommand(new DefaultIntake(this));
 	}
 
 	/**
@@ -158,6 +158,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 		if (rightOpen) {
 			toggleRightIntake();
 		}
+		SmartDashboard.putBoolean("Intake Open", false);
 	}
 
 	/**
@@ -171,5 +172,6 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 		if (!rightOpen) {
 			toggleRightIntake();
 		}
+		SmartDashboard.putBoolean("Intake Open", true);
 	}
 }
