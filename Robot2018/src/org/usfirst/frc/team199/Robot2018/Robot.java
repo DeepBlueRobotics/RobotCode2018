@@ -245,7 +245,8 @@ public class Robot extends IterativeRobot {
 		// SmartDashboard.putNumber("Avg Enc Dist", dt.getEncAvgDist());
 		//
 
-		System.out.printf("Left: %1$5.2f; Right: %2$5.2f\n", RobotMap.dtLeft.get(), RobotMap.dtRight.get());
+		// System.out.printf("Left: %1$5.2f; Right: %2$5.2f\n", RobotMap.dtLeft.get(),
+		// RobotMap.dtRight.get());
 
 		SmartDashboard.putNumber("Angle", dt.getAHRSAngle());
 		SmartDashboard.putNumber("Left Current draw", rmap.pdp.getCurrent(4));

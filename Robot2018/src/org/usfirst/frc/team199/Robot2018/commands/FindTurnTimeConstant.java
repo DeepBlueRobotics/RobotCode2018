@@ -20,20 +20,20 @@ public class FindTurnTimeConstant extends Command {
 	private SmartDashboardInterface sd;
 	private AHRS gyro;
 	private Robot robot;
-	private Timer tim = new Timer();
-	private ArrayList<DataPoint> dataPoints = new ArrayList<DataPoint>();
+	private Timer tim;
+	private ArrayList<DataPoint> dataPoints;
 
 	private class DataPoint {
 		public double seconds;
-		public double degreesPerSecond;
+		public double radiansPerSecond;
 
-		public DataPoint(double seconds, double degreesPerSecond) {
+		public DataPoint(double seconds, double radiansPerSecond) {
 			this.seconds = seconds;
-			this.degreesPerSecond = degreesPerSecond;
+			this.radiansPerSecond = radiansPerSecond;
 		}
 
 		public String toString() {
-			return "Time: " + seconds + " seconds; rotational velocity: " + degreesPerSecond + " degrees per second";
+			return "Time: " + seconds + " seconds; rotational velocity: " + radiansPerSecond + " radians per second";
 		}
 	}
 
@@ -53,12 +53,18 @@ public class FindTurnTimeConstant extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		System.out.println("FindTurnTimeConstant is in init()");
-		if (!robot.isTest()) {
-			System.out.println("but you're not in test mode.");
-			return;
-		}
+		// if (!robot.isTest()) {
+		// System.out.println("but you're not in test mode.");
+		// return;
+		// }
+
+		// this should be done in low gear
+		Robot.dt.shiftGears(false);
+
+		dataPoints = new ArrayList<DataPoint>();
 
 		System.out.println("and you're in test mode");
+		tim = new Timer();
 		tim.start();
 		// spin at full speed
 		dt.arcadeDrive(0, 1);
@@ -70,6 +76,7 @@ public class FindTurnTimeConstant extends Command {
 		DataPoint newMeasurement = new DataPoint(tim.get(), gyro.getRate());
 		System.out.println(newMeasurement);
 		dataPoints.add(newMeasurement);
+		dt.arcadeDrive(0, 1);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -78,11 +85,16 @@ public class FindTurnTimeConstant extends Command {
 		// true if the last and second-to-last rotational velocities measured are within
 		// 5 degrees per second squared of each other. or if it's not a test, finish
 		// immediately
-		if (numberOfDataPoints < 2) {
+
+		// if we're still in the first 51 cycles (don't have enough data), then not
+		// finished. also, we're probably still accelerating if we haven't reached 3
+		// radians per second (the max will be around 5).
+		if (numberOfDataPoints < 51 || Math.abs(dataPoints.get(numberOfDataPoints - 1).radiansPerSecond) < 3.0) {
 			return false;
 		}
-		return (Math.abs(dataPoints.get(numberOfDataPoints - 1).degreesPerSecond
-				- dataPoints.get(numberOfDataPoints - 2).degreesPerSecond) < 5) || !robot.isTest();
+
+		return (Math.abs(dataPoints.get(numberOfDataPoints - 1).radiansPerSecond
+				- dataPoints.get(numberOfDataPoints - 51).radiansPerSecond) < 0.02);
 	}
 
 	// Called once after isFinished returns true
@@ -90,14 +102,17 @@ public class FindTurnTimeConstant extends Command {
 		// stop moving
 		dt.arcadeDrive(0, 0);
 
-		DataPoint lastDataPoint = dataPoints.get(dataPoints.size() - 1);
-		System.out.println("Finished when " + lastDataPoint);
-		// the rotvel of the data point we're looking for to find the time constant
-		double magicValue = lastDataPoint.degreesPerSecond * (1 - (1 / Math.E));
+		double lastRadiansPerSecond = dataPoints.get(dataPoints.size() - 1).radiansPerSecond;
+		System.out.println("Finished at " + lastRadiansPerSecond + " radians per second");
+		Robot.putConst("Max Turn Radians Per Second", lastRadiansPerSecond);
+
+		// the radians per second of the data point we're looking for to find the time
+		// constant
+		double magicValue = lastRadiansPerSecond * (1 - (1 / Math.E));
 
 		for (DataPoint datum : dataPoints) {
 			// if we've past the magic value, we're done
-			if (Math.abs(datum.degreesPerSecond) > Math.abs(magicValue)) {
+			if (Math.abs(datum.radiansPerSecond) > Math.abs(magicValue)) {
 				System.out.println("The magic value is " + datum);
 				Robot.putConst("TurnTimeConstant", datum.seconds);
 				// stop checking data
