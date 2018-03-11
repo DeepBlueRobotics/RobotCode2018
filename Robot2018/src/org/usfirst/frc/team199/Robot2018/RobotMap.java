@@ -9,6 +9,7 @@ package org.usfirst.frc.team199.Robot2018;
 
 import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
@@ -93,6 +94,8 @@ public class RobotMap {
 		mc.enableCurrentLimit(true);
 
 		mc.configNeutralDeadband(Robot.getConst("Motor Deadband", 0.001), kTimeout);
+
+		mc.setNeutralMode(NeutralMode.Brake);
 	}
 
 	/**
@@ -111,6 +114,8 @@ public class RobotMap {
 		mc.configPeakOutputReverse(-1, kTimeout);
 
 		mc.configNeutralDeadband(Robot.getConst("Motor Deadband", 0.001), kTimeout);
+
+		mc.setNeutralMode(NeutralMode.Brake);
 	}
 
 	public RobotMap() {
