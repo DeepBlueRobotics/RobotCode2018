@@ -6,9 +6,9 @@ import org.usfirst.frc.team199.Robot2018.commands.DefaultIntake;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * kForward = intake closed, kReverse = intake open
@@ -128,7 +128,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 			leftSolenoid.set(DoubleSolenoid.Value.kReverse);
 		}
 		leftOpen = !leftOpen;
-		Preferences.getInstance().putBoolean("Left Horizontal Solenoid Open", leftOpen);
+		SmartDashboard.putBoolean("Left Solenoid Open", leftOpen);
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 			rightSolenoid.set(DoubleSolenoid.Value.kReverse);
 		}
 		rightOpen = !rightOpen;
-		Preferences.getInstance().putBoolean("Right Solenoid Open", rightOpen);
+		SmartDashboard.putBoolean("Right Solenoid Open", rightOpen);
 	}
 
 	/**
