@@ -1,5 +1,7 @@
 package org.usfirst.frc.team199.Robot2018.autonomous;
 
+import org.usfirst.frc.team199.Robot2018.Robot;
+
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -30,7 +32,8 @@ public class VelocityPIDController extends PIDController implements SpeedControl
 	 */
 	public VelocityPIDController(double kp, double ki, double kd, double kf, PIDSource source,
 			SpeedControllerGroup output) {
-		super(kp, ki, kd, kf, source, output);
+		super(kp, ki, kd, kf, /* LinearDigitalFilter.singlePoleIIR(source, 0.1, Robot.rmap.getCycleTime()) */source,
+				output, Robot.rmap.getCycleTime());
 		out = output;
 	}
 
@@ -42,7 +45,7 @@ public class VelocityPIDController extends PIDController implements SpeedControl
 	 */
 	@Override
 	public void pidWrite(double output) {
-		setSetpoint(output);
+		set(output);
 	}
 
 	/**
@@ -56,12 +59,17 @@ public class VelocityPIDController extends PIDController implements SpeedControl
 		setSetpoint(speed);
 	}
 
+	public void setConsts(double kP, double kI, double kD, double kF) {
+		super.setP(kP);
+		super.setI(kI);
+		super.setD(kD);
+		super.setF(kF);
+	}
+
 	/**
-	 * Gets the current set voltage (setpoint) sent to the output
-	 * SpeedControllerGroup
+	 * Gets the current setpoint sent to the PID
 	 * 
-	 * @return the current set voltage (setpoint/target/goal) sent to the output
-	 *         SpeedControllerGroup
+	 * @return the current set setpoint/target/goal sent to the PID
 	 */
 	@Override
 	public double get() {

@@ -134,7 +134,7 @@ class ParseScriptFileTest {
 	@Test
 	void test10() {
 		String input = "CLRx:\n"
-				+ "turn 0x4a"; // unfortunately, the program does not except hexadecimal xD
+				+ "turn 0x4a"; // unfortunately, the program does not accept hexadecimal xD
 		Map<String, ArrayList<String[]>> output = AutoUtils.parseScriptFile(input);
 		
 		assertEquals(1, output.size());
@@ -148,7 +148,8 @@ class ParseScriptFileTest {
 		Map<String, ArrayList<String[]>> output = AutoUtils.parseScriptFile(input);
 		
 		assertEquals(1, output.size());
-		assertEquals(true, output.get("CLRx").isEmpty());
+		assertEquals("moveto", output.get("CLRx").get(0)[0]);
+		assertEquals("(4,20) (18,47) 39", output.get("CLRx").get(0)[1]);
 	}
 	
 	@Test
@@ -168,7 +169,8 @@ class ParseScriptFileTest {
 		Map<String, ArrayList<String[]>> output = AutoUtils.parseScriptFile(input);
 		
 		assertEquals(1, output.size());
-		assertEquals(true, output.get("CLRx").isEmpty());
+		assertEquals("moveto", output.get("CLRx").get(0)[0]);
+		assertEquals("(4,20) (18,47) 39", output.get("CLRx").get(0)[1]);
 	}
 	
 	@Test

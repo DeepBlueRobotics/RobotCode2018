@@ -40,7 +40,7 @@ class VelocityPIDControllerTest {
 		VelocityPIDController vPID = new VelocityPIDController(p, i, d, f, source, out);
 
 		vPID.set(20);
-		assertEquals(vPID.get(), 20);
+		assertEquals(20, vPID.get());
 	}
 
 	@Test
