@@ -73,6 +73,19 @@ public class Robot extends IterativeRobot {
 		}
 
 		@Override
+		public String getString(String key, String def) {
+			Preferences pref = Preferences.getInstance();
+			if (!pref.containsKey("String/" + key)) {
+				pref.putString("String/" + key, def);
+				if (pref.getString("String/ + key", def) != def) {
+					System.err.println("pref Key" + "String/" + key + "already taken by a different type");
+					return def;
+				}
+			}
+			return pref.getString("String/" + key, def);
+		}
+
+		@Override
 		public void putConst(String key, double def) {
 			Preferences pref = Preferences.getInstance();
 			pref.putDouble("Const/" + key, def);
@@ -109,6 +122,10 @@ public class Robot extends IterativeRobot {
 		return sd.getConst(key, def);
 	}
 
+	public static String getString(String key, String def) {
+		return sd.getString(key, def);
+	}
+
 	public static void putConst(String key, double def) {
 		sd.putConst(key, def);
 	}
@@ -135,8 +152,7 @@ public class Robot extends IterativeRobot {
 		climber = new Climber();
 		climberAssist = new ClimberAssist();
 		intakeEject = new IntakeEject();
-		lift = new Lift("Lift", getConst("LiftkP", 0.1), getConst("LiftkI", 0), getConst("LiftkD", 0),
-				getConst("LiftkF", 0.1));
+		lift = new Lift();
 		dt = new Drivetrain(sd);
 		oi = new OI(this);
 

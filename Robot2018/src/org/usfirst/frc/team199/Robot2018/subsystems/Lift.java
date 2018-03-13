@@ -15,15 +15,35 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 
 	private final SpeedControllerGroup liftMotors = RobotMap.liftMotors;
 	private final Encoder liftEnc = RobotMap.liftEnc;
-	private Position currPosition = Position.GROUND;
+	private LiftHeight currPosition = LiftHeight.GROUND;
 
 	private final int NUM_STAGES;
 	private final double WIGGLE_ROOM;
+	private final double SWITCH_DIST;
+	private final double SCALE_DIST;
+	private final double BAR_DIST;
 
-	public Lift(String name, double kP, double kI, double kD, double kF) {
-		super(name, kP, kI, kD, kF);
+	public Lift() {
+		super("Lift", Robot.getConst("LiftkP", 0.1), Robot.getConst("LiftkI", 0), Robot.getConst("LiftkD", 0),
+				Robot.getConst("LiftkF", 0.1));
+
+		/**
+		 * @TODO figure out Lift Max Height
+		 */
+		setInputRange(0, Robot.getConst("Lift Max Height", 0));
+		setOutputRange(-1, 1);
+
 		NUM_STAGES = (int) Robot.getConst("Lift stages", 1);
-		WIGGLE_ROOM = (int) Robot.getConst("Lift wiggle room", 3.0);
+		WIGGLE_ROOM = (int) Robot.getConst("Lift wiggle room", 3.0); // inches
+
+		// calculate constant measurements
+		// distance to switch 18.75 inches in starting position
+		SWITCH_DIST = (18.75 + WIGGLE_ROOM) / NUM_STAGES;
+		// distance to scale 5 feet starting 63 / 3 = 21
+		SCALE_DIST = (60.0 + WIGGLE_ROOM) / NUM_STAGES;
+		// 7 feet starting; bar distance should be changed because I'm not aware how
+		// climber mech will be positioned
+		BAR_DIST = (84.0 + WIGGLE_ROOM) / NUM_STAGES;
 		enable();
 	}
 
@@ -35,6 +55,29 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 		setDefaultCommand(new UpdateLiftPosition(this));
 	}
 
+	public double getDesiredDistFromPos(LiftHeight pos) {
+		double desiredDist;
+		switch (pos) {
+		case GROUND:
+			desiredDist = 0;
+			break;
+		case SWITCH:
+			desiredDist = SWITCH_DIST;
+			break;
+		case SCALE:
+			desiredDist = SCALE_DIST;
+			break;
+		case BAR:
+			desiredDist = BAR_DIST;
+			break;
+		default:
+			desiredDist = 0;
+			break;
+		}
+
+		return desiredDist;
+	}
+
 	/**
 	 * Sets the current position in the lift subsystem
 	 * 
@@ -42,7 +85,7 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	 *            - the new position meant to be set
 	 */
 	@Override
-	public void setCurrPosition(Position newPosition) {
+	public void setCurrPosition(LiftHeight newPosition) {
 		currPosition = newPosition;
 	}
 
@@ -87,7 +130,7 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	 * @return pos - current position
 	 */
 	@Override
-	public Position getCurrPos() {
+	public LiftHeight getCurrPos() {
 		return currPosition;
 	}
 

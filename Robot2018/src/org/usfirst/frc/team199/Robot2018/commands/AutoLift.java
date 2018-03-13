@@ -3,7 +3,7 @@ package org.usfirst.frc.team199.Robot2018.commands;
 import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.RobotMap;
 import org.usfirst.frc.team199.Robot2018.subsystems.LiftInterface;
-import org.usfirst.frc.team199.Robot2018.subsystems.LiftInterface.Position;
+import org.usfirst.frc.team199.Robot2018.subsystems.LiftInterface.LiftHeight;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -28,11 +28,11 @@ public class AutoLift extends Command implements PIDOutput {
 	private double desiredDist = 0;
 	private double currDist;
 	private LiftInterface lift;
-	private Position desiredPos;
+	private LiftHeight desiredPos;
 
 	private PIDController liftController;
 
-	public AutoLift(Position stage, LiftInterface lift) {
+	public AutoLift(LiftHeight stage, LiftInterface lift) {
 		this.lift = lift;
 		requires(Robot.lift);
 
