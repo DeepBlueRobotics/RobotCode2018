@@ -2,15 +2,15 @@
 	buttons
 		1	slow forward-backward movement in arcade, or all movement in tank
 		2	toggle drive type (arcade/tank) [ShiftDriveType]
-		3
-		4
-		5
+		3	move lift up w/ incremental PID [MoveLiftWithPID...true]
+		4	move lift down w/ incremental PID [MoveLiftWithPID...false]
+		5	use to test PID, targ height changed in SD [LiftToPosition]
 		6
 		7	move with PID by inches from SmartDashboard "Move Targ" [PIDMove]
 		8	turn with PID by degrees from SmartDashboard "Turn Targ" [PIDTurn]
 		9
 		10	reset left and right drivetrain encoders to 0 [ResetEncoders]
-		11	run experiment to find turning time constant (FindTurnTimeConstant)
+		11	run experiment to find turning time constant [FindTurnTimeConstant]
 	axes
 		0	X axis	if NOT default: arcade turn
 		1	Y axis	tank left, arcade forward (if default)
@@ -18,16 +18,16 @@
 1 right joystick
 	buttons
 		1	slow turning movement in arcade, or all movement in tank
-		2	shift drivetrain to low gear [ShiftLowGear]
-		3	shift drivetrain to high gear [ShiftHighGear]
-		4
+		2	
+		3	shift drivetrain to low gear [ShiftLowGear]
+		4	shift drivetrain to high gear [ShiftHighGear]
 		5
 		6
 		7
 		8	update the PIDController constants with SmartDashboard values [UpdatePIDConstants]
 		9	set the left and right encoder distance per pulse with SmartDashboard values [SetDistancePerPulse]
-		10	run lift motor up [RunLift]
-		11	run lift motor down [RunLift]
+		10	move lift up while held at very slow speed [MoveLift...true]
+		11	move lift down while held at very slow speed [MoveLift...false]
 	axes
 		0	X axis	arcade turn (if default)
 		1	Y axis	tank right, if NOT default: arcade forward
@@ -40,8 +40,8 @@
 		4	Y	lower intake [LowerIntake]
 		5	LB	take in [IntakeCube]
 		6	RB	take out [OuttakeCube]
-		7	back
-		8	start
+		7	back run lift motor up [RunLift]
+		8	start run lift motor down [RunLift]
 		9	N/a
 		10	N/a
 	press mode to toggle mode light
@@ -55,5 +55,9 @@
 			mode light off:
 	POV
 		D-pad (left joystick if mode light on)
+			UP		move lift ground [AutoLift(GROUND)]
+			RIGHT	move lift switch [AutoLift(SWITCH)]
+			DOWN	move lift scale [AutoLift(SCALE)]
+			LEFT	move lift bar [AutoLift(BAR)]
 	rumble
 		fake news

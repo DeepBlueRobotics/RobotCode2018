@@ -59,6 +59,7 @@ public class Robot extends IterativeRobot {
 	String[] fmsPossibilities = { "LL", "LR", "RL", "RR" };
 
 	public static SmartDashboardInterface sd = new SmartDashboardInterface() {
+		@Override
 		public double getConst(String key, double def) {
 			Preferences pref = Preferences.getInstance();
 			if (!pref.containsKey("Const/" + key)) {
@@ -71,6 +72,20 @@ public class Robot extends IterativeRobot {
 			return pref.getDouble("Const/" + key, def);
 		}
 
+		@Override
+		public String getString(String key, String def) {
+			Preferences pref = Preferences.getInstance();
+			if (!pref.containsKey("String/" + key)) {
+				pref.putString("String/" + key, def);
+				if (pref.getString("String/ + key", def) != def) {
+					System.err.println("pref Key" + "String/" + key + "already taken by a different type");
+					return def;
+				}
+			}
+			return pref.getString("String/" + key, def);
+		}
+
+		@Override
 		public void putConst(String key, double def) {
 			Preferences pref = Preferences.getInstance();
 			pref.putDouble("Const/" + key, def);
@@ -79,14 +94,17 @@ public class Robot extends IterativeRobot {
 			}
 		}
 
+		@Override
 		public void putData(String string, PIDController controller) {
 			SmartDashboard.putData(string, controller);
 		}
 
+		@Override
 		public void putNumber(String string, double d) {
 			SmartDashboard.putNumber(string, d);
 		}
 
+		@Override
 		public void putBoolean(String string, boolean b) {
 			SmartDashboard.putBoolean(string, b);
 		}
@@ -102,6 +120,10 @@ public class Robot extends IterativeRobot {
 
 	public static double getConst(String key, double def) {
 		return sd.getConst(key, def);
+	}
+
+	public static String getString(String key, String def) {
+		return sd.getString(key, def);
 	}
 
 	public static void putConst(String key, double def) {
