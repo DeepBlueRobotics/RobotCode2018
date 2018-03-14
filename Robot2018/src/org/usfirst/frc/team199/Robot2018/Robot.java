@@ -206,6 +206,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		dt.resetAHRS();
+		lift.resetEnc();
 		AutoUtils.state = new State(0, 0, 0);
 		Scheduler.getInstance().add(new ShiftLowGear());
 		Scheduler.getInstance().add(new CloseIntake());

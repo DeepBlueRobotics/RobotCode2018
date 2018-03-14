@@ -27,10 +27,7 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 		super("Lift", Robot.getConst("LiftkP", 0.1), Robot.getConst("LiftkI", 0), Robot.getConst("LiftkD", 0),
 				Robot.getConst("LiftkF", 0.1));
 
-		/**
-		 * @TODO figure out Lift Max Height
-		 */
-		setInputRange(0, Robot.getConst("Lift Max Height", 0));
+		setInputRange(0, Robot.getConst("Lift Max Height", 24));
 		setOutputRange(-1, 1);
 
 		NUM_STAGES = (int) Robot.getConst("Lift stages", 1);
