@@ -5,6 +5,7 @@ import org.usfirst.frc.team199.Robot2018.RobotMap;
 import org.usfirst.frc.team199.Robot2018.commands.UpdateLiftPosition;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
@@ -24,8 +25,20 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	private final double BAR_DIST;
 
 	public Lift() {
-		super("Lift", Robot.getConst("LiftkP", 0.1), Robot.getConst("LiftkI", 0), Robot.getConst("LiftkD", 0),
-				Robot.getConst("LiftkF", 0.1));
+		super("Lift", 0, 0, 0, 0);
+
+		double maxSpeed = getLiftMaxSpeed();
+
+		double r = Robot.getConst("LiftPidR", 3.0);
+		double kP = r / getLiftTimeConstant() / maxSpeed;
+		double kI = 0;
+		double kD = r / maxSpeed;
+		double kF = 1 / (maxSpeed * Robot.getConst("Default PID Update Time", 0.05));
+
+		PIDController liftController = getPIDController();
+
+		liftController.setPID(Robot.getConst("LiftkP", kP), Robot.getConst("LiftkI", kI), Robot.getConst("LiftkD", kD),
+				Robot.getConst("LiftkF", kF));
 
 		setInputRange(0, Robot.getConst("Lift Max Height", 24));
 		setOutputRange(-1, 1);
@@ -220,6 +233,6 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	 *         lift components, NOT cube
 	 */
 	public double getLiftedWeight() {
-		return Robot.getConst("Weight of Lifted Stuff", 342);
+		return Robot.getConst("Weight of Lifted Stuff", 53.11);
 	}
 }

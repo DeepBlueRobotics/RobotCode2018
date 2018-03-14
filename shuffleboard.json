@@ -88,8 +88,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Left VPID Targ",
               "_title": "/SmartDashboard/Drivetrain/Left VPID Targ",
-              "Visible time": 30.0,
-              "SmartDashboard/Drivetrain/Left VPID Targ visible": true
+              "Visible time": 30.0
             }
           },
           "4,0": {
@@ -101,8 +100,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Right VPID Targ",
               "_title": "/SmartDashboard/Drivetrain/Right VPID Targ",
-              "Visible time": 30.0,
-              "SmartDashboard/Drivetrain/Right VPID Targ visible": true
+              "Visible time": 30.0
             }
           },
           "4,3": {
@@ -386,8 +384,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Left VPID Targ",
               "_title": "/SmartDashboard/Drivetrain/Left VPID Targ",
-              "Visible time": 10.0,
-              "SmartDashboard/Drivetrain/Left VPID Targ visible": true
+              "Visible time": 10.0
             }
           },
           "5,2": {
@@ -399,8 +396,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Right VPID Targ",
               "_title": "/SmartDashboard/Drivetrain/Right VPID Targ",
-              "Visible time": 10.0,
-              "SmartDashboard/Drivetrain/Right VPID Targ visible": true
+              "Visible time": 10.0
             }
           },
           "5,1": {
@@ -940,6 +936,18 @@
             }
           }
         }
+      }
+    },
+    {
+      "title": "Tab 8",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {}
       }
     }
   ]

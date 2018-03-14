@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -130,11 +131,17 @@ public class RobotMap {
 		configSRX(liftMotorB);
 		liftMotorC = new WPI_TalonSRX(getPort("2LiftTalonSRX", 7));
 		configSRX(liftMotorC);
-		liftMotors = new SpeedControllerGroup(liftMotorB, liftMotorA, liftMotorC);
+		// liftMotors = new SpeedControllerGroup(liftMotorB, liftMotorA, liftMotorC);
+		liftMotors = new SpeedControllerGroup(liftMotorC);
+		liftMotors.setName("Lift", "CIM Motor");
+		LiveWindow.add(liftMotors);
+
 		liftEncPort1 = new DigitalInput(getPort("1LiftEnc", 4));
 		liftEncPort2 = new DigitalInput(getPort("2LiftEnc", 5));
 		liftEnc = new Encoder(liftEncPort1, liftEncPort2);
 		liftEnc.setPIDSourceType(PIDSourceType.kDisplacement);
+		liftEnc.setName("Lift", "Encoder");
+		LiveWindow.add(liftEnc);
 
 		leftIntakeMotor = new VictorSP(getPort("IntakeLeftVictorSP", 8));
 		rightIntakeMotor = new VictorSP(getPort("IntakeRightVictorSP", 9));
