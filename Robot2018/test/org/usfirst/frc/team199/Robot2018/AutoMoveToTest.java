@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
+import org.usfirst.frc.team199.Robot2018.autonomous.State;
 import org.usfirst.frc.team199.Robot2018.commands.AutoMoveTo;
 import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
 
