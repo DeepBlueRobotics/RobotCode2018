@@ -28,7 +28,7 @@ public class RunScript extends CommandGroup {
 
 			switch (cmdName) {
 			case "moveto":
-				addSequential(new AutoMoveTo(cmdArgs.split(" "),  AutoUtils.state.getCenterOfRot()));
+				addSequential(new AutoMoveTo(cmdArgs.split(" ")));
 				break;
 			case "turn":
 				if (AutoUtils.isPoint(cmdArgs)) {
