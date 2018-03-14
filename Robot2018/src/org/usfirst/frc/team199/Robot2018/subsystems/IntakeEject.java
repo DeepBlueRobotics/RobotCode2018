@@ -11,22 +11,32 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- *
+ * kForward = intake closed, kReverse = intake open
  */
 public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	private final PowerDistributionPanel pdp = RobotMap.pdp;
 	private final VictorSP leftIntakeMotor = RobotMap.leftIntakeMotor;
 	private final VictorSP rightIntakeMotor = RobotMap.rightIntakeMotor;
-	private final DoubleSolenoid leftVerticalSolenoid = RobotMap.leftIntakeVerticalSolenoid;
-	private final DoubleSolenoid rightVerticalSolenoid = RobotMap.rightIntakeVerticalSolenoid;
-	private final DoubleSolenoid leftHorizontalSolenoid = RobotMap.leftIntakeHorizontalSolenoid;
-	private final DoubleSolenoid rightHorizontalSolenoid = RobotMap.rightIntakeHorizontalSolenoid;
-	private boolean rightOpen = false;
-	private boolean leftOpen = false;
+	private final DoubleSolenoid leftSolenoid = RobotMap.leftIntakeSolenoid;
+	private final DoubleSolenoid rightSolenoid = RobotMap.rightIntakeSolenoid;
+	private boolean leftOpen = isOpen(leftSolenoid.get());
+	private boolean rightOpen = isOpen(rightSolenoid.get());
+
+	/**
+	 * Return whether or not a side of the intake (L/R) is open
+	 * 
+	 * @param val
+	 *            The value (kForward, kReverse, kOff) of the DoubleSolenoid for one
+	 *            side of the intake
+	 */
+	public boolean isOpen(DoubleSolenoid.Value val) {
+		return val == DoubleSolenoid.Value.kReverse;
+	}
 
 	/**
 	 * Set the default command for a subsystem here.
 	 */
+	@Override
 	public void initDefaultCommand() {
 		setDefaultCommand(new DefaultIntake());
 	}
@@ -34,6 +44,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	/**
 	 * @return current left motor value
 	 */
+	@Override
 	public double getLeftIntakeSpeed() {
 		return leftIntakeMotor.get();
 	}
@@ -41,6 +52,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	/**
 	 * @return current right motor value
 	 */
+	@Override
 	public double getRightIntakeSpeed() {
 		return rightIntakeMotor.get();
 	}
@@ -50,6 +62,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * robot
 	 * 
 	 */
+	@Override
 	public boolean hasCube() {
 		return pdp.getCurrent(Robot.rmap.getPort("PDP Intake Left Channel", 4)) > Robot.getConst("Max Current", 39)
 				|| pdp.getCurrent(Robot.rmap.getPort("PDP Intake Right Channel", 11)) > Robot.getConst("Max Current",
@@ -60,6 +73,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * stops the motors
 	 * 
 	 */
+	@Override
 	public void stopIntake() {
 		leftIntakeMotor.stopMotor();
 		rightIntakeMotor.stopMotor();
@@ -71,6 +85,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * @param speed
 	 *            Speed the left motor should run at
 	 */
+	@Override
 	public void runLeftIntake(double speed) {
 		double actualSpeed = speed * Robot.getConst("Intake Motor Speed Multiplier", 0.5);
 		leftIntakeMotor.set(actualSpeed);
@@ -82,6 +97,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * @param speed
 	 *            Speed the left motor should run at
 	 */
+	@Override
 	public void runRightIntake(double speed) {
 		double actualSpeed = speed * Robot.getConst("Intake Motor Speed Multiplier", 0.5);
 		rightIntakeMotor.set(actualSpeed);
@@ -93,126 +109,67 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 * @param speed
 	 *            - negative -> rollers in, positive -> rollers out
 	 */
+	@Override
 	public void runIntake(double speed) {
 		runLeftIntake(speed);
 		runRightIntake(speed);
 	}
 
 	/**
-	 * Raises the intake
+	 * Toggles the left intake between open (kReverse) and closed (kForward).
 	 */
-	public void raiseIntake() {
-		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Vertical Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kReverse
-				: DoubleSolenoid.Value.kForward;
-		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Vertical Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kReverse
-				: DoubleSolenoid.Value.kForward;
-		leftVerticalSolenoid.set(leftSet);
-		rightVerticalSolenoid.set(rightSet);
-	}
-
-	/**
-	 * Lowers the intake
-	 */
-	public void lowerIntake() {
-		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Vertical Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kForward
-				: DoubleSolenoid.Value.kReverse;
-		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Vertical Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kForward
-				: DoubleSolenoid.Value.kReverse;
-		leftVerticalSolenoid.set(leftSet);
-		rightVerticalSolenoid.set(rightSet);
-	}
-
-	/**
-	 * Toggles the left intake between open and closed
-	 */
+	@Override
 	public void toggleLeftIntake() {
-		// DoubleSolenoid.Value set;
-		// if (Robot.getBool("Left Horizontal Solenoid Open", true)) {
-		// set = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false) ?
-		// DoubleSolenoid.Value.kForward
-		// : DoubleSolenoid.Value.kReverse;
-		// } else {
-		// set = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false) ?
-		// DoubleSolenoid.Value.kReverse
-		// : DoubleSolenoid.Value.kForward;
-		// }
-		// leftHorizontalSolenoid.set(set);
-		// SmartDashboard.putBoolean("Bool/Left Horizontal Solenoid Open",
-		// !Robot.getBool("Left Horizontal Solenoid Open", true));
 		if (leftOpen) {
 			// set to closed
-			leftHorizontalSolenoid.set(DoubleSolenoid.Value.kReverse);
+			leftSolenoid.set(DoubleSolenoid.Value.kForward);
 		} else {
 			// set to open
-			leftHorizontalSolenoid.set(DoubleSolenoid.Value.kForward);
+			leftSolenoid.set(DoubleSolenoid.Value.kReverse);
 		}
 		leftOpen = !leftOpen;
+		SmartDashboard.putBoolean("Left Solenoid Open", leftOpen);
 	}
 
 	/**
-	 * Toggles the right intake between open and closed
+	 * Toggles the right intake between open (kReverse) and closed (kForward).
 	 */
+	@Override
 	public void toggleRightIntake() {
-		// DoubleSolenoid.Value set;
-		// if (Robot.getBool("Right Horizontal Solenoid Open", true)) {
-		// set = Robot.getBool("Intake Right Horizontal Solenoid Inverted", false) ?
-		// DoubleSolenoid.Value.kForward
-		// : DoubleSolenoid.Value.kReverse;
-		// } else {
-		// set = Robot.getBool("Intake Right Horizontal Solenoid Inverted", false) ?
-		// DoubleSolenoid.Value.kReverse
-		// : DoubleSolenoid.Value.kForward;
-		// }
-		// rightHorizontalSolenoid.set(set);
-		// SmartDashboard.putBoolean("Bool/Right Horizontal Solenoid Open",
-		// !Robot.getBool("Right Horizontal Solenoid Open", true));
 		if (rightOpen) {
 			// set to closed
-			rightHorizontalSolenoid.set(DoubleSolenoid.Value.kReverse);
+			rightSolenoid.set(DoubleSolenoid.Value.kForward);
 		} else {
 			// set to open
-			rightHorizontalSolenoid.set(DoubleSolenoid.Value.kForward);
+			rightSolenoid.set(DoubleSolenoid.Value.kReverse);
 		}
 		rightOpen = !rightOpen;
+		SmartDashboard.putBoolean("Right Solenoid Open", rightOpen);
 	}
 
 	/**
 	 * Closes the intake
 	 */
+	@Override
 	public void closeIntake() {
-		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kReverse
-				: DoubleSolenoid.Value.kForward;
-		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Horizontal Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kReverse
-				: DoubleSolenoid.Value.kForward;
-		SmartDashboard.putBoolean("Bool/Left Horizontal Solenoid Open", false);
-		SmartDashboard.putBoolean("Bool/Right Horizontal Solenoid Open", false);
-		leftHorizontalSolenoid.set(leftSet);
-		rightHorizontalSolenoid.set(rightSet);
-		leftOpen = false;
-		rightOpen = false;
+		if (leftOpen) {
+			toggleLeftIntake();
+		}
+		if (rightOpen) {
+			toggleRightIntake();
+		}
 	}
 
 	/**
 	 * Opens the intake
 	 */
+	@Override
 	public void openIntake() {
-		DoubleSolenoid.Value leftSet = Robot.getBool("Intake Left Horizontal Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kForward
-				: DoubleSolenoid.Value.kReverse;
-		DoubleSolenoid.Value rightSet = Robot.getBool("Intake Right Horizontal Solenoid Inverted", false)
-				? DoubleSolenoid.Value.kForward
-				: DoubleSolenoid.Value.kReverse;
-		SmartDashboard.putBoolean("Bool/Left Horizontal Solenoid Open", true);
-		SmartDashboard.putBoolean("Bool/Right Horizontal Solenoid Open", true);
-		leftHorizontalSolenoid.set(leftSet);
-		rightHorizontalSolenoid.set(rightSet);
-		leftOpen = false;
-		rightOpen = false;
+		if (!leftOpen) {
+			toggleLeftIntake();
+		}
+		if (!rightOpen) {
+			toggleRightIntake();
+		}
 	}
 }
