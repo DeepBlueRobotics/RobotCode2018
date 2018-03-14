@@ -117,7 +117,7 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	 * Runs lift motors at specified speed
 	 * 
 	 * @param speed
-	 *            - desired speed to run at
+	 *            - desired speed to run at [-1, 1]
 	 */
 	@Override
 	public void runMotor(double output) {

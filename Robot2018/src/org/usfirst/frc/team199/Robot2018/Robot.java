@@ -288,43 +288,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		// if(firstTime) {
-		// Robot.dt.enableVelocityPIDs();
-		// firstTime = false;
-		//// }
-		// dt.getLeftVPID().setConsts(getConst("VelocityLeftkI", 0), 0,
-		// getConst("VelocityLeftkD", rmap.calcDefkD(dt.getCurrentMaxSpeed())),
-		// /* 1 / dt.getCurrentMaxSpeed() */Robot.getConst("VelocityLeftkF",
-		// 1 / Robot.getConst("Max Low Speed", 84)));
-		// dt.getRightVPID().setConsts(getConst("VelocityRightkI", 0), 0,
-		// getConst("VelocityRightkD", rmap.calcDefkD(dt.getCurrentMaxSpeed())),
-		// /* 1 / dt.getCurrentMaxSpeed() */Robot.getConst("VelocityRightkF",
-		// 1 / Robot.getConst("Max Low Speed", 84)));
-		// dt.resetAllVelocityPIDConsts();
-
-		// dt.setVPIDs(getConst("VPID Test Set", 0.5));
-
-		Scheduler.getInstance().run();
-
-		// System.out.println("Left VPID Targ: " + dt.getLeftVPIDOutput());
-		// System.out.println("Right VPID Targ: " + dt.getRightVPIDOutput());
-		// System.out.println("Left VPID Error: " + dt.getLeftVPIDerror());
-		// System.out.println("Right VPID Error: " + dt.getRightVPIDerror());
-		// System.out.println("Left Enc Rate: " + dt.getLeftEncRate());
-		// System.out.println("Right Enc Rate: " + dt.getRightEncRate());
-		//
-		// System.out.println("Left Talon Speed: " + rmap.dtLeftMaster.get());
-		// System.out.println("Right Talon Speed: " + rmap.dtRightMaster.get());
-
-		// System.out.println("Left Enc Dist " + dt.getLeftDist());
-		// System.out.println("Right Enc Dist " + dt.getRightDist());
-		// System.out.println("Avg Enc Dist" + dt.getEncAvgDist());
-
-		// dt.dtLeft.set(0.1);
-		// dt.dtRight.set(-oi.rightJoy.getY());
-		// dt.dtLeft.set(-oi.leftJoy.getY());
-		// dt.dtRight.set(-oi.rightJoy.getY());
-
-		// dt.putVelocityControllersToDashboard();
+		// Scheduler.getInstance().run();
+		lift.disable();
+		lift.runMotor(SmartDashboard.getNumber("Voltage to Lift", 0));
 	}
 }
