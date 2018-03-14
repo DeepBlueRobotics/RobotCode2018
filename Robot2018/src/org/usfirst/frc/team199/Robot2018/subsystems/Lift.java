@@ -90,7 +90,7 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	}
 
 	/**
-	 * Uses (insert sensor here) to detect the current lift position
+	 * Uses AMT103 Encoder to detect the current lift position
 	 */
 	@Override
 	public double getHeight() {
@@ -165,7 +165,7 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	@Override
 	protected double returnPIDInput() {
 		// return getHeight(); //Use this instead? What's the difference?
-		return liftEnc.getDistance();
+		return getHeight();
 	}
 
 	/**

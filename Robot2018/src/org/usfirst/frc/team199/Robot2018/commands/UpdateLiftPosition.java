@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj.command.Command;
 public class UpdateLiftPosition extends Command {
 
 	private Lift lift;
-
-	private double currDist;
 	private double desiredDist = 0;
 	private LiftHeight desiredPos;
 
@@ -33,14 +31,6 @@ public class UpdateLiftPosition extends Command {
 			System.err.println("[ERROR] Manipulator not plugged in.");
 			manipulatorPluggedIn = false;
 		}
-
-		// I put this enable in here as well as in the Lift constructor bc not sure if
-		// this interrupted() method (and therefore end() and disable() methods) will be
-		// called when an auto command takes overs temporarily. May be repetitive, so...
-		/**
-		 * @TODO figure out if this needs to be here and/or in Lift constructor or not
-		 */
-		lift.enable();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -59,15 +49,7 @@ public class UpdateLiftPosition extends Command {
 				desiredPos = LiftHeight.GROUND;
 			}
 
-			currDist = lift.getHeight();
-			/**
-			 * @TODO: AutoLift sets desiredDist to the delta dist (set - current), but
-			 *        shouldn't you set the setpoint to your actual setpoint? not to the
-			 *        current error? Uncomment line 70 if using delta. Or, use
-			 *        setRelativeSetpoint(something here).
-			 */
 			desiredDist = lift.getDesiredDistFromPos(desiredPos);
-			// desiredDist -= currDist;
 			lift.setSetpoint(desiredDist);
 		}
 	}
