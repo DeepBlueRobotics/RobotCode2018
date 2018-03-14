@@ -14,6 +14,6 @@ public class EjectToScale extends CommandGroup {
 		addSequential(new PIDMove(Robot.getConst("Auto Scale Move Dist", 12), Robot.dt, Robot.sd, Robot.dt.getDistEncAvg()));
 		addSequential(new OuttakeCube());
 		addSequential(new PIDMove(-1 * Robot.getConst("Auto Scale Move Dist", 12), Robot.dt, Robot.sd, Robot.dt.getDistEncAvg()));
-		addSequential(new LiftToPosition(Robot.lift, "SCALE"));
+		addSequential(new LiftToPosition(Robot.lift, "GROUND"));
     }
 }
