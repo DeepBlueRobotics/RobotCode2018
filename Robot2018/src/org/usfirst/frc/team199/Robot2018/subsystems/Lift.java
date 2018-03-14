@@ -156,6 +156,14 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	}
 
 	/**
+	 * @return the max speed of the lift
+	 */
+	public double getLiftMaxSpeed() {
+		/** @todo find lift max speed and set default below */
+		return Robot.getConst("Lift Max Speed", 0);
+	}
+
+	/**
 	 * Uses AMT103 Encoder to detect the current lift height with respect to the
 	 * lift's min height (inches)
 	 */
@@ -175,5 +183,43 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 		double spd = liftEnc.getRate();
 		out += Robot.getConst("Lift: Necessary Voltage", 0);
 		runMotor(out);
+	}
+
+	/**
+	 * Gets the time constant of the drivetrain, which is used to calculate PID
+	 * constants.
+	 * 
+	 * @return time constant
+	 */
+	public double getLiftTimeConstant() {
+		double gearReduction = getLiftGearRatio();
+		double radius = getLiftRadius();
+		double timeConstant = RobotMap.getOmegaMax() / gearReduction / 60 * 2 * Math.PI
+				* RobotMap.convertNtokG(getLiftedWeight()) * radius * radius
+				/ (RobotMap.getStallTorque() * gearReduction);
+		return timeConstant;
+	}
+
+	/**
+	 * @return the gear ratio of the lift gearbox
+	 */
+	public double getLiftGearRatio() {
+		return Robot.getConst("Lift Gear Reduction", 10);
+	}
+
+	/**
+	 * @return the lift sprocket's radius
+	 */
+	public double getLiftRadius() {
+		// 15 tooth, #35 sprocket
+		return Robot.getConst("Lift Sprocket Pitch Diam", 1.79) / 2;
+	}
+
+	/**
+	 * @return the weight (in Newtons) of everything that is being lifted: intake,
+	 *         lift components, NOT cube
+	 */
+	public double getLiftedWeight() {
+		return Robot.getConst("Weight of Lifted Stuff", 342);
 	}
 }

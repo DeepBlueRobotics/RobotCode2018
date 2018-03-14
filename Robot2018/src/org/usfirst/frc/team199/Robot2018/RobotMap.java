@@ -43,7 +43,7 @@ public class RobotMap {
 	public static DigitalSource liftEncPort1;
 	public static DigitalSource liftEncPort2;
 
-	//public static WPI_TalonSRX climberMotor;
+	// public static WPI_TalonSRX climberMotor;
 
 	public static VictorSP leftIntakeMotor;
 	public static VictorSP rightIntakeMotor;
@@ -123,7 +123,7 @@ public class RobotMap {
 
 	public RobotMap() {
 		pdp = new PowerDistributionPanel();
-		
+
 		liftMotorA = new WPI_VictorSPX(getPort("LiftVictorSPX", 5));
 		configSPX(liftMotorA);
 		liftMotorB = new WPI_TalonSRX(getPort("1LiftTalonSRX", 6));
@@ -252,7 +252,10 @@ public class RobotMap {
 		return Robot.getConst("Radius of Drivetrain Wheel", 0.0635);
 	}
 
-	public double getOmegaMax() {
+	/**
+	 * @return the RPM max of a CIM
+	 */
+	public static double getOmegaMax() {
 		return Robot.getConst("Omega Max", 5330);
 	}
 
@@ -264,7 +267,10 @@ public class RobotMap {
 		return Robot.getConst("Code cycle time", 0.05);
 	}
 
-	public double getStallTorque() {
+	/**
+	 * @return the stall torque of a CIM
+	 */
+	public static double getStallTorque() {
 		return Robot.getConst("Stall Torque", 2.41);
 	}
 
@@ -273,7 +279,12 @@ public class RobotMap {
 		return lbs * 0.45359237;
 	}
 
-	private double convertNtokG(double newtons) {
+	/**
+	 * @param the
+	 *            weight (in Newtons)
+	 * @return the equivalent mass (in kg)
+	 */
+	public static double convertNtokG(double newtons) {
 		// weight / accel due to grav = kg
 		return newtons / 9.81;
 	}

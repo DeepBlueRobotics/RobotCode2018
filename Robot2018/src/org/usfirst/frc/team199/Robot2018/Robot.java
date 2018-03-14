@@ -290,7 +290,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		// Scheduler.getInstance().run();
-		lift.disable();
-		lift.runMotor(SmartDashboard.getNumber("Voltage to Lift", 0));
+		// lift.disable();
+		// lift.runMotor(SmartDashboard.getNumber("Voltage to Lift", 0));
 	}
 }
