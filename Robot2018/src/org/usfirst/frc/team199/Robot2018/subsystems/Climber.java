@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  */
 public class Climber extends Subsystem implements ClimberInterface {
 
-	private final WPI_TalonSRX climberMotor = RobotMap.climberMotor;
+	//private final WPI_TalonSRX climberMotor = RobotMap.climberMotor;
 	
 	
 	/**
@@ -52,7 +52,7 @@ public class Climber extends Subsystem implements ClimberInterface {
 	 * stops the climber
 	 */
 	public void stopClimber() {
-		climberMotor.stopMotor();
+		//climberMotor.stopMotor();
 	}
 
 	

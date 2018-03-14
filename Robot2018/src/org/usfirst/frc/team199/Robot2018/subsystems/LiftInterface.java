@@ -31,16 +31,8 @@ public interface LiftInterface {
 	 */
 	public double getLiftSpeed();
 	
-	
 	/**
-	 * Goes to specified height
-	 * @param position - ground, switch, scale, bar
-	 * @param offset - distance up or down from position
-	 */
-	public void goToPosition(Position position, double offset);
-	
-	/**
-	 * Runs lift motor at specified speed
+	 * Runs lift motors at specified speed
 	 * @param speed - desired speed to run at
 	 */
 	public void runMotor(double speed);
@@ -60,5 +52,7 @@ public interface LiftInterface {
 	 * Sets the current position in the lift subsystem
 	 * @param newPosition - the new position meant to be set
 	 */
-	public void setTargetPosition(Position newPosition);
+	public void setCurrPosition(Position newPosition);
+	
+	
 }

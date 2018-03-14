@@ -14,55 +14,40 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class AutoLift extends Command implements PIDOutput{
 	/**
-	 * All distances are - 1 foot for initial height of intake and + 3 inches for wiggle room for dropping cubes
-	 * Also, acutal distances are divided by 3 because according to cad, the lift will have a 1:3 ratio from winch
+	 * All distances are measured from bottom of cube and + 3 inches for wiggle room for dropping cubes
+	 * Also, actual distances are divided by 3 because according to cad, the lift will have a 1:3 ratio from winch
 	 * to actual height.
 	 */
 	
 	/**
 	 * Distance to switch
 	 * 18.75 inches in starting position (this measurement is the fence that surrounds the switch)
-	 * 9.75 / 3 for ratio = 3.25
+	 * 21.75 / 3 for ratio = 7.25
 	 */
-	private final double SWITCH_DIST = 3.25;
+	private final double SWITCH_DIST = 7.25;
 	/**
 	 * Distance to scale
 	 * 5 feet starting
-	 * 51 / 3 = 17
+	 * 63 / 3 = 21
 	 */
-	private final double SCALE_DIST = 17;
+	private final double SCALE_DIST = 21;
 	/**
 	 * Distance to bar
-	 * 72 / 3 = 24
+	 * 87 / 3 = 29
 	 * 7 feet starting; bar distance should be changed because I'm not aware how climber mech will be positioned
 	 */
-	private final double BAR_DIST = 24;
+	private final double BAR_DIST = 29;
 	private double desiredDist = 0;
-	private double currDist = 0;
+	private double currDist;
 	private LiftInterface lift;
 	private Position desiredPos;
 	
 	private PIDController liftController;
 
     public AutoLift(Position stage, LiftInterface lift) {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
     	this.lift = lift;
     	requires(Robot.lift);
-    	switch(lift.getCurrPos()) {
-    	case GROUND:
-    		currDist = 0;
-    		break;
-    	case SWITCH:
-    		currDist = SWITCH_DIST;
-    		break;
-    	case SCALE:
-    		currDist = SCALE_DIST;
-    		break;
-    	case BAR:
-    		currDist = BAR_DIST;
-    		break;
-    	}
+    	currDist = lift.getHeight();
     	switch(stage) {
     	case GROUND:
     		desiredDist = -currDist;
@@ -86,7 +71,6 @@ public class AutoLift extends Command implements PIDOutput{
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	lift.resetEnc();
 		// input is in inches
 		//liftController.setInputRange(-Robot.getConst("Max High Speed", 204), Robot.getConst("Max High Speed", 204));
 		// output in "motor units" (arcade and tank only accept values [-1, 1]
@@ -104,7 +88,7 @@ public class AutoLift extends Command implements PIDOutput{
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	if(liftController.onTarget()) {
-    		lift.setTargetPosition(desiredPos);
+    		lift.setCurrPosition(desiredPos);
     		return true;
     	}
     	return false;

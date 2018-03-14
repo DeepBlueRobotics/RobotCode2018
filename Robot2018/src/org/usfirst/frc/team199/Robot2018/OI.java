@@ -76,33 +76,36 @@ public class OI {
 		leftJoy = new Joystick(0);
 		shiftDriveTypeButton = new JoystickButton(leftJoy, getButton("Shift Drive Type", 2));
 		shiftDriveTypeButton.whenPressed(new ShiftDriveType());
+
 		pIDMoveButton = new JoystickButton(leftJoy, getButton("PID Move", 7));
 		pIDMoveButton
 				.whenPressed(new PIDMove(Robot.sd.getConst("Move Targ", 24), Robot.dt, Robot.sd, RobotMap.distEncAvg));
 		pIDTurnButton = new JoystickButton(leftJoy, getButton("PID Turn", 8));
-		// PIDTurnButton.whenPressed(new PIDTurn(Robot.getConst("Turn Targ", 90),
-		// Robot.dt, Robot.sd RobotMap.fancyGyro));
 		pIDTurnButton
 				.whenReleased(new PIDTurn(Robot.getConst("Turn Targ", 90), Robot.dt, Robot.sd, RobotMap.fancyGyro));
+
 		resetEncButton = new JoystickButton(leftJoy, getButton("Reset Dist Enc", 10));
 		resetEncButton.whenPressed(new ResetEncoders());
+
 		findTurnTimeConstantButton = new JoystickButton(leftJoy, getButton("Find Turn Time Constant", 11));
 		// the command will only run in test mode
 		findTurnTimeConstantButton
 				.whenPressed(new FindTurnTimeConstant(robot, Robot.dt, Robot.rmap.fancyGyro, Robot.sd));
 
 		rightJoy = new Joystick(1);
-		shiftHighGearButton = new JoystickButton(rightJoy, getButton("Shift High Gear", 3));
+		shiftHighGearButton = new JoystickButton(rightJoy, getButton("Shift High Gear", 4));
 		shiftHighGearButton.whenPressed(new ShiftHighGear());
-		shiftLowGearButton = new JoystickButton(rightJoy, getButton("Shift Low Gear", 2));
+		shiftLowGearButton = new JoystickButton(rightJoy, getButton("Shift Low Gear", 3));
 		shiftLowGearButton.whenPressed(new ShiftLowGear());
+
 		updatePIDConstantsButton = new JoystickButton(rightJoy, getButton("Get PID Constants", 8));
 		updatePIDConstantsButton.whenPressed(new UpdatePIDConstants());
 		updateEncoderDPPButton = new JoystickButton(rightJoy, getButton("Get Encoder Dist Per Pulse", 9));
 		updateEncoderDPPButton.whenPressed(new SetDistancePerPulse());
+
 		moveLiftUpButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Up", 10));
-		moveLiftDownButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Down", 11));
 		moveLiftUpButton.whileHeld(new RunLift(Robot.lift, true));
+		moveLiftDownButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Down", 11));
 		moveLiftDownButton.whileHeld(new RunLift(Robot.lift, false));
 
 		manipulator = new Joystick(2);

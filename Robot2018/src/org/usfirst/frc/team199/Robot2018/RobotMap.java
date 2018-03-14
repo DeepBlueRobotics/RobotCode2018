@@ -9,6 +9,7 @@ package org.usfirst.frc.team199.Robot2018;
 
 import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
@@ -34,12 +35,15 @@ public class RobotMap {
 
 	public static PowerDistributionPanel pdp;
 
-	public static WPI_TalonSRX liftMotor;
+	public static WPI_VictorSPX liftMotorA;
+	public static WPI_TalonSRX liftMotorB;
+	public static WPI_TalonSRX liftMotorC;
+	public static SpeedControllerGroup liftMotors;
 	public static Encoder liftEnc;
 	public static DigitalSource liftEncPort1;
 	public static DigitalSource liftEncPort2;
 
-	public static WPI_TalonSRX climberMotor;
+	//public static WPI_TalonSRX climberMotor;
 
 	public static VictorSP leftIntakeMotor;
 	public static VictorSP rightIntakeMotor;
@@ -93,6 +97,8 @@ public class RobotMap {
 		mc.enableCurrentLimit(true);
 
 		mc.configNeutralDeadband(Robot.getConst("Motor Deadband", 0.001), kTimeout);
+
+		mc.setNeutralMode(NeutralMode.Brake);
 	}
 
 	/**
@@ -111,26 +117,31 @@ public class RobotMap {
 		mc.configPeakOutputReverse(-1, kTimeout);
 
 		mc.configNeutralDeadband(Robot.getConst("Motor Deadband", 0.001), kTimeout);
+
+		mc.setNeutralMode(NeutralMode.Brake);
 	}
 
 	public RobotMap() {
 		pdp = new PowerDistributionPanel();
-
-		liftMotor = new WPI_TalonSRX(getPort("LiftTalonSRX", 7));
-		configSRX(liftMotor);
+		
+		liftMotorA = new WPI_VictorSPX(getPort("LiftVictorSPX", 5));
+		configSPX(liftMotorA);
+		liftMotorB = new WPI_TalonSRX(getPort("1LiftTalonSRX", 6));
+		configSRX(liftMotorB);
+		liftMotorC = new WPI_TalonSRX(getPort("2LiftTalonSRX", 7));
+		configSRX(liftMotorC);
+		liftMotors = new SpeedControllerGroup(liftMotorB, liftMotorA, liftMotorC);
 		liftEncPort1 = new DigitalInput(getPort("1LiftEnc", 4));
 		liftEncPort2 = new DigitalInput(getPort("2LiftEnc", 5));
 		liftEnc = new Encoder(liftEncPort1, liftEncPort2);
 		liftEnc.setPIDSourceType(PIDSourceType.kDisplacement);
-		climberMotor = new WPI_TalonSRX(getPort("ClimberTalonSRX", 6));
-		configSRX(climberMotor);
 
 		leftIntakeMotor = new VictorSP(getPort("IntakeLeftVictorSP", 8));
 		rightIntakeMotor = new VictorSP(getPort("IntakeRightVictorSP", 9));
-		leftIntakeSolenoid = new DoubleSolenoid(getPort("IntakeLeftHorizontalSolenoidPort1", 4),
-				getPort("IntakeLeftHorizontalSolenoidPort2", 5));
-		rightIntakeSolenoid = new DoubleSolenoid(getPort("IntakeRightHorizontalSolenoidPort1", 2),
-				getPort("IntakeRightHorizontalSolenoidPort2", 3));
+		leftIntakeSolenoid = new DoubleSolenoid(getPort("IntakeLeftSolenoidForward", 4),
+				getPort("IntakeLeftSolenoidReverse", 5));
+		rightIntakeSolenoid = new DoubleSolenoid(getPort("IntakeRightSolenoidForward", 2),
+				getPort("IntakeRightSolenoidReverse", 3));
 
 		leftEncPort1 = new DigitalInput(getPort("1LeftEnc", 2));
 		leftEncPort2 = new DigitalInput(getPort("2LeftEnc", 3));

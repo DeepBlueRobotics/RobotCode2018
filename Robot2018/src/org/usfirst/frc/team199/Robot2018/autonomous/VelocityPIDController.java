@@ -13,15 +13,16 @@ public class VelocityPIDController extends PIDController implements SpeedControl
 
 	/**
 	 * Constructs a VelocityPIDContoller and invokes the super constructor
-	 * (PIDController), setting the three PID constants and the source and output
-	 * for this VelocityPIDController.
+	 * (PIDController), setting the four PID constants and the source and output for
+	 * this VelocityPIDController.
 	 * 
 	 * @param kp
-	 *            the proportional PID constant
+	 *            the proportional PID constant, multiplied by the total error (aka
+	 *            I)
 	 * @param ki
-	 *            the integral PID constant
+	 *            the integral PID constant, not used in velocity control
 	 * @param kd
-	 *            the derivative PID constant
+	 *            the derivative PID constant, multiplied by the error (aka P)
 	 * @param kf
 	 *            the feed forward value: should be 1/MaxSpeed
 	 * @param source
