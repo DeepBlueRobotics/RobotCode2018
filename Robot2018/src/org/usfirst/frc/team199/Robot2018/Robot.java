@@ -59,6 +59,7 @@ public class Robot extends IterativeRobot {
 	String[] fmsPossibilities = { "LL", "LR", "RL", "RR" };
 
 	public static SmartDashboardInterface sd = new SmartDashboardInterface() {
+		@Override
 		public double getConst(String key, double def) {
 			Preferences pref = Preferences.getInstance();
 			if (!pref.containsKey("Const/" + key)) {
@@ -71,6 +72,20 @@ public class Robot extends IterativeRobot {
 			return pref.getDouble("Const/" + key, def);
 		}
 
+		@Override
+		public String getString(String key, String def) {
+			Preferences pref = Preferences.getInstance();
+			if (!pref.containsKey("String/" + key)) {
+				pref.putString("String/" + key, def);
+				if (pref.getString("String/ + key", def) != def) {
+					System.err.println("pref Key" + "String/" + key + "already taken by a different type");
+					return def;
+				}
+			}
+			return pref.getString("String/" + key, def);
+		}
+
+		@Override
 		public void putConst(String key, double def) {
 			Preferences pref = Preferences.getInstance();
 			pref.putDouble("Const/" + key, def);
@@ -79,14 +94,17 @@ public class Robot extends IterativeRobot {
 			}
 		}
 
+		@Override
 		public void putData(String string, PIDController controller) {
 			SmartDashboard.putData(string, controller);
 		}
 
+		@Override
 		public void putNumber(String string, double d) {
 			SmartDashboard.putNumber(string, d);
 		}
 
+		@Override
 		public void putBoolean(String string, boolean b) {
 			SmartDashboard.putBoolean(string, b);
 		}
@@ -102,6 +120,10 @@ public class Robot extends IterativeRobot {
 
 	public static double getConst(String key, double def) {
 		return sd.getConst(key, def);
+	}
+
+	public static String getString(String key, String def) {
+		return sd.getString(key, def);
 	}
 
 	public static void putConst(String key, double def) {
@@ -184,6 +206,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		dt.resetAHRS();
+		lift.resetEnc();
 		AutoUtils.state = new State(0, 0, 0);
 		Scheduler.getInstance().add(new ShiftLowGear());
 		Scheduler.getInstance().add(new CloseIntake());
@@ -267,43 +290,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		// if(firstTime) {
-		// Robot.dt.enableVelocityPIDs();
-		// firstTime = false;
-		//// }
-		// dt.getLeftVPID().setConsts(getConst("VelocityLeftkI", 0), 0,
-		// getConst("VelocityLeftkD", rmap.calcDefkD(dt.getCurrentMaxSpeed())),
-		// /* 1 / dt.getCurrentMaxSpeed() */Robot.getConst("VelocityLeftkF",
-		// 1 / Robot.getConst("Max Low Speed", 84)));
-		// dt.getRightVPID().setConsts(getConst("VelocityRightkI", 0), 0,
-		// getConst("VelocityRightkD", rmap.calcDefkD(dt.getCurrentMaxSpeed())),
-		// /* 1 / dt.getCurrentMaxSpeed() */Robot.getConst("VelocityRightkF",
-		// 1 / Robot.getConst("Max Low Speed", 84)));
-		// dt.resetAllVelocityPIDConsts();
-
-		// dt.setVPIDs(getConst("VPID Test Set", 0.5));
-
-		Scheduler.getInstance().run();
-
-		// System.out.println("Left VPID Targ: " + dt.getLeftVPIDOutput());
-		// System.out.println("Right VPID Targ: " + dt.getRightVPIDOutput());
-		// System.out.println("Left VPID Error: " + dt.getLeftVPIDerror());
-		// System.out.println("Right VPID Error: " + dt.getRightVPIDerror());
-		// System.out.println("Left Enc Rate: " + dt.getLeftEncRate());
-		// System.out.println("Right Enc Rate: " + dt.getRightEncRate());
-		//
-		// System.out.println("Left Talon Speed: " + rmap.dtLeftMaster.get());
-		// System.out.println("Right Talon Speed: " + rmap.dtRightMaster.get());
-
-		// System.out.println("Left Enc Dist " + dt.getLeftDist());
-		// System.out.println("Right Enc Dist " + dt.getRightDist());
-		// System.out.println("Avg Enc Dist" + dt.getEncAvgDist());
-
-		// dt.dtLeft.set(0.1);
-		// dt.dtRight.set(-oi.rightJoy.getY());
-		// dt.dtLeft.set(-oi.leftJoy.getY());
-		// dt.dtRight.set(-oi.rightJoy.getY());
-
-		// dt.putVelocityControllersToDashboard();
+		// Scheduler.getInstance().run();
+		// lift.disable();
+		// lift.runMotor(SmartDashboard.getNumber("Voltage to Lift", 0));
 	}
 }
