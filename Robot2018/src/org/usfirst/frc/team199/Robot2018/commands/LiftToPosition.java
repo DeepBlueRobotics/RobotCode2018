@@ -23,13 +23,11 @@ public class LiftToPosition extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		// There's no way to reset the Lift's PID constants after constructing it, so if
-		// you change them you must Restart Robot Code in DS.
+		lift.getPIDController().setPID(Robot.getConst("LiftkP", 0.1), Robot.getConst("LiftkI", 0),
+				Robot.getConst("LiftkD", 0), Robot.getConst("LiftkF", 0.1));
 		double setpoint = lift.getDesiredDistFromPos(pos);
 		lift.setSetpoint(setpoint);
 		System.out.println("Target Height: " + setpoint);
-		lift.enable();
-		System.out.println("Enabled");
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -47,11 +45,6 @@ public class LiftToPosition extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		lift.disable();
-		System.out.println("Disabled");
-		// keep stopLift() after disable() so they don't conflict
-		lift.stopLift();
-		System.out.println("Stopped");
 	}
 
 	// Called when another command which requires one or more of the same

@@ -176,18 +176,7 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	protected void usePIDOutput(double output) {
 		double out = output;
 		double spd = liftEnc.getRate();
-		out += convertSpdToVoltage(spd);
+		out += Robot.getConst("Lift: Necessary Voltage", 0);
 		runMotor(out);
-	}
-
-	/**
-	 * Takes a value for the current lift speed and translates it to the amount of
-	 * voltage to motors need to supply.
-	 * 
-	 * @param speed
-	 *            - the current lift speed (in/s)
-	 */
-	public double convertSpdToVoltage(double speed) {
-		return 0;
 	}
 }

@@ -28,7 +28,6 @@ public class MoveLiftWithPID extends Command {
 	protected void initialize() {
 		setpoint = 0;
 		lift.setSetpoint(setpoint);
-		lift.enable();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -48,9 +47,6 @@ public class MoveLiftWithPID extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		lift.disable();
-		// keep stopLift() after disable() so they don't conflict
-		lift.stopLift();
 	}
 
 	// Called when another command which requires one or more of the same

@@ -104,8 +104,8 @@ public class OI {
 		moveLiftPIDDownButton.whileHeld(new MoveLiftWithPID(Robot.lift, false));
 
 		testLiftPID = new JoystickButton(leftJoy, getButton("Test Lift PID", 5));
-		testLiftPID.whenPressed(
-				new LiftToPosition(Robot.lift, Robot.getString("Lift Targ Height", LiftHeight.SWITCH.toString())));
+		testLiftPID.whenPressed(new LiftToPosition(Robot.lift,
+				SmartDashboard.getString("Lift Targ Height", LiftHeight.SWITCH.toString())));
 
 		rightJoy = new Joystick(1);
 		shiftHighGearButton = new JoystickButton(rightJoy, getButton("Shift High Gear", 4));

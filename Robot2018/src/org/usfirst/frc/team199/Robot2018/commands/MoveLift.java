@@ -46,6 +46,7 @@ public class MoveLift extends Command {
 	@Override
 	protected void end() {
 		lift.stopLift();
+		lift.enable();
 	}
 
 	// Called when another command which requires one or more of the same
