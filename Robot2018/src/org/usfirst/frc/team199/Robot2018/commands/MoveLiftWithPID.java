@@ -26,14 +26,14 @@ public class MoveLiftWithPID extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		setpoint = 0;
-		lift.setSetpoint(setpoint);
+		// setpoint = lift.getPIDController().getSetpoint();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		setpoint += dir * Robot.getConst("Lift Move Increment", 1); // inches
+		setpoint = lift.getPIDController().getSetpoint() + dir * Robot.getConst("Lift Move Increment", 0.25); // inches/0.05
+																												// secs
 		lift.setSetpoint(setpoint);
 	}
 

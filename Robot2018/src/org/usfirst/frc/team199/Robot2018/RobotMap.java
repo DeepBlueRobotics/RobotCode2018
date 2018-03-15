@@ -134,6 +134,7 @@ public class RobotMap {
 		// liftMotors = new SpeedControllerGroup(liftMotorB, liftMotorA, liftMotorC);
 		liftMotors = new SpeedControllerGroup(liftMotorC);
 		liftMotors.setName("Lift", "CIM Motor");
+		liftMotors.setInverted(true);
 		LiveWindow.add(liftMotors);
 
 		liftEncPort1 = new DigitalInput(getPort("1LiftEnc", 4));

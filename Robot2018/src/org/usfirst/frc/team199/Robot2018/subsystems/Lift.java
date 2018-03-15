@@ -29,7 +29,9 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 
 		double maxSpeed = getLiftMaxSpeed();
 
-		double r = Robot.getConst("LiftPidR", 3.0);
+		System.out.println("Lift Time Const: " + getLiftTimeConstant());
+
+		double r = Robot.getConst("LiftPidR", 0.3);
 		double kP = r / getLiftTimeConstant() / maxSpeed;
 		double kI = 0;
 		double kD = r / maxSpeed;
@@ -37,11 +39,18 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 
 		PIDController liftController = getPIDController();
 
-		liftController.setPID(Robot.getConst("LiftkP", kP), Robot.getConst("LiftkI", kI), Robot.getConst("LiftkD", kD),
-				Robot.getConst("LiftkF", kF));
+		// liftController.setPID(Robot.getConst("LiftkP", kP), Robot.getConst("LiftkI",
+		// kI), Robot.getConst("LiftkD", kD),
+		// Robot.getConst("LiftkF", kF));
+		liftController.setPID(kP, kI, kD, kF);
 
 		setInputRange(0, Robot.getConst("Lift Max Height", 24));
 		setOutputRange(-1, 1);
+		setAbsoluteTolerance(Robot.getConst("Lift Tolerance", 0.8));
+
+		// dpp = (pitch circumference of sprocket) / (pulses per rev of output shaft)
+		double dpp = 2 * Math.PI * getLiftRadius() / 2048;
+		liftEnc.setDistancePerPulse(dpp);
 
 		NUM_STAGES = (int) Robot.getConst("Lift stages", 1);
 		WIGGLE_ROOM = (int) Robot.getConst("Lift wiggle room", 3.0); // inches
@@ -71,6 +80,9 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 		case GROUND:
 			desiredDist = 0;
 			break;
+		case HOLD_CUBE:
+			desiredDist = 4;
+			break;
 		case SWITCH:
 			desiredDist = SWITCH_DIST;
 			break;
@@ -86,6 +98,13 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 		}
 
 		return desiredDist;
+	}
+
+	/**
+	 * @return the rate of the lift encoder (in/s)
+	 */
+	public double getSpeed() {
+		return liftEnc.getRate();
 	}
 
 	/**
@@ -124,14 +143,19 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	}
 
 	/**
-	 * Runs lift motors at specified speed
+	 * Sends specific voltage to lift motor, clamped at max voltage
 	 * 
-	 * @param speed
-	 *            - desired speed to run at [-1, 1]
+	 * @param output
+	 *            - desired voltage to set motor to [-1, 1]
 	 */
 	@Override
 	public void runMotor(double output) {
-		liftMotors.set(output);
+		double absMax = Robot.getConst("Lift Max Voltage", 0.5);
+		double out = output;
+		if (Math.abs(out) > absMax) {
+			out = Math.signum(out) * absMax;
+		}
+		liftMotors.set(out);
 	}
 
 	/**
@@ -169,11 +193,11 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	}
 
 	/**
-	 * @return the max speed of the lift
+	 * @return the max speed of the lift (in/s)
 	 */
 	public double getLiftMaxSpeed() {
-		/** @todo find lift max speed and set default below */
-		return Robot.getConst("Lift Max Speed", 0);
+		double maxSpd = RobotMap.getOmegaMax() / getLiftGearRatio() / 60 * 2 * Math.PI * getLiftRadius();
+		return Robot.getConst("Lift Max Speed", maxSpd);
 	}
 
 	/**
@@ -194,7 +218,7 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	protected void usePIDOutput(double output) {
 		double out = output;
 		double spd = liftEnc.getRate();
-		out += Robot.getConst("Lift: Necessary Voltage", 0);
+		out += Robot.getConst("Lift: Necessary Voltage", 0.125);
 		runMotor(out);
 	}
 
@@ -206,11 +230,20 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	 */
 	public double getLiftTimeConstant() {
 		double gearReduction = getLiftGearRatio();
-		double radius = getLiftRadius();
+		double radius = convertInToM(getLiftRadius());
 		double timeConstant = RobotMap.getOmegaMax() / gearReduction / 60 * 2 * Math.PI
 				* RobotMap.convertNtokG(getLiftedWeight()) * radius * radius
 				/ (RobotMap.getStallTorque() * gearReduction);
 		return timeConstant;
+	}
+
+	/**
+	 * @param inches
+	 *            - an amount in inches
+	 * @return the equivalent amount in meters
+	 */
+	public double convertInToM(double inches) {
+		return inches * 2.54 / 100;
 	}
 
 	/**
@@ -221,7 +254,7 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	}
 
 	/**
-	 * @return the lift sprocket's radius
+	 * @return the lift sprocket's radius (inches)
 	 */
 	public double getLiftRadius() {
 		// 15 tooth, #35 sprocket
@@ -233,6 +266,6 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	 *         lift components, NOT cube
 	 */
 	public double getLiftedWeight() {
-		return Robot.getConst("Weight of Lifted Stuff", 53.11);
+		return Robot.getConst("Weight of Lifted Stuff", 62.91);
 	}
 }

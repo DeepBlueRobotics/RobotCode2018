@@ -191,6 +191,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledInit() {
 		dt.disableVelocityPIDs();
+		lift.setSetpoint(0);
 	}
 
 	@Override
@@ -283,6 +284,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("In testInit()");
 		dt.resetAHRS();
 		AutoUtils.state = new State(0, 0, 0);
+		lift.disable();
 	}
 
 	/**

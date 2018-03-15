@@ -8,13 +8,16 @@ public interface LiftInterface {
 	public void initDefaultCommand();
 
 	public enum LiftHeight {
-		GROUND, SWITCH, SCALE, BAR;
+		GROUND, HOLD_CUBE, SWITCH, SCALE, BAR;
 
 		public static LiftHeight toLH(String str) {
 			LiftHeight lh = null;
 			switch (str) {
 			case "GROUND":
 				lh = GROUND;
+				break;
+			case "HOLD_CUBE":
+				lh = HOLD_CUBE;
 				break;
 			case "SWITCH":
 				lh = SWITCH;

@@ -15,7 +15,8 @@ public class UpdateLiftPosition extends Command {
 	private double desiredDist = 0;
 	private LiftHeight desiredPos;
 
-	private boolean manipulatorPluggedIn;
+	private boolean manipulatorPluggedIn = true;
+	private boolean goToGround = false;
 
 	public UpdateLiftPosition(Lift lift) {
 		requires(Robot.lift);
@@ -39,18 +40,40 @@ public class UpdateLiftPosition extends Command {
 		if (manipulatorPluggedIn) {
 			int angle = Robot.oi.manipulator.getPOV();
 
+			System.out.println("POV Reading: " + angle);
+
 			// 180 degrees is down and -1 is "nothing," so basically default to GROUND,
 			// anything else is SWITCH
-			if (angle != 180 && angle != -1) {
+			// if (angle != 180 && angle != -1) {
+			// desiredPos = LiftHeight.SWITCH;
+			// // NOTE: if full lift functionality does become a thing, need to add a couple
+			// // more if-elses here to account for those enum values
+			// } else {
+			// desiredPos = LiftHeight.GROUND;
+			// }
+
+			if (angle == 180) {
+				desiredPos = LiftHeight.HOLD_CUBE;
+				goToGround = true;
+			} else if (angle == 270) {
+				desiredPos = LiftHeight.HOLD_CUBE;
+				goToGround = false;
+			} else if (angle != -1) {
 				desiredPos = LiftHeight.SWITCH;
-				// NOTE: if full lift functionality does become a thing, need to add a couple
-				// more if-elses here to account for those enum values
-			} else {
-				desiredPos = LiftHeight.GROUND;
+				goToGround = false;
 			}
 
-			desiredDist = lift.getDesiredDistFromPos(desiredPos);
-			lift.setSetpoint(desiredDist);
+			if (angle != -1) {
+				desiredDist = lift.getDesiredDistFromPos(desiredPos);
+				lift.setSetpoint(desiredDist);
+			}
+
+			if (goToGround && lift.onTarget() && lift.getSpeed() <= 0.1) {
+				desiredPos = LiftHeight.GROUND;
+				desiredDist = lift.getDesiredDistFromPos(desiredPos);
+				lift.setSetpoint(desiredDist);
+				goToGround = false;
+			}
 		}
 	}
 
