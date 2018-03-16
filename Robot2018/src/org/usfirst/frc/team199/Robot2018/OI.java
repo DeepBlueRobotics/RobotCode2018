@@ -7,10 +7,10 @@
 
 package org.usfirst.frc.team199.Robot2018;
 
+import org.usfirst.frc.team199.Robot2018.commands.AutoLift;
 import org.usfirst.frc.team199.Robot2018.commands.CloseIntake;
 import org.usfirst.frc.team199.Robot2018.commands.FindTurnTimeConstant;
 import org.usfirst.frc.team199.Robot2018.commands.IntakeCube;
-import org.usfirst.frc.team199.Robot2018.commands.LiftToPosition;
 import org.usfirst.frc.team199.Robot2018.commands.MoveLift;
 import org.usfirst.frc.team199.Robot2018.commands.MoveLiftWithPID;
 import org.usfirst.frc.team199.Robot2018.commands.OpenIntake;
@@ -106,8 +106,8 @@ public class OI {
 		moveLiftPIDDownButton.whileHeld(new MoveLiftWithPID(Robot.lift, false));
 
 		testLiftPID = new JoystickButton(leftJoy, getButton("Test Lift PID", 5));
-		testLiftPID.whenPressed(new LiftToPosition(Robot.lift,
-				SmartDashboard.getString("Lift Targ Height", LiftHeight.SWITCH.toString())));
+		testLiftPID.whenPressed(
+				new AutoLift(Robot.lift, SmartDashboard.getString("Lift Targ Height", LiftHeight.SWITCH.toString())));
 
 		rightJoy = new Joystick(1);
 		shiftHighGearButton = new JoystickButton(rightJoy, getButton("Shift High Gear", 4));
@@ -124,6 +124,9 @@ public class OI {
 		moveLiftUpButton.whileHeld(new MoveLift(Robot.lift, true));
 		moveLiftDownButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Down", 11));
 		moveLiftDownButton.whileHeld(new MoveLift(Robot.lift, false));
+
+		stopIntakeButton = new JoystickButton(rightJoy, getButton("Stop Intake Button", 6));
+		stopIntakeButton.whenPressed(new StopIntake());
 
 		manipulator = new Joystick(2);
 		if (manipulator.getButtonCount() == 0) {
@@ -148,9 +151,6 @@ public class OI {
 			toggleLeftIntakeButton.whenPressed(new ToggleLeftIntake());
 			toggleRightIntakeButton = new JoystickButton(manipulator, getButton("Toggle Right Intake Button", 4));
 			toggleRightIntakeButton.whenPressed(new ToggleRightIntake());
-
-			stopIntakeButton = new JoystickButton(manipulator, getButton("Stop Intake Button", 7));
-			stopIntakeButton.whenPressed(new StopIntake());
 		}
 
 	}

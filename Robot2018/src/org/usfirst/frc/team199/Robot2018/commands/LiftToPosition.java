@@ -15,10 +15,10 @@ public class LiftToPosition extends Command {
 	private LiftHeight pos;
 	private boolean goToGround;
 
-	public LiftToPosition(Lift lift, String goal) {
+	public LiftToPosition(Lift lift, LiftHeight goal) {
 		requires(Robot.lift);
 		this.lift = lift;
-		pos = LiftHeight.toLH(goal);
+		pos = goal;
 	}
 
 	// Called just before this Command runs the first time
@@ -26,14 +26,14 @@ public class LiftToPosition extends Command {
 	protected void initialize() {
 		lift.getPIDController().setPID(Robot.getConst("LiftkP", 0.1), Robot.getConst("LiftkI", 0),
 				Robot.getConst("LiftkD", 0), Robot.getConst("LiftkF", 0.1));
+		double setpoint = lift.getDesiredDistFromPos(pos);
+		lift.setSetpoint(setpoint);
+		System.out.println("Target Height: " + setpoint);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		double setpoint = lift.getDesiredDistFromPos(pos);
-		lift.setSetpoint(setpoint);
-		System.out.println("Target Height: " + setpoint);
 		System.out.println("Current Height: " + lift.getHeight());
 	}
 

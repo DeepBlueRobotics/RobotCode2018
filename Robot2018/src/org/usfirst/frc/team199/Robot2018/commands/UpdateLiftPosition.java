@@ -59,12 +59,12 @@ public class UpdateLiftPosition extends Command {
 				lift.setSetpoint(desiredDist);
 			}
 
-			// if (goToGround && lift.onTarget() && lift.getSpeed() <= 0.1) {
-			// desiredPos = LiftHeight.GROUND;
-			// desiredDist = lift.getDesiredDistFromPos(desiredPos);
-			// lift.setSetpoint(desiredDist);
-			// goToGround = false;
-			// }
+			if (goToGround && lift.onTarget() && lift.getSpeed() <= 0.1) {
+				desiredPos = LiftHeight.GROUND;
+				desiredDist = lift.getDesiredDistFromPos(desiredPos);
+				lift.setSetpoint(desiredDist);
+				goToGround = false;
+			}
 		}
 	}
 

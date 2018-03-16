@@ -29,7 +29,7 @@ public class MoveLift extends Command {
 		lift.disable();
 		// below Lift Speed may be for manual testing only, but commented out code 2
 		// lines below can be used if want max speed
-		SPEED = Robot.getConst("Lift Speed", 0.05);
+		SPEED = Robot.getConst("Lift Speed", 0.5);
 		// SPEED = lift.getLiftMaxSpeed();
 	}
 

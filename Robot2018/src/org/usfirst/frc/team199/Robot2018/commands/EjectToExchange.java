@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class EjectToExchange extends CommandGroup {
 
-    public EjectToExchange() {
-        addSequential(new LiftToPosition(Robot.lift, "GROUND"));
-        addSequential(new OuttakeCube());
-    }
+	public EjectToExchange() {
+		addSequential(new AutoLift(Robot.lift, "GROUND"));
+		addSequential(new OuttakeCube());
+	}
 }

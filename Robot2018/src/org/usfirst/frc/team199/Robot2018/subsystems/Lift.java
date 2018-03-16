@@ -96,15 +96,16 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	 * @return true if reached target height and does not still have to go to the
 	 *         ground as a secondary, consecutive target
 	 */
-	@Override
-	public boolean onTarget() {
-		double targ = getSetpoint();
-		double tol = Robot.getConst("Lift Tolerance", 0.8);
-		double height = getHeight();
-		// true if (height within tolerance of targ) and (lift is not moving)
-		boolean wInTol = height <= (targ + tol) && height >= (targ - tol) && getSpeed() <= 0.1;
-		return wInTol && !goToGround;
-	}
+	// @Override
+	// public boolean onTarget() {
+	// double targ = getSetpoint();
+	// double tol = Robot.getConst("Lift Tolerance", 0.8);
+	// double height = getHeight();
+	// // true if (height within tolerance of targ) and (lift is not moving)
+	// boolean wInTol = height <= (targ + tol) && height >= (targ - tol) &&
+	// getSpeed() <= 0.1;
+	// return wInTol && !goToGround;
+	// }
 
 	/**
 	 * Set the lift's setpoint to this value continuously.
@@ -119,23 +120,23 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 		LiftHeight height = pos;
 		switch (height) {
 		case GROUND:
-			if (atHoldCube()) {
-				desiredDist = GROUND_DIST;
-				// false bc doesn't need to hold the GROUND as a second consecutive targ anymore
-				goToGround = false;
-				break;
-			} else {
-				// falls through to HOLD_CUBE case
-				height = LiftHeight.HOLD_CUBE;
-				goToGround = true;
-			}
+			// if (atHoldCube() || goToGround) {
+			desiredDist = GROUND_DIST;
+			// false bc doesn't need to hold the GROUND as a second consecutive targ anymore
+			goToGround = true;
+			break;
+		// } else {
+		// // falls through to HOLD_CUBE case
+		// height = LiftHeight.HOLD_CUBE;
+		// goToGround = false;
+		// }
 		case HOLD_CUBE:
 			desiredDist = HOLD_CUBE_DIST;
-			goToGround = false;
+			// goToGround = false;
 			break;
 		case SWITCH:
 			desiredDist = SWITCH_DIST;
-			goToGround = false;
+			// goToGround = false;
 			break;
 		case SCALE:
 			desiredDist = SCALE_DIST;
@@ -143,11 +144,11 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 			break;
 		case BAR:
 			desiredDist = BAR_DIST;
-			goToGround = false;
+			// goToGround = false;
 			break;
 		default:
 			desiredDist = GROUND_DIST;
-			goToGround = false;
+			// goToGround = false;
 			break;
 		}
 
