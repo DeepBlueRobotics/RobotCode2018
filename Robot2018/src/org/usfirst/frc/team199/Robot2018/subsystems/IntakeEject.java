@@ -21,6 +21,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	private final DoubleSolenoid rightSolenoid = RobotMap.rightIntakeSolenoid;
 	private boolean leftOpen = isOpen(leftSolenoid.get());
 	private boolean rightOpen = isOpen(rightSolenoid.get());
+	private boolean hasCube = false;
 
 	/**
 	 * Return whether or not a side of the intake (L/R) is open
