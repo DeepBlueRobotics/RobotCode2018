@@ -22,6 +22,7 @@ import org.usfirst.frc.team199.Robot2018.commands.SetDistancePerPulse;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftDriveType;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftHighGear;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
+import org.usfirst.frc.team199.Robot2018.commands.StopIntake;
 import org.usfirst.frc.team199.Robot2018.commands.ToggleLeftIntake;
 import org.usfirst.frc.team199.Robot2018.commands.ToggleRightIntake;
 import org.usfirst.frc.team199.Robot2018.commands.UpdatePIDConstants;
@@ -67,6 +68,7 @@ public class OI {
 	private JoystickButton outakeCubeButton;
 	private JoystickButton toggleLeftIntakeButton;
 	private JoystickButton toggleRightIntakeButton;
+	private JoystickButton stopIntakeButton;
 
 	public int getButton(String key, int def) {
 		if (!SmartDashboard.containsKey("Button/" + key)) {
@@ -146,6 +148,9 @@ public class OI {
 			toggleLeftIntakeButton.whenPressed(new ToggleLeftIntake());
 			toggleRightIntakeButton = new JoystickButton(manipulator, getButton("Toggle Right Intake Button", 4));
 			toggleRightIntakeButton.whenPressed(new ToggleRightIntake());
+
+			stopIntakeButton = new JoystickButton(manipulator, getButton("Stop Intake Button", 7));
+			stopIntakeButton.whenPressed(new StopIntake());
 		}
 
 	}

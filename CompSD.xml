@@ -1,0 +1,72 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="High Gear" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="14" y="4"/>
+		<width>93</width>
+		<height>78</height>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="830" y="4"/>
+		<width>529</width>
+		<height>399</height>
+		<property name="Camera Choice" value="USB Camera 1"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="324" y="17"/>
+		<width>502</width>
+		<height>383</height>
+		<property name="Camera Choice" value=""/>
+	</static-widget>
+	<widget field="Turn PID" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+		<location x="182" y="426"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.RobotPreferences">
+		<location x="6" y="87"/>
+		<width>284</width>
+		<height>205</height>
+	</static-widget>
+	<widget field="LR" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="31" y="2"/>
+	</widget>
+	<widget field="LL" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="16" y="12"/>
+	</widget>
+	<widget field="Left PID Controller" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+		<location x="51" y="417"/>
+	</widget>
+	<widget field="PIDController[1]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+		<location x="134" y="229"/>
+	</widget>
+	<widget field="RR" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="4" y="11"/>
+	</widget>
+	<widget field="Starting Position" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="11" y="16"/>
+	</widget>
+	<widget field="Move PID" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+		<location x="32" y="467"/>
+	</widget>
+	<widget field="Right PID Controller" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+		<location x="-26" y="264"/>
+		<width>159</width>
+	</widget>
+	<widget field="RL" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="13" y="30"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="VPID Right kI"/>
+	<hidden field="VPID Left kI"/>
+	<hidden field="Turn PID Error"/>
+	<hidden field="Auto Delay"/>
+	<hidden field="Move PID Error"/>
+	<hidden field="Angle"/>
+	<hidden field="Turn PID Result"/>
+	<hidden field="VPID kF"/>
+	<hidden field="Move PID Output"/>
+	<hidden field="VPID Right kP"/>
+	<hidden field="VPID Left kP"/>
+	<hidden field="Turn PID Output"/>
+	<hidden field="Move PID Result"/>
+</xml>
