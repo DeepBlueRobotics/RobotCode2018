@@ -20,9 +20,14 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 
 	private final int NUM_STAGES;
 	private final double WIGGLE_ROOM;
+	private final double GROUND_DIST;
+	private final double HOLD_CUBE_DIST;
 	private final double SWITCH_DIST;
 	private final double SCALE_DIST;
 	private final double BAR_DIST;
+
+	private LiftHeight desiredPos;
+	private boolean goToGround;
 
 	public Lift() {
 		super("Lift", 0, 0, 0, 0);
@@ -35,7 +40,7 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 		double kP = r / getLiftTimeConstant() / maxSpeed;
 		double kI = 0;
 		double kD = r / maxSpeed;
-		double kF = 1 / (maxSpeed * Robot.getConst("Default PID Update Time", 0.05));
+		double kF = 1 / maxSpeed * Robot.getConst("Default PID Update Time", 0.05);
 
 		PIDController liftController = getPIDController();
 
@@ -56,6 +61,8 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 		WIGGLE_ROOM = (int) Robot.getConst("Lift wiggle room", 3.0); // inches
 
 		// calculate constant measurements
+		GROUND_DIST = 0;
+		HOLD_CUBE_DIST = 4;
 		// distance to switch 18.75 inches in starting position
 		SWITCH_DIST = (18.75 + WIGGLE_ROOM) / NUM_STAGES;
 		// distance to scale 5 feet starting 63 / 3 = 21
@@ -74,26 +81,73 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 		setDefaultCommand(new UpdateLiftPosition(this));
 	}
 
+	/**
+	 * @return whether or not the cube
+	 */
+	private boolean atHoldCube() {
+		double tol = Robot.getConst("Lift Tolerance", 0.8);
+		double height = getHeight();
+		// true if (height within tolerance of HOLD_CUBE height) and (lift is not
+		// moving)
+		return height <= (HOLD_CUBE_DIST + tol) && height >= (HOLD_CUBE_DIST - tol) && getSpeed() <= 0.1;
+	}
+
+	/**
+	 * @return true if reached target height and does not still have to go to the
+	 *         ground as a secondary, consecutive target
+	 */
+	@Override
+	public boolean onTarget() {
+		double targ = getSetpoint();
+		double tol = Robot.getConst("Lift Tolerance", 0.8);
+		double height = getHeight();
+		// true if (height within tolerance of targ) and (lift is not moving)
+		boolean wInTol = height <= (targ + tol) && height >= (targ - tol) && getSpeed() <= 0.1;
+		return wInTol && !goToGround;
+	}
+
+	/**
+	 * Set the lift's setpoint to this value continuously.
+	 * 
+	 * @param pos
+	 *            - the desired FINAL height
+	 * @return the FIRST height to travel to; in all cases but GROUND, FIRST = FINAL
+	 *         targ
+	 */
 	public double getDesiredDistFromPos(LiftHeight pos) {
 		double desiredDist;
-		switch (pos) {
+		LiftHeight height = pos;
+		switch (height) {
 		case GROUND:
-			desiredDist = 0;
-			break;
+			if (atHoldCube()) {
+				desiredDist = GROUND_DIST;
+				// false bc doesn't need to hold the GROUND as a second consecutive targ anymore
+				goToGround = false;
+				break;
+			} else {
+				// falls through to HOLD_CUBE case
+				height = LiftHeight.HOLD_CUBE;
+				goToGround = true;
+			}
 		case HOLD_CUBE:
-			desiredDist = 4;
+			desiredDist = HOLD_CUBE_DIST;
+			goToGround = false;
 			break;
 		case SWITCH:
 			desiredDist = SWITCH_DIST;
+			goToGround = false;
 			break;
 		case SCALE:
 			desiredDist = SCALE_DIST;
+			goToGround = false;
 			break;
 		case BAR:
 			desiredDist = BAR_DIST;
+			goToGround = false;
 			break;
 		default:
-			desiredDist = 0;
+			desiredDist = GROUND_DIST;
+			goToGround = false;
 			break;
 		}
 
@@ -101,10 +155,17 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	}
 
 	/**
-	 * @return the rate of the lift encoder (in/s)
+	 * @return the desired LiftHeight to be at
+	 */
+	public LiftHeight desiredPos() {
+		return desiredPos;
+	}
+
+	/**
+	 * @return the absolute rate of the lift encoder (in/s)
 	 */
 	public double getSpeed() {
-		return liftEnc.getRate();
+		return Math.abs(liftEnc.getRate());
 	}
 
 	/**

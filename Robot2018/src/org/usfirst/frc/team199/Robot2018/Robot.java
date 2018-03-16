@@ -181,6 +181,8 @@ public class Robot extends IterativeRobot {
 		listen = new Listener();
 		// CameraServer.getInstance().startAutomaticCapture(0);
 		// CameraServer.getInstance().startAutomaticCapture(1);
+
+		lift.resetEnc();
 	}
 
 	/**
@@ -207,7 +209,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		dt.resetAHRS();
-		lift.resetEnc();
 		AutoUtils.state = new State(0, 0, 0);
 		Scheduler.getInstance().add(new ShiftLowGear());
 		Scheduler.getInstance().add(new CloseIntake());
