@@ -154,11 +154,11 @@ public class PIDTurn extends Command implements PIDOutput {
 		double maxTurnSpeed = Robot.getConst("Max Turn Radians Per Second", 4.0) * 180 / Math.PI;
 		double updateTime = sd.getConst("Default PID Update Time", 0.05);
 		double r = Robot.getConst("TurnPidR", 3.0);
-		
+
 		double kP = r / Robot.getConst("TurnTimeConstant", 0.2) / maxTurnSpeed;
 		double kI = 0;
 		double kD = r / (maxTurnSpeed * updateTime);
-		double kF = 1 / (maxTurnSpeed * updateTime);
+		double kF = 1 / maxTurnSpeed * updateTime;
 		turnController.setPID(kP, kI, kD, kF);
 
 		if (!turnToPoint) {

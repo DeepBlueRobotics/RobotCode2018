@@ -15,7 +15,6 @@ public class AutoLift extends CommandGroup {
 			addSequential(new LiftToPosition(lift, LiftHeight.toLH("HOLD_CUBE")));
 			addSequential(new LiftToPosition(lift, LiftHeight.toLH(height)));
 		} else {
-
 			addSequential(new LiftToPosition(lift, LiftHeight.toLH(height)));
 		}
 	}
