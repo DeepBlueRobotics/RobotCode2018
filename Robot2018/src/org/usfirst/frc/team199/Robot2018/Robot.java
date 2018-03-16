@@ -23,6 +23,7 @@ import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
 import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEject;
 import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PIDController;
@@ -59,6 +60,7 @@ public class Robot extends IterativeRobot {
 	String[] fmsPossibilities = { "LL", "LR", "RL", "RR" };
 
 	public static SmartDashboardInterface sd = new SmartDashboardInterface() {
+		@Override
 		public double getConst(String key, double def) {
 			Preferences pref = Preferences.getInstance();
 			if (!pref.containsKey("Const/" + key)) {
@@ -71,6 +73,7 @@ public class Robot extends IterativeRobot {
 			return pref.getDouble("Const/" + key, def);
 		}
 
+		@Override
 		public void putConst(String key, double def) {
 			Preferences pref = Preferences.getInstance();
 			pref.putDouble("Const/" + key, def);
@@ -79,14 +82,17 @@ public class Robot extends IterativeRobot {
 			}
 		}
 
+		@Override
 		public void putData(String string, PIDController controller) {
 			SmartDashboard.putData(string, controller);
 		}
 
+		@Override
 		public void putNumber(String string, double d) {
 			SmartDashboard.putNumber(string, d);
 		}
 
+		@Override
 		public void putBoolean(String string, boolean b) {
 			SmartDashboard.putBoolean(string, b);
 		}
@@ -157,8 +163,8 @@ public class Robot extends IterativeRobot {
 		autoScripts = AutoUtils.parseScriptFile(Preferences.getInstance().getString("autoscripts", ""));
 
 		listen = new Listener();
-		// CameraServer.getInstance().startAutomaticCapture(0);
-		// CameraServer.getInstance().startAutomaticCapture(1);
+		CameraServer.getInstance().startAutomaticCapture(0);
+		CameraServer.getInstance().startAutomaticCapture(1);
 	}
 
 	/**
