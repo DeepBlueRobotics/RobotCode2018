@@ -279,7 +279,7 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 	protected void usePIDOutput(double output) {
 		double out = output;
 		double spd = liftEnc.getRate();
-		out += Robot.getConst("Lift: Necessary Voltage", 0.125);
+		out += Robot.getConst("Lift: Necessary Voltage", 0.25);
 		runMotor(out);
 	}
 
