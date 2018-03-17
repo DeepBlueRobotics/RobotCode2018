@@ -31,7 +31,7 @@ public class IntakeCube extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.intakeEject.runIntake(1);
+		Robot.intakeEject.runIntake(-1);
 		SmartDashboard.putBoolean("Has Cube", Robot.intakeEject.hasCube());
 		if (Robot.intakeEject.hasCube()) {
 			if (!overDraw) {
