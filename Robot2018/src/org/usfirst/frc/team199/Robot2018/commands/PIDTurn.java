@@ -57,12 +57,12 @@ public class PIDTurn extends Command implements PIDOutput {
 	public PIDTurn(double target, double[] point, DrivetrainInterface dt, SmartDashboardInterface sd, PIDSource ahrs,
 			boolean absoluteRotation, boolean turnToPoint) {
 		this.target = target;
+		System.out.println(this.target);
 		this.point = point;
 		this.dt = dt;
 		this.ahrs = ahrs;
 		this.sd = sd;
 		this.turnToPoint = turnToPoint;
-		this.target = target;
 		this.absoluteRotation = absoluteRotation;
 
 		if (Robot.dt != null) {
