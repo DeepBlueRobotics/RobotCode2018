@@ -4,6 +4,7 @@ import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
 import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
+import org.usfirst.frc.team199.Robot2018.subsystems.LiftInterface.LiftHeight;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -23,6 +24,7 @@ public class PIDMove extends Command implements PIDOutput {
 	private SmartDashboardInterface sd;
 	private double[] point;
 	private boolean absolute;
+	private boolean hasInitialized = false;
 
 	/**
 	 * Constructs this command with a new PIDController. Sets all of the
@@ -67,7 +69,7 @@ public class PIDMove extends Command implements PIDOutput {
 		double kP = r / Robot.rmap.getDrivetrainTimeConstant() / maxSpeed;
 		double kI = 0;
 		double kD = r / maxSpeed;
-		double kF = 1 / (maxSpeed * sd.getConst("Default PID Update Time", 0.05)) / maxSpeed;
+		double kF = 1 / maxSpeed * sd.getConst("Default PID Update Time", 0.05);
 
 		moveController = new PIDController(kP, kI, kD, kF, avg, this);
 		sd.putData("Move PID", moveController);
@@ -120,6 +122,7 @@ public class PIDMove extends Command implements PIDOutput {
 	 */
 	@Override
 	public void initialize() {
+		hasInitialized = true;
 		if (absolute) {
 			double dx = point[0] - AutoUtils.state.getX();
 			double dy = point[1] - AutoUtils.state.getY();
@@ -131,7 +134,13 @@ public class PIDMove extends Command implements PIDOutput {
 		dt.resetDistEncs();
 		moveController.disable();
 		// output in "motor units" (arcade and tank only accept values [-1, 1]
-		moveController.setOutputRange(-1.0, 1.0);
+		LiftHeight currPos = Robot.lift.getCurrPos();
+		if (Robot.auto && currPos != LiftHeight.GROUND && currPos != LiftHeight.HOLD_CUBE) {
+			moveController.setOutputRange(Robot.getConst("Auto Min Speed", -0.5),
+					Robot.getConst("Auto Max Speed", 0.5));
+		} else {
+			moveController.setOutputRange(-1.0, 1.0);
+		}
 		moveController.setContinuous(false);
 		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 0.5));
 		System.out.println("move target = " + target);
@@ -174,7 +183,7 @@ public class PIDMove extends Command implements PIDOutput {
 	@Override
 	protected void end() {
 		moveController.disable();
-		System.out.println("End");
+		System.out.println("PIDMove End");
 		// moveController.free();
 
 		double angle = Math.toRadians(AutoUtils.state.getRot());
@@ -212,6 +221,9 @@ public class PIDMove extends Command implements PIDOutput {
 	 */
 	@Override
 	public void pidWrite(double output) {
+		if (!hasInitialized) {
+			return;
+		}
 		dt.arcadeDrive(output, 0);
 		sd.putNumber("Move PID Output", output);
 	}

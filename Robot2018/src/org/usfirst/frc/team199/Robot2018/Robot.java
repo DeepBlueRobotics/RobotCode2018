@@ -23,6 +23,7 @@ import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
 import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEject;
 import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PIDController;
@@ -52,6 +53,8 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 
 	public static Map<String, ArrayList<String[]>> autoScripts;
+	public static boolean auto;
+	public static boolean stopIntake = false;
 
 	Command autonomousCommand;
 	SendableChooser<Autonomous.Position> posChooser = new SendableChooser<Autonomous.Position>();
@@ -59,6 +62,7 @@ public class Robot extends IterativeRobot {
 	String[] fmsPossibilities = { "LL", "LR", "RL", "RR" };
 
 	public static SmartDashboardInterface sd = new SmartDashboardInterface() {
+		@Override
 		public double getConst(String key, double def) {
 			Preferences pref = Preferences.getInstance();
 			if (!pref.containsKey("Const/" + key)) {
@@ -71,6 +75,20 @@ public class Robot extends IterativeRobot {
 			return pref.getDouble("Const/" + key, def);
 		}
 
+		@Override
+		public String getString(String key, String def) {
+			Preferences pref = Preferences.getInstance();
+			if (!pref.containsKey("String/" + key)) {
+				pref.putString("String/" + key, def);
+				if (pref.getString("String/ + key", def) != def) {
+					System.err.println("pref Key" + "String/" + key + "already taken by a different type");
+					return def;
+				}
+			}
+			return pref.getString("String/" + key, def);
+		}
+
+		@Override
 		public void putConst(String key, double def) {
 			Preferences pref = Preferences.getInstance();
 			pref.putDouble("Const/" + key, def);
@@ -79,14 +97,17 @@ public class Robot extends IterativeRobot {
 			}
 		}
 
+		@Override
 		public void putData(String string, PIDController controller) {
 			SmartDashboard.putData(string, controller);
 		}
 
+		@Override
 		public void putNumber(String string, double d) {
 			SmartDashboard.putNumber(string, d);
 		}
 
+		@Override
 		public void putBoolean(String string, boolean b) {
 			SmartDashboard.putBoolean(string, b);
 		}
@@ -102,6 +123,10 @@ public class Robot extends IterativeRobot {
 
 	public static double getConst(String key, double def) {
 		return sd.getConst(key, def);
+	}
+
+	public static String getString(String key, String def) {
+		return sd.getString(key, def);
 	}
 
 	public static void putConst(String key, double def) {
@@ -157,8 +182,9 @@ public class Robot extends IterativeRobot {
 		autoScripts = AutoUtils.parseScriptFile(Preferences.getInstance().getString("autoscripts", ""));
 
 		listen = new Listener();
-		// CameraServer.getInstance().startAutomaticCapture(0);
-		// CameraServer.getInstance().startAutomaticCapture(1);
+		lift.resetEnc();
+		CameraServer.getInstance().startAutomaticCapture(0);
+		CameraServer.getInstance().startAutomaticCapture(1);
 	}
 
 	/**
@@ -169,6 +195,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledInit() {
 		dt.disableVelocityPIDs();
+		lift.setSetpoint(0);
 	}
 
 	@Override
@@ -183,6 +210,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		auto = true;
 		dt.resetAHRS();
 		AutoUtils.state = new State(0, 0, 0);
 		Scheduler.getInstance().add(new ShiftLowGear());
@@ -212,6 +240,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		auto = false;
 		System.out.println("In teleopInit()");
 		dt.resetAHRS();
 		AutoUtils.state = new State(0, 0, 0);
@@ -245,7 +274,8 @@ public class Robot extends IterativeRobot {
 		// SmartDashboard.putNumber("Avg Enc Dist", dt.getEncAvgDist());
 		//
 
-		System.out.printf("Left: %1$5.2f; Right: %2$5.2f\n", RobotMap.dtLeft.get(), RobotMap.dtRight.get());
+		// System.out.printf("Left: %1$5.2f; Right: %2$5.2f\n", RobotMap.dtLeft.get(),
+		// RobotMap.dtRight.get());
 
 		SmartDashboard.putNumber("Angle", dt.getAHRSAngle());
 		SmartDashboard.putNumber("Left Current draw", rmap.pdp.getCurrent(4));
@@ -259,6 +289,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("In testInit()");
 		dt.resetAHRS();
 		AutoUtils.state = new State(0, 0, 0);
+		lift.disable();
 	}
 
 	/**
@@ -266,43 +297,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		// if(firstTime) {
-		// Robot.dt.enableVelocityPIDs();
-		// firstTime = false;
-		//// }
-		// dt.getLeftVPID().setConsts(getConst("VelocityLeftkI", 0), 0,
-		// getConst("VelocityLeftkD", rmap.calcDefkD(dt.getCurrentMaxSpeed())),
-		// /* 1 / dt.getCurrentMaxSpeed() */Robot.getConst("VelocityLeftkF",
-		// 1 / Robot.getConst("Max Low Speed", 84)));
-		// dt.getRightVPID().setConsts(getConst("VelocityRightkI", 0), 0,
-		// getConst("VelocityRightkD", rmap.calcDefkD(dt.getCurrentMaxSpeed())),
-		// /* 1 / dt.getCurrentMaxSpeed() */Robot.getConst("VelocityRightkF",
-		// 1 / Robot.getConst("Max Low Speed", 84)));
-		// dt.resetAllVelocityPIDConsts();
-
-		// dt.setVPIDs(getConst("VPID Test Set", 0.5));
-
-		Scheduler.getInstance().run();
-
-		// System.out.println("Left VPID Targ: " + dt.getLeftVPIDOutput());
-		// System.out.println("Right VPID Targ: " + dt.getRightVPIDOutput());
-		// System.out.println("Left VPID Error: " + dt.getLeftVPIDerror());
-		// System.out.println("Right VPID Error: " + dt.getRightVPIDerror());
-		// System.out.println("Left Enc Rate: " + dt.getLeftEncRate());
-		// System.out.println("Right Enc Rate: " + dt.getRightEncRate());
-		//
-		// System.out.println("Left Talon Speed: " + rmap.dtLeftMaster.get());
-		// System.out.println("Right Talon Speed: " + rmap.dtRightMaster.get());
-
-		// System.out.println("Left Enc Dist " + dt.getLeftDist());
-		// System.out.println("Right Enc Dist " + dt.getRightDist());
-		// System.out.println("Avg Enc Dist" + dt.getEncAvgDist());
-
-		// dt.dtLeft.set(0.1);
-		// dt.dtRight.set(-oi.rightJoy.getY());
-		// dt.dtLeft.set(-oi.leftJoy.getY());
-		// dt.dtRight.set(-oi.rightJoy.getY());
-
-		// dt.putVelocityControllersToDashboard();
+		// Scheduler.getInstance().run();
+		// lift.disable();
+		// lift.runMotor(SmartDashboard.getNumber("Voltage to Lift", 0));
 	}
 }

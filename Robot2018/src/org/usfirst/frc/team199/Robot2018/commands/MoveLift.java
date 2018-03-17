@@ -1,47 +1,55 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
+import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * Use this command to test the Lift without PID
  */
-public class OuttakeCube extends Command {
+public class MoveLift extends Command {
 
-	Timer tim;
+	private Lift lift;
+	private double SPEED;
+	private int dir;
 
-	public OuttakeCube() {
-		// Use requires() here to declare subsystem dependencies
-		// eg. requires(chassis);
-		requires(Robot.intakeEject);
+	public MoveLift(Lift lift, boolean up) {
+		requires(Robot.lift);
+		this.lift = lift;
+		if (up)
+			dir = 1;
+		else
+			dir = -1;
 	}
 
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		tim = new Timer();
-		tim.reset();
-		tim.start();
+		lift.disable();
+		// below Lift Speed may be for manual testing only, but commented out code 2
+		// lines below can be used if want max speed
+		SPEED = Robot.getConst("Lift Speed", 0.5);
+		// SPEED = lift.getLiftMaxSpeed();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.intakeEject.runIntake(1);
+		lift.runMotor(SPEED * dir);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return tim.get() > Robot.getConst("Outake Time", 0.5);
+		return false;
 	}
 
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		Robot.intakeEject.runIntake(0);
+		lift.stopLift();
+		lift.enable();
 	}
 
 	// Called when another command which requires one or more of the same

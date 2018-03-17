@@ -1,0 +1,82 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="Has Cube" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="132"/>
+	</widget>
+	<widget field="Intake Current Right" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="111"/>
+	</widget>
+	<widget field="Intake Current Left" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="90"/>
+	</widget>
+	<widget field="Left Current draw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="482" y="581"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.RobotPreferences">
+		<location x="875" y="450"/>
+	</static-widget>
+	<widget field="Intake Open" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="487" y="556"/>
+	</widget>
+	<widget field="Right Solenoid Open" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="478" y="614"/>
+	</widget>
+	<widget field="Right Current draw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="493" y="601"/>
+	</widget>
+	<widget field="High Gear" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="79" y="11"/>
+		<width>93</width>
+		<height>78</height>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="783" y="1"/>
+		<width>586</width>
+		<height>430</height>
+		<property name="Camera Choice" value="USB Camera 1"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="148" y="2"/>
+		<width>630</width>
+		<height>459</height>
+		<property name="Camera Choice" value=""/>
+	</static-widget>
+	<widget field="LR" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="31" y="2"/>
+	</widget>
+	<widget field="LL" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="16" y="12"/>
+	</widget>
+	<widget field="RR" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="4" y="11"/>
+	</widget>
+	<widget field="Starting Position" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="11" y="16"/>
+	</widget>
+	<widget field="RL" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="13" y="30"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="Right PID Controller"/>
+	<hidden field="VPID Right kI"/>
+	<hidden field="VPID Left kI"/>
+	<hidden field="Turn PID Error"/>
+	<hidden field="Auto Delay"/>
+	<hidden field="PIDController[2]"/>
+	<hidden field="Move PID Error"/>
+	<hidden field="Turn PID"/>
+	<hidden field="Left PID Controller"/>
+	<hidden field="Left Solenoid Open"/>
+	<hidden field="Angle"/>
+	<hidden field="Turn PID Result"/>
+	<hidden field="Move PID"/>
+	<hidden field="VPID kF"/>
+	<hidden field="Move PID Output"/>
+	<hidden field="PIDController[1]"/>
+	<hidden field="VPID Right kP"/>
+	<hidden field="VPID Left kP"/>
+	<hidden field="Turn PID Output"/>
+	<hidden field="Move PID Result"/>
+</xml>
