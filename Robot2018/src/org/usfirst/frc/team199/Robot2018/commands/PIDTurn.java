@@ -28,6 +28,7 @@ public class PIDTurn extends Command implements PIDOutput {
 	private double[] point;
 	private boolean turnToPoint;
 	private boolean absoluteRotation;
+	private boolean hasInitialized = false;
 
 	/**
 	 * Constructs this command with a new PIDController. Sets all of the
@@ -148,6 +149,7 @@ public class PIDTurn extends Command implements PIDOutput {
 	 */
 	@Override
 	protected void initialize() {
+		hasInitialized = true;
 		// calculate pid constants
 
 		// max turn speed from FindTurnTimeConstant, converted to degrees
@@ -231,7 +233,7 @@ public class PIDTurn extends Command implements PIDOutput {
 	 */
 	@Override
 	protected boolean isFinished() {
-		System.out.println("isFinished");
+		// System.out.println("isFinished");
 		return (turnController.onTarget() && Math.abs(dt.getGyroRate()) < 1);
 		// return turnController.onTarget()
 		// && Math.abs(dt.getLeftEncRate()) <= Robot.getConst("Maximum Velocity When
@@ -248,7 +250,7 @@ public class PIDTurn extends Command implements PIDOutput {
 	@Override
 	protected void end() {
 		turnController.disable();
-		System.out.println("end");
+		System.out.println("PIDTurn end");
 		sd.putNumber("Turn PID Result", turnController.get());
 		sd.putNumber("Turn PID Error", turnController.getError());
 		// turnController.free();
@@ -279,6 +281,9 @@ public class PIDTurn extends Command implements PIDOutput {
 	 */
 	@Override
 	public void pidWrite(double output) {
+		if (!hasInitialized) {
+			return;
+		}
 		dt.arcadeDrive(0, output);
 		SmartDashboard.putNumber("Turn PID Output", output);
 	}

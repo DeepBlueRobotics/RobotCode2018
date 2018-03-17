@@ -26,49 +26,48 @@ public class UpdateLiftPosition extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		try {
-			Robot.oi.manipulator.getRawAxis(1);
-		} catch (NullPointerException e) {
-			System.err.println("[ERROR] Manipulator not plugged in.");
-			manipulatorPluggedIn = false;
-		}
+		// try {
+		// Robot.oi.manipulator.getRawAxis(1);
+		// } catch (NullPointerException e) {
+		// System.err.println("[ERROR] Manipulator not plugged in.");
+		// manipulatorPluggedIn = false;
+		// }
 		goToGround = false;
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		if (manipulatorPluggedIn) {
-			int angle = Robot.oi.manipulator.getPOV();
+		// if (manipulatorPluggedIn) {
+		int angle = Robot.oi.manipulator.getPOV();
 
-			System.out.println("POV Reading: " + angle);
+		System.out.println("POV Reading: " + angle);
 
-			if (angle == 180) {
-				desiredPos = LiftHeight.HOLD_CUBE;
-				goToGround = true;
-			} else if (angle == 270) {
-				desiredPos = LiftHeight.HOLD_CUBE;
-				goToGround = false;
-			} else if (angle != -1) {
-				desiredPos = LiftHeight.SWITCH;
-				goToGround = false;
-			}
-
-			if (goToGround || angle != -1) {
-				desiredDist = lift.getDesiredDistFromPos(desiredPos);
-				lift.setSetpoint(desiredDist);
-			}
-
-			if (goToGround && lift.onTarget() && lift.getSpeed() <= 0.1) {
-				desiredPos = LiftHeight.GROUND;
-				desiredDist = lift.getDesiredDistFromPos(desiredPos);
-				lift.setSetpoint(desiredDist);
-				goToGround = false;
-			}
-			System.out.println("Desired Pos: " + desiredPos);
-			System.out.println("Desired Dist: " + desiredDist);
-			System.out.println("Current Dist: " + lift.getHeight());
+		if (angle == 180) {
+			desiredPos = LiftHeight.HOLD_CUBE;
+			goToGround = true;
+		} else if (angle == 270) {
+			desiredPos = LiftHeight.HOLD_CUBE;
+			goToGround = false;
+		} else if (angle != -1) {
+			desiredPos = LiftHeight.SWITCH;
+			goToGround = false;
 		}
+
+		if (goToGround || angle != -1) {
+			desiredDist = lift.getDesiredDistFromPos(desiredPos);
+			lift.setSetpoint(desiredDist);
+		}
+
+		if (goToGround && lift.onTarget() && lift.getSpeed() <= 0.1) {
+			desiredPos = LiftHeight.GROUND;
+			desiredDist = lift.getDesiredDistFromPos(desiredPos);
+			lift.setSetpoint(desiredDist);
+			goToGround = false;
+		}
+		System.out.println("Desired Pos: " + desiredPos);
+		System.out.println("Desired Dist: " + desiredDist);
+		System.out.println("Current Dist: " + lift.getHeight());
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

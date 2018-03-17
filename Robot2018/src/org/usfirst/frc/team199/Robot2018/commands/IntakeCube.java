@@ -17,6 +17,7 @@ public class IntakeCube extends Command {
 	public IntakeCube() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
+		// requires(Robot.intakeEject);
 		tim = new Timer();
 	}
 
@@ -36,6 +37,7 @@ public class IntakeCube extends Command {
 		if (Robot.intakeEject.hasCube()) {
 			if (!overDraw) {
 				overDraw = true;
+				// tim.reset();
 				tim.start();
 			}
 		} else {

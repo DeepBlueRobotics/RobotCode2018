@@ -2,7 +2,7 @@
 from networktables import NetworkTables
 import __future__
 import time
-NetworkTables.initialize(server='10.1.99.2')
+NetworkTables.initialize(server='172.22.11.2')
 prefs = NetworkTables.getTable("Preferences")
 
 go = False #true when file has been successfully read
