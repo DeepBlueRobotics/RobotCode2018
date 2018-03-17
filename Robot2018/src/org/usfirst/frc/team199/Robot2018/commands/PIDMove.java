@@ -4,6 +4,7 @@ import org.usfirst.frc.team199.Robot2018.Robot;
 import org.usfirst.frc.team199.Robot2018.SmartDashboardInterface;
 import org.usfirst.frc.team199.Robot2018.autonomous.AutoUtils;
 import org.usfirst.frc.team199.Robot2018.subsystems.DrivetrainInterface;
+import org.usfirst.frc.team199.Robot2018.subsystems.LiftInterface.LiftHeight;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -131,7 +132,13 @@ public class PIDMove extends Command implements PIDOutput {
 		dt.resetDistEncs();
 		moveController.disable();
 		// output in "motor units" (arcade and tank only accept values [-1, 1]
-		moveController.setOutputRange(-1.0, 1.0);
+		LiftHeight currPos = Robot.lift.getCurrPos();
+		if (Robot.auto && currPos != LiftHeight.GROUND && currPos != LiftHeight.HOLD_CUBE) {
+			moveController.setOutputRange(Robot.getConst("Auto Min Speed", -0.5),
+					Robot.getConst("Auto Max Speed", 0.5));
+		} else {
+			moveController.setOutputRange(-1.0, 1.0);
+		}
 		moveController.setContinuous(false);
 		moveController.setAbsoluteTolerance(Robot.getConst("MoveTolerance", 0.5));
 		System.out.println("move target = " + target);

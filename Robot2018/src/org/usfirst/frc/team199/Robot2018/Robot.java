@@ -53,7 +53,7 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 
 	public static Map<String, ArrayList<String[]>> autoScripts;
-
+	public static boolean auto;
 	Command autonomousCommand;
 	SendableChooser<Autonomous.Position> posChooser = new SendableChooser<Autonomous.Position>();
 	Map<String, SendableChooser<Strategy>> stratChoosers = new HashMap<String, SendableChooser<Strategy>>();
@@ -208,6 +208,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		auto = true;
 		dt.resetAHRS();
 		AutoUtils.state = new State(0, 0, 0);
 		Scheduler.getInstance().add(new ShiftLowGear());
@@ -237,6 +238,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		auto = false;
 		System.out.println("In teleopInit()");
 		dt.resetAHRS();
 		AutoUtils.state = new State(0, 0, 0);
