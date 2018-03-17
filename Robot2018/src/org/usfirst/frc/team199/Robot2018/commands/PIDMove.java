@@ -67,7 +67,7 @@ public class PIDMove extends Command implements PIDOutput {
 		double kP = r / Robot.rmap.getDrivetrainTimeConstant() / maxSpeed;
 		double kI = 0;
 		double kD = r / maxSpeed;
-		double kF = 1 / (maxSpeed * sd.getConst("Default PID Update Time", 0.05)) / maxSpeed;
+		double kF = 1 / maxSpeed * sd.getConst("Default PID Update Time", 0.05);
 
 		moveController = new PIDController(kP, kI, kD, kF, avg, this);
 		sd.putData("Move PID", moveController);
