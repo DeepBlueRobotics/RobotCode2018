@@ -48,13 +48,14 @@ public class IntakeCube extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return tim.get() > Robot.getConst("Has Cube Timeout", 0.5);
+		return tim.get() > Robot.getConst("Has Cube Timeout", 0.5) || Robot.stopIntake;
 	}
 
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
 		Robot.intakeEject.stopIntake();
+		Robot.stopIntake = false;
 	}
 
 	// Called when another command which requires one or more of the same
