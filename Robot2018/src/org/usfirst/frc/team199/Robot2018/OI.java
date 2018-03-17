@@ -8,12 +8,10 @@
 package org.usfirst.frc.team199.Robot2018;
 
 import org.usfirst.frc.team199.Robot2018.commands.AutoLift;
-import org.usfirst.frc.team199.Robot2018.commands.CloseIntake;
 import org.usfirst.frc.team199.Robot2018.commands.FindTurnTimeConstant;
 import org.usfirst.frc.team199.Robot2018.commands.IntakeCube;
 import org.usfirst.frc.team199.Robot2018.commands.MoveLift;
 import org.usfirst.frc.team199.Robot2018.commands.MoveLiftWithPID;
-import org.usfirst.frc.team199.Robot2018.commands.OpenIntake;
 import org.usfirst.frc.team199.Robot2018.commands.OuttakeCube;
 import org.usfirst.frc.team199.Robot2018.commands.PIDMove;
 import org.usfirst.frc.team199.Robot2018.commands.PIDTurn;
@@ -23,8 +21,7 @@ import org.usfirst.frc.team199.Robot2018.commands.ShiftDriveType;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftHighGear;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 import org.usfirst.frc.team199.Robot2018.commands.StopIntake;
-import org.usfirst.frc.team199.Robot2018.commands.ToggleLeftIntake;
-import org.usfirst.frc.team199.Robot2018.commands.ToggleRightIntake;
+import org.usfirst.frc.team199.Robot2018.commands.ToggleIntake;
 import org.usfirst.frc.team199.Robot2018.commands.UpdatePIDConstants;
 import org.usfirst.frc.team199.Robot2018.subsystems.LiftInterface.LiftHeight;
 
@@ -68,6 +65,7 @@ public class OI {
 	private JoystickButton outakeCubeButton;
 	private JoystickButton toggleLeftIntakeButton;
 	private JoystickButton toggleRightIntakeButton;
+	private JoystickButton toggleIntakeButton;
 	private JoystickButton stopIntakeButton;
 
 	public int getButton(String key, int def) {
@@ -100,11 +98,6 @@ public class OI {
 		findTurnTimeConstantButton
 				.whenPressed(new FindTurnTimeConstant(robot, Robot.dt, Robot.rmap.fancyGyro, Robot.sd));
 
-		moveLiftPIDUpButton = new JoystickButton(leftJoy, getButton("Run Lift PID Up", 3));
-		moveLiftPIDUpButton.whileHeld(new MoveLiftWithPID(Robot.lift, true));
-		moveLiftPIDDownButton = new JoystickButton(leftJoy, getButton("Run Lift PID Down", 4));
-		moveLiftPIDDownButton.whileHeld(new MoveLiftWithPID(Robot.lift, false));
-
 		testLiftPID = new JoystickButton(leftJoy, getButton("Test Lift PID", 5));
 		testLiftPID.whenPressed(
 				new AutoLift(Robot.lift, SmartDashboard.getString("Lift Targ Height", LiftHeight.SWITCH.toString())));
@@ -125,33 +118,42 @@ public class OI {
 		moveLiftDownButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Down", 11));
 		moveLiftDownButton.whileHeld(new MoveLift(Robot.lift, false));
 
-		stopIntakeButton = new JoystickButton(rightJoy, getButton("Stop Intake Button", 6));
+		manipulator = new Joystick(2);
+		// if (manipulator.getButtonCount() == 0) {
+		// System.err.println(
+		// "ERROR: manipulator does not appear to be plugged in. Disabling intake code.
+		// Restart code with manipulator plugged in to enable intake code");
+		// } else {
+
+		// closeIntakeButton = new JoystickButton(manipulator, getButton("Close Intake
+		// Button", 1));
+		// closeIntakeButton.whenPressed(new CloseIntake());
+		// openIntakeButton = new JoystickButton(manipulator, getButton("Open Intake
+		// Button", 2));
+		// openIntakeButton.whenPressed(new OpenIntake());
+
+		moveLiftPIDUpButton = new JoystickButton(manipulator, getButton("Run Lift PID Up", 4));
+		moveLiftPIDUpButton.whileHeld(new MoveLiftWithPID(Robot.lift, true));
+		moveLiftPIDDownButton = new JoystickButton(manipulator, getButton("Run Lift PID Down", 1));
+		moveLiftPIDDownButton.whileHeld(new MoveLiftWithPID(Robot.lift, false));
+
+		toggleIntakeButton = new JoystickButton(manipulator, getButton("Toggle Intake Button", 2));
+		toggleIntakeButton.whenPressed(new ToggleIntake());
+
+		stopIntakeButton = new JoystickButton(manipulator, getButton("Stop Intake Button", 3));
 		stopIntakeButton.whenPressed(new StopIntake());
 
-		manipulator = new Joystick(2);
-		if (manipulator.getButtonCount() == 0) {
-			System.err.println(
-					"ERROR: manipulator does not appear to be plugged in. Disabling intake code. Restart code with manipulator plugged in to enable intake code");
-		} else {
-			closeIntakeButton = new JoystickButton(manipulator, getButton("Close Intake Button", 1));
-			closeIntakeButton.whenPressed(new CloseIntake());
-			openIntakeButton = new JoystickButton(manipulator, getButton("Open Intake Button", 2));
-			openIntakeButton.whenPressed(new OpenIntake());
-			// raiseIntake = new JoystickButton(manipulator, getButton("Raise Intake
-			// Button", 3));
-			// raiseIntake.whenPressed(new RaiseIntake());
-			// lowerIntake = new JoystickButton(manipulator, getButton("Lower Intake
-			// Button", 4));
-			// lowerIntake.whenPressed(new LowerIntake());
-			intakeCubeButton = new JoystickButton(manipulator, getButton("Intake Button", 5));
-			intakeCubeButton.whenPressed(new IntakeCube());
-			outakeCubeButton = new JoystickButton(manipulator, getButton("Outake Button", 6));
-			outakeCubeButton.whenPressed(new OuttakeCube());
-			toggleLeftIntakeButton = new JoystickButton(manipulator, getButton("Toggle Left Intake Button", 3));
-			toggleLeftIntakeButton.whenPressed(new ToggleLeftIntake());
-			toggleRightIntakeButton = new JoystickButton(manipulator, getButton("Toggle Right Intake Button", 4));
-			toggleRightIntakeButton.whenPressed(new ToggleRightIntake());
-		}
+		intakeCubeButton = new JoystickButton(manipulator, getButton("Intake Button", 5));
+		intakeCubeButton.whenPressed(new IntakeCube());
+		outakeCubeButton = new JoystickButton(manipulator, getButton("Outake Button", 6));
+		outakeCubeButton.whenPressed(new OuttakeCube());
+		// toggleLeftIntakeButton = new JoystickButton(manipulator, getButton("Toggle
+		// Left Intake Button", 3));
+		// toggleLeftIntakeButton.whenPressed(new ToggleLeftIntake());
+		// toggleRightIntakeButton = new JoystickButton(manipulator, getButton("Toggle
+		// Right Intake Button", 4));
+		// toggleRightIntakeButton.whenPressed(new ToggleRightIntake());
+		// }
 
 	}
 

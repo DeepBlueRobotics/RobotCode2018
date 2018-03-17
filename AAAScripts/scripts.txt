@@ -9,7 +9,6 @@ moveto (0,120) #Drive past auto line
 RRxx:
 moveto (0,155) 
 turn -90
-move 10
 switch
 
 RLxx:
@@ -17,7 +16,7 @@ move 56
 turn -90
 move 170
 turn 90
-move 35
+move 25
 switch
 
 
@@ -35,7 +34,6 @@ exchange
 RRxE:
 moveto (0,155) 
 turn -90
-move 12
 switch
 turn -90
 move 105
@@ -55,7 +53,7 @@ move 56
 turn -90
 move 170
 turn 90
-move 35
+move 25
 switch
 move -40
 turn 90
@@ -80,7 +78,6 @@ moveto (0, 120) #Drive past auto line
 LLxx:
 move 150
 turn 90
-move 12
 switch
 
 LRxx:
@@ -88,7 +85,7 @@ move 56
 turn 90
 move 170
 turn -90
-move 35
+move 25
 switch	
 
 
@@ -106,7 +103,6 @@ exchange
 LLxE:
 move 150
 turn 90
-move 12
 switch
 turn 90
 move 95
@@ -126,7 +122,7 @@ move 56
 turn 90
 move 170
 turn -90
-move 35
+move 25
 switch
 move -40
 turn -90
@@ -148,17 +144,17 @@ moveto (0,50) (48,50) (48,92)  #cross baseline
 
 # Switch
 CRxx:
-moveto (0,50) (48,50) (48,95) 
+moveto (0,50) (48,50) (48,85) 
 switch #deploy switch 
 
 CLxx:
-moveto (0,50) (-56,50) (-56,95)
+moveto (0,50) (-56,50) (-56,85)
 switch #deploy switch 
 
 
 # Switch and Exchange
 CRxE:
-moveto (0,50) (48,50) (48,95) 
+moveto (0,50) (48,50) (48,85) 
 switch #deploy switch 
 move -48 # 3 feet back
 turn -90
@@ -173,7 +169,7 @@ exchange
 
 
 CLxE:
-moveto (0,50) (-56,50) (-56,95) 
+moveto (0,50) (-56,50) (-56,85) 
 switch #deploy switch 
 move -48 # 3 feet back
 turn 90

@@ -15,6 +15,7 @@ public class OuttakeCube extends Command {
 	public OuttakeCube() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
+		requires(Robot.intakeEject);
 	}
 
 	// Called just before this Command runs the first time
@@ -28,7 +29,7 @@ public class OuttakeCube extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.intakeEject.runIntake(-1);
+		Robot.intakeEject.runIntake(1);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

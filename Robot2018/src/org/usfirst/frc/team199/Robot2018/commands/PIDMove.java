@@ -24,6 +24,7 @@ public class PIDMove extends Command implements PIDOutput {
 	private SmartDashboardInterface sd;
 	private double[] point;
 	private boolean absolute;
+	private boolean hasInitialized = false;
 
 	/**
 	 * Constructs this command with a new PIDController. Sets all of the
@@ -121,6 +122,7 @@ public class PIDMove extends Command implements PIDOutput {
 	 */
 	@Override
 	public void initialize() {
+		hasInitialized = true;
 		if (absolute) {
 			double dx = point[0] - AutoUtils.state.getX();
 			double dy = point[1] - AutoUtils.state.getY();
@@ -181,7 +183,7 @@ public class PIDMove extends Command implements PIDOutput {
 	@Override
 	protected void end() {
 		moveController.disable();
-		System.out.println("End");
+		System.out.println("PIDMove End");
 		// moveController.free();
 
 		double angle = Math.toRadians(AutoUtils.state.getRot());
@@ -219,6 +221,9 @@ public class PIDMove extends Command implements PIDOutput {
 	 */
 	@Override
 	public void pidWrite(double output) {
+		if (!hasInitialized) {
+			return;
+		}
 		dt.arcadeDrive(output, 0);
 		sd.putNumber("Move PID Output", output);
 	}

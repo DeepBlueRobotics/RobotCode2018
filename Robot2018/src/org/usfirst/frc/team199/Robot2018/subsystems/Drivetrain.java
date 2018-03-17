@@ -52,11 +52,13 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	private SmartDashboardInterface sd;
 
 	private boolean highGear;
+	private int inverted;
 
 	public Drivetrain(SmartDashboardInterface sd) {
 		this.sd = sd;
 
 		highGear = false;
+		inverted = 1;
 
 		// all 0s for controller construction because they all get set to right values
 		// by resetAllVelocityPIDConsts
@@ -85,11 +87,16 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		}
 	}
 
+	public void reverseDT() {
+		inverted *= -1;
+	}
+
 	@Override
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleopDrive());
 	}
 
+	@Override
 	public boolean isVPIDUsed() {
 		return Robot.getBool("Teleop velocity PID", false);
 	}
@@ -151,6 +158,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 * 
 	 * @return the rate of the left encoder
 	 */
+	@Override
 	public double getLeftEncRate() {
 		return leftEncRate.getRate();
 	}
@@ -160,6 +168,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 * 
 	 * @return the rate of the right encoder
 	 */
+	@Override
 	public double getRightEncRate() {
 		return rightEncRate.getRate();
 	}
@@ -331,6 +340,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		fancyGyro.reset();
 	}
 
+	@Override
 	public double getGyroRate() {
 		return fancyGyro.getRate();
 	}
@@ -432,6 +442,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	/**
 	 * @return the gyroscope
 	 */
+	@Override
 	public PIDSource getGyro() {
 		return fancyGyro;
 	}
@@ -530,6 +541,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		SmartDashboard.putData("Right PID Controller", rightVelocityController);
 	}
 
+	@Override
 	public double getPIDMoveConstant() {
 		double G = Robot.rmap.getGearRatio();
 		double T = Robot.rmap.getStallTorque();
@@ -541,6 +553,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		return Math.sqrt(Robot.rmap.convertMtoIn((8 * T * G) / (R * M)));
 	}
 
+	@Override
 	public double getPIDTurnConstant() {
 		double G = Robot.rmap.getGearRatio();
 		double T = Robot.rmap.getStallTorque();

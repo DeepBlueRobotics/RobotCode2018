@@ -54,6 +54,8 @@ public class Robot extends IterativeRobot {
 
 	public static Map<String, ArrayList<String[]>> autoScripts;
 	public static boolean auto;
+	public static boolean stopIntake = false;
+
 	Command autonomousCommand;
 	SendableChooser<Autonomous.Position> posChooser = new SendableChooser<Autonomous.Position>();
 	Map<String, SendableChooser<Strategy>> stratChoosers = new HashMap<String, SendableChooser<Strategy>>();
