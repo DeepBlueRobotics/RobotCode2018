@@ -12,9 +12,9 @@ public class EjectToSwitch extends CommandGroup {
 	public EjectToSwitch() {
 		addSequential(new AutoLift(Robot.lift, "SWITCH"));
 		addSequential(
-				new PIDMove(Robot.getConst("Auto Switch Move Dist", 12), Robot.dt, Robot.sd, Robot.dt.getDistEncAvg()));
+				new PIDMove(Robot.getConst("Auto Switch Move Dist", 18), Robot.dt, Robot.sd, Robot.dt.getDistEncAvg()));
 		addSequential(new OuttakeCube());
-		addSequential(new PIDMove(-1 * Robot.getConst("Auto Switch Move Dist", 12), Robot.dt, Robot.sd,
+		addSequential(new PIDMove(-1 * Robot.getConst("Auto Switch Move Dist", 18), Robot.dt, Robot.sd,
 				Robot.dt.getDistEncAvg()));
 		addSequential(new AutoLift(Robot.lift, "GROUND"));
 	}
