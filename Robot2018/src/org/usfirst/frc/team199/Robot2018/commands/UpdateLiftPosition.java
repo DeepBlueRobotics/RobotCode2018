@@ -44,7 +44,7 @@ public class UpdateLiftPosition extends Command {
 			System.out.println("POV Reading: " + angle);
 
 			if (angle == 180) {
-				desiredPos = LiftHeight.GROUND;
+				desiredPos = LiftHeight.HOLD_CUBE;
 				goToGround = true;
 			} else if (angle == 270) {
 				desiredPos = LiftHeight.HOLD_CUBE;
@@ -65,6 +65,9 @@ public class UpdateLiftPosition extends Command {
 				lift.setSetpoint(desiredDist);
 				goToGround = false;
 			}
+			System.out.println("Desired Pos: " + desiredPos);
+			System.out.println("Desired Dist: " + desiredDist);
+			System.out.println("Current Dist: " + lift.getHeight());
 		}
 	}
 
