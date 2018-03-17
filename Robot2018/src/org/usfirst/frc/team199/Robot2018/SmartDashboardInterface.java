@@ -12,4 +12,6 @@ public interface SmartDashboardInterface {
 	public void putNumber(String string, double d);
 
 	public void putBoolean(String string, boolean b);
+
+	public String getString(String key, String def);
 }
