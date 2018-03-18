@@ -42,6 +42,7 @@ public class OuttakeCube extends Command {
 	@Override
 	protected void end() {
 		Robot.intakeEject.runIntake(0);
+		System.out.println("Outtake done");
 	}
 
 	// Called when another command which requires one or more of the same
