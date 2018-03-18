@@ -30,6 +30,8 @@ public class PIDTurn extends Command implements PIDOutput {
 	private boolean absoluteRotation;
 	private boolean hasInitialized = false;
 
+	private double setpoint;
+
 	/**
 	 * Constructs this command with a new PIDController. Sets all of the
 	 * controller's PID constants based on SD prefs. Sets the controller's PIDSource
@@ -203,6 +205,8 @@ public class PIDTurn extends Command implements PIDOutput {
 		System.out.println("set point = " + newSetPoint);
 		turnController.setSetpoint(newSetPoint);
 
+		setpoint = newSetPoint;
+
 		turnController.enable();
 		System.out.println("initialize finished");
 		// tim.start();
@@ -218,6 +222,7 @@ public class PIDTurn extends Command implements PIDOutput {
 	protected void execute() {
 		System.out.println("execute");
 		System.out.println("Angle: " + dt.getAHRSAngle());
+		System.out.println("Targ: " + setpoint);
 		// if (tim.get() > lastTime + Robot.getConst("Update Time", 1)) {
 		// SmartDashboard.putNumber("Angle", dt.getAHRSAngle());
 		// lastTime = tim.get();
@@ -234,7 +239,11 @@ public class PIDTurn extends Command implements PIDOutput {
 	@Override
 	protected boolean isFinished() {
 		// System.out.println("isFinished");
-		return (turnController.onTarget() && Math.abs(dt.getGyroRate()) < 1);
+		double gyroRate = Math.abs(dt.getGyroRate());
+		System.out.println("Rate: " + gyroRate);
+		boolean done = turnController.onTarget();
+		System.out.println("On targ: " + done);
+		return (done && gyroRate < 1);
 		// return turnController.onTarget()
 		// && Math.abs(dt.getLeftEncRate()) <= Robot.getConst("Maximum Velocity When
 		// Stop", 1)

@@ -105,6 +105,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		isInverted = !isInverted;
 		leftEncDist.setReverseDirection(isInverted);
 		rightEncDist.setReverseDirection(isInverted);
+		SmartDashboard.putBoolean("DT is Inverted", isInverted);
 	}
 
 	@Override
@@ -284,7 +285,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 				turn *= Robot.getConst("Turn Slow Ratio", 0.5);
 			}
 		}
-		robotDrive.arcadeDrive(inverted * speed, inverted * turn, Robot.getBool("Square Drive Values", false));
+		robotDrive.arcadeDrive(inverted * speed, turn, Robot.getBool("Square Drive Values", false));
 	}
 
 	/**

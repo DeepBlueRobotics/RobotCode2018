@@ -178,6 +178,9 @@ public class RobotMap {
 		rightEncRate.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
 		rightEncRate.setReverseDirection(true);
 
+		leftEncDist.setReverseDirection(false);
+		rightEncDist.setReverseDirection(false);
+
 		dtRightMaster = new WPI_TalonSRX(getPort("RightTalonSRXMaster", 4));
 		configSRX(dtRightMaster);
 		dtRightSlave = new WPI_VictorSPX(getPort("RightVictorSPXSlave", 3));
