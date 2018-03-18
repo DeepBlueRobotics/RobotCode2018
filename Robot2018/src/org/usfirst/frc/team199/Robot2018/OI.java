@@ -10,6 +10,7 @@ package org.usfirst.frc.team199.Robot2018;
 import org.usfirst.frc.team199.Robot2018.commands.AutoLift;
 import org.usfirst.frc.team199.Robot2018.commands.FindTurnTimeConstant;
 import org.usfirst.frc.team199.Robot2018.commands.IntakeCube;
+import org.usfirst.frc.team199.Robot2018.commands.InvertDrivetrain;
 import org.usfirst.frc.team199.Robot2018.commands.MoveLift;
 import org.usfirst.frc.team199.Robot2018.commands.MoveLiftWithPID;
 import org.usfirst.frc.team199.Robot2018.commands.OuttakeCube;
@@ -55,6 +56,7 @@ public class OI {
 	private JoystickButton findTurnTimeConstantButton;
 	private JoystickButton updatePIDConstantsButton;
 	private JoystickButton updateEncoderDPPButton;
+	private JoystickButton invertDTButton;
 
 	public Joystick manipulator;
 	private JoystickButton closeIntakeButton;
@@ -82,6 +84,9 @@ public class OI {
 		leftJoy = new Joystick(0);
 		shiftDriveTypeButton = new JoystickButton(leftJoy, getButton("Shift Drive Type", 2));
 		shiftDriveTypeButton.whenPressed(new ShiftDriveType());
+
+		invertDTButton = new JoystickButton(leftJoy, getButton("Invert Drivetrain", 3));
+		invertDTButton.whenPressed(new InvertDrivetrain());
 
 		pIDMoveButton = new JoystickButton(leftJoy, getButton("PID Move", 7));
 		pIDMoveButton
