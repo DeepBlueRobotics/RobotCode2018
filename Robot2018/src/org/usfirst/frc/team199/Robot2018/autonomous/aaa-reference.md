@@ -50,7 +50,7 @@ Ex:
 | jump | Jumps to the specified script and continues the current script when finished. (Doesn’t make the robot go up.) | `jump MoveToRScale`
 | move | Move forward or backwards for the specified amount in inches, relative to the current position. | `move 24` |
 | moveto | Move to 1 or more points, sequentially, with an optional last value having a final angle to face towards, all relative to the starting position. | `moveto (12,0) (36,12)` <br> `moveto (0,12) 90` |
-| scale | Place a cube at scale height. | `scale` |
-| switch | Place a cube at switch height. | `switch` |
+| scale | Place a cube at scale height after moving forward by the specified amount with the lift up. | `scale 24` |
+| switch | Place a cube at switch height after moving forward by the specified amount with the lift up. | `switch 24` |
 | turn | Turn towards a relative point or rotate clockwise by an angle in degrees, relative to the current position. <br> Negative angle for counterclockwise. | `turn (36,48)` <br> `turn 45` |
 | wait | Waits for the number of seconds before proceeding to next command. | `wait 5` |
