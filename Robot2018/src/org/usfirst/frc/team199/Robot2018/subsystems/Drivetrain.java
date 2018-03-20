@@ -298,9 +298,16 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void tankDrive(double leftSpeed, double rightSpeed) {
-		if (Robot.oi.leftJoy.getRawButton(1) || Robot.oi.rightJoy.getRawButton(1)) {
+		if (Robot.oi.leftJoy.getRawButton(1)) {
 			leftSpeed *= Robot.getConst("Speed Slow Ratio", 0.5);
+		}
+		if (Robot.oi.rightJoy.getRawButton(1)) {
 			rightSpeed *= Robot.getConst("Speed Slow Ratio", 0.5);
+		}
+		if (isInverted) {
+			double leftSpd = leftSpeed;
+			leftSpeed = rightSpeed;
+			rightSpeed = leftSpd;
 		}
 		robotDrive.tankDrive(inverted * leftSpeed, inverted * rightSpeed, Robot.getBool("Square Drive Values", false));
 	}
