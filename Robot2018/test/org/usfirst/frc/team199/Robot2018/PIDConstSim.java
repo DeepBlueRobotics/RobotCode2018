@@ -1,18 +1,13 @@
 package org.usfirst.frc.team199.Robot2018;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
-import java.util.Collection;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import edu.wpi.first.wpilibj.HLUsageReporting;
 import edu.wpi.first.wpilibj.PIDController;
@@ -21,32 +16,29 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.internal.HardwareTimer;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-import org.junit.runners.Parameterized.Parameter;
 
 //@RunWith(value = Parameterized.class)
 class PIDConstSim {
 	static final double initkP = 10;
 	static final double initkI = 6;
 	static final double initkD = 6;
-	
-	//@Parameter(value = )
+
+	// @Parameter(value = )
 	double liftkP = initkP;
 	double liftkI = initkI;
 	double liftkD = initkD;
-	
+
 	private final double targetOne = 24;
 	private final double targetTwo = 60;
 	private final double targetThree = 45;
 	// 1 in in meters
 	private final double tolerance = 0.0254;
-	
+
 	double position = 0;
 	double velocity_ = 0;
 	double voltage_ = 0;
 	double offset_ = -0.1;
-	
+
 	// Stall Torque in N m
 	static final double kStallTorque = 2.41;
 	// Stall Current in Amps
@@ -63,8 +55,7 @@ class PIDConstSim {
 	// Resistance of the motor
 	static final double kResistance = 12.0 / kStallCurrent;
 	// Motor velocity constant
-	static final double Kv = ((kFreeSpeed / 60.0 * 2.0 * Math.PI) /
-	             (12.0 - kResistance * kFreeCurrent));
+	static final double Kv = ((kFreeSpeed / 60.0 * 2.0 * Math.PI) / (12.0 - kResistance * kFreeCurrent));
 	// Torque constant
 	static final double Kt = (kNumMotors * kStallTorque) / kStallCurrent;
 	// Gear ratio
@@ -75,61 +66,46 @@ class PIDConstSim {
 
 	// Control loop time step
 	static final double kDt = 0.01;
-	    
+
 	double current_time = 0;
-	
-	  // V = I * R + omega / Kv
-	  // torque = Kt * I
-	
-	
+
+	// V = I * R + omega / Kv
+	// torque = Kt * I
+
 	// (name = "{index}: testAdd({0}+{1}) = {2}")
-	/*@Parameters
-    public static double[][] data() {
-    	// array is P I and D finalants in order
-        //double [][][] PIDfinalTable = new double[5][5][5];
-		double [][] PIDfinalTable = new double[3][5];
-        double diffInter3 = initkD / 10;
-        double diffInter2 = initkI / 10;
-        double diffInter1 = initkP / 10;
-        for(int i = 0; i < 3; i++) {
-        	for(int j = -2; j < 3; j++) {
-        		double res;
-        		if(i == 0)
-        			res = initkP + j * diffInter1;
-        		else if(i == 1)
-        			res = initkI + j * diffInter2;
-        		else
-        			res = initkD + j * diffInter3;
-        		PIDfinalTable[i][j] = res;
-        	}
-        }
-    	//return (Iterable<Double[]>)Arrays.asList(PIDfinalTable);
-        return PIDfinalTable;
-    }
-    */
-	
+	/*
+	 * @Parameters public static double[][] data() { // array is P I and D finalants
+	 * in order //double [][][] PIDfinalTable = new double[5][5][5]; double [][]
+	 * PIDfinalTable = new double[3][5]; double diffInter3 = initkD / 10; double
+	 * diffInter2 = initkI / 10; double diffInter1 = initkP / 10; for(int i = 0; i <
+	 * 3; i++) { for(int j = -2; j < 3; j++) { double res; if(i == 0) res = initkP +
+	 * j * diffInter1; else if(i == 1) res = initkI + j * diffInter2; else res =
+	 * initkD + j * diffInter3; PIDfinalTable[i][j] = res; } } //return
+	 * (Iterable<Double[]>)Arrays.asList(PIDfinalTable); return PIDfinalTable; }
+	 */
+
 	private double GetAcceleration(double voltage) {
-	    return -Kt * kG * kG / (Kv * kResistance * kr * kr * kMass) * velocity_ +
-	           kG * Kt / (kResistance * kr * kMass) * voltage;
-	  }
-	
+		return -Kt * kG * kG / (Kv * kResistance * kr * kr * kMass) * velocity_
+				+ kG * Kt / (kResistance * kr * kMass) * voltage;
+	}
+
 	private void simulateTime(double time, double voltage) {
 		final double starting_time = time;
-	    while (time > 0) {
-	      final double current_dt = Math.min(time, 0.001);
-	      //System.out.println("vel before: " + velocity_);
-	      position += current_dt * velocity_;
-	      double acc = GetAcceleration(voltage);
-	      //System.out.println("acc: " + acc);
-	      velocity_ += current_dt * acc;
-	      //System.out.println("vel after: " + velocity_);
-	      time -= 0.001;
-	      //EXPECT_LE(position, ElevatorLoop::kMaxHeight + 0.01);
-	      //EXPECT_GE(position, ElevatorLoop::kMinHeight - 0.01);
-	    }
-	    current_time += starting_time;
+		while (time > 0) {
+			final double current_dt = Math.min(time, 0.001);
+			// System.out.println("vel before: " + velocity_);
+			position += current_dt * velocity_;
+			double acc = GetAcceleration(voltage);
+			// System.out.println("acc: " + acc);
+			velocity_ += current_dt * acc;
+			// System.out.println("vel after: " + velocity_);
+			time -= 0.001;
+			// EXPECT_LE(position, ElevatorLoop::kMaxHeight + 0.01);
+			// EXPECT_GE(position, ElevatorLoop::kMinHeight - 0.01);
+		}
+		current_time += starting_time;
 	}
-	
+
 	@BeforeEach
 	void setUp() {
 		// Since VelocityPIDController extends PIDController and PIDController calls
@@ -140,50 +116,50 @@ class PIDConstSim {
 		HardwareTimer tim = mock(HardwareTimer.class);
 		Timer.Interface timerInstance = mock(Timer.Interface.class);
 		when(tim.newTimer()).thenReturn(timerInstance);
-		when(timerInstance.get()).thenAnswer(
-			     new Answer() {
-			         public Object answer(InvocationOnMock invocation) {
-			             //return getTime();
-			        	 return current_time;
-			         }
-			 });
-		
+		when(timerInstance.get()).thenAnswer(new Answer() {
+			public Object answer(InvocationOnMock invocation) {
+				// return getTime();
+				return current_time;
+			}
+		});
+
 		Timer.SetImplementation(tim);
 		HLUsageReporting.Interface usageReporter = mock(HLUsageReporting.Interface.class);
 		HLUsageReporting.SetImplementation(usageReporter);
 	}
-	
-	class PIDSim{
+
+	class PIDSim {
 		public PIDSim() {
-			//position = 0;
+			// position = 0;
 		}
-		
+
 		public double pidGet() {
 			return position;
 		}
-		
+
 		public void pidWrite(double output) {
-			//System.out.println("voltage: " + output);
+			// System.out.println("voltage: " + output);
 			simulateTime(kDt, output * 12);
 			System.out.println("position: " + position);
 		}
 	}
-	
-	class PIDSimController extends PIDController{
-		
+
+	class PIDSimController extends PIDController {
+
 		public PIDSimController(double p, double i, double d, PIDSource src, PIDOutput out) {
-			super(p,i,d,src,out);
+			super(p, i, d, src, out);
 		}
-		
+
 		public void calc() {
 			this.calculate();
 		}
-		
+
 	}
-	
-	class PIDSimSource implements PIDSource{
+
+	class PIDSimSource implements PIDSource {
 		private PIDSim sim;
 		private PIDSourceType type;
+
 		public PIDSimSource(PIDSim sim) {
 			this.sim = sim;
 		}
@@ -197,25 +173,28 @@ class PIDConstSim {
 		public double pidGet() {
 			return sim.pidGet();
 		}
-		
+
 		@Override
 		public void setPIDSourceType(PIDSourceType pidSource) {
 			// TODO Auto-generated method stub
 			type = pidSource;
 		}
 	}
-	
-	class PIDSimOutput implements PIDOutput{
+
+	class PIDSimOutput implements PIDOutput {
 		private PIDSim sim;
+
 		public PIDSimOutput(PIDSim sim) {
 			this.sim = sim;
 		}
+
 		@Override
 		public void pidWrite(double output) {
 			sim.pidWrite(output);
 		}
 	}
 
+	@Test
 	void test24() {
 		PIDSim sim = new PIDSim();
 		PIDSimSource src = new PIDSimSource(sim);
@@ -225,8 +204,8 @@ class PIDConstSim {
 		liftController.setSetpoint(0.6);
 		liftController.setOutputRange(-1.0, 1.0);
 		liftController.enable();
-		//1 second?
-		for(int i = 0; i < 100; i++) {
+		// 1 second?
+		for (int i = 0; i < 100; i++) {
 			liftController.calc();
 		}
 		System.out.println("Test" + targetOne + ": " + sim.pidGet());
@@ -235,6 +214,7 @@ class PIDConstSim {
 		assertTrue(Math.abs(0.6 - sim.pidGet()) < tolerance);
 	}
 
+	@Test
 	void test60() {
 		PIDSim sim = new PIDSim();
 		PIDSimSource src = new PIDSimSource(sim);
@@ -244,8 +224,8 @@ class PIDConstSim {
 		liftController.setSetpoint(1.524);
 		liftController.setOutputRange(-1.0, 1.0);
 		liftController.enable();
-		//1 second?
-		for(int i = 0; i < 200; i++) {
+		// 1 second?
+		for (int i = 0; i < 200; i++) {
 			liftController.calc();
 		}
 		System.out.println("" + sim.pidGet());
@@ -263,8 +243,8 @@ class PIDConstSim {
 		liftController.setSetpoint(1.143);
 		liftController.setOutputRange(-1.0, 1.0);
 		liftController.enable();
-		//1 second?
-		for(int i = 0; i < 100; i++) {
+		// 1 second?
+		for (int i = 0; i < 100; i++) {
 			liftController.calc();
 		}
 		System.out.println("" + sim.pidGet());

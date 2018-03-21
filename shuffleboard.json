@@ -87,7 +87,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Left VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Left VPID Targ",
+              "_title": "/SmartDashboard/Drivetrain/Left VPID Targ",
               "Visible time": 30.0,
               "SmartDashboard/Drivetrain/Left VPID Targ visible": true
             }
@@ -100,7 +100,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Right VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Right VPID Targ",
+              "_title": "/SmartDashboard/Drivetrain/Right VPID Targ",
               "Visible time": 30.0,
               "SmartDashboard/Drivetrain/Right VPID Targ visible": true
             }
@@ -385,7 +385,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Left VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Left VPID Targ",
+              "_title": "/SmartDashboard/Drivetrain/Left VPID Targ",
               "Visible time": 10.0,
               "SmartDashboard/Drivetrain/Left VPID Targ visible": true
             }
@@ -398,7 +398,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Drivetrain/Right VPID Targ",
-              "_title": "SmartDashboard/Drivetrain/Right VPID Targ",
+              "_title": "/SmartDashboard/Drivetrain/Right VPID Targ",
               "Visible time": 10.0,
               "SmartDashboard/Drivetrain/Right VPID Targ visible": true
             }
@@ -937,6 +937,54 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Time Const (kD)",
               "_title": "SmartDashboard/Time Const (kD)"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Tab 8",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "0,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Encoder",
+              "_source0": "network_table:///LiveWindow/Lift/Encoder",
+              "_title": "LiveWindow/Lift/Encoder"
+            }
+          },
+          "0,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Speed Controller",
+              "_source0": "network_table:///LiveWindow/Lift/CIM Motor",
+              "_title": "LiveWindow/Lift/CIM Motor",
+              "controllable": false,
+              "orientation": "HORIZONTAL"
+            }
+          },
+          "0,2": {
+            "size": [
+              6,
+              2
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Scheduler",
+              "_title": "LiveWindow/Ungrouped/Scheduler"
             }
           }
         }
