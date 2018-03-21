@@ -8,10 +8,10 @@
 package org.usfirst.frc.team199.Robot2018;
 
 import org.usfirst.frc.team199.Robot2018.commands.CloseIntake;
+import org.usfirst.frc.team199.Robot2018.commands.EjectCube;
 import org.usfirst.frc.team199.Robot2018.commands.FindTurnTimeConstant;
 import org.usfirst.frc.team199.Robot2018.commands.IntakeCube;
 import org.usfirst.frc.team199.Robot2018.commands.OpenIntake;
-import org.usfirst.frc.team199.Robot2018.commands.OuttakeCube;
 import org.usfirst.frc.team199.Robot2018.commands.PIDMove;
 import org.usfirst.frc.team199.Robot2018.commands.PIDTurn;
 import org.usfirst.frc.team199.Robot2018.commands.ResetEncoders;
@@ -114,23 +114,19 @@ public class OI {
 					"ERROR: manipulator does not appear to be plugged in. Disabling intake code. Restart code with manipulator plugged in to enable intake code");
 		} else {
 			closeIntakeButton = new JoystickButton(manipulator, getButton("Close Intake Button", 1));
-			closeIntakeButton.whenPressed(new CloseIntake());
+			closeIntakeButton.whenPressed(new CloseIntake(Robot.intakeEject));
 			openIntakeButton = new JoystickButton(manipulator, getButton("Open Intake Button", 2));
-			openIntakeButton.whenPressed(new OpenIntake());
-			// raiseIntake = new JoystickButton(manipulator, getButton("Raise Intake
-			// Button", 3));
-			// raiseIntake.whenPressed(new RaiseIntake());
-			// lowerIntake = new JoystickButton(manipulator, getButton("Lower Intake
-			// Button", 4));
-			// lowerIntake.whenPressed(new LowerIntake());
+			openIntakeButton.whenPressed(new OpenIntake(Robot.intakeEject));
+
 			intakeCubeButton = new JoystickButton(manipulator, getButton("Intake Button", 5));
-			intakeCubeButton.whenPressed(new IntakeCube());
+			intakeCubeButton.whenPressed(new IntakeCube(Robot.intakeEject));
 			outakeCubeButton = new JoystickButton(manipulator, getButton("Outake Button", 6));
-			outakeCubeButton.whenPressed(new OuttakeCube());
+			outakeCubeButton.whenPressed(new EjectCube(Robot.intakeEject));
+
 			toggleLeftIntakeButton = new JoystickButton(manipulator, getButton("Toggle Left Intake Button", 3));
-			toggleLeftIntakeButton.whenPressed(new ToggleLeftIntake());
+			toggleLeftIntakeButton.whenPressed(new ToggleLeftIntake(Robot.intakeEject));
 			toggleRightIntakeButton = new JoystickButton(manipulator, getButton("Toggle Right Intake Button", 4));
-			toggleRightIntakeButton.whenPressed(new ToggleRightIntake());
+			toggleRightIntakeButton.whenPressed(new ToggleRightIntake(Robot.intakeEject));
 		}
 
 	}

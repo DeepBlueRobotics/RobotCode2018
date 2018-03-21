@@ -1,25 +1,27 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
 import org.usfirst.frc.team199.Robot2018.Robot;
+import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEjectInterface;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
 public class CloseIntake extends InstantCommand {
 
-	public CloseIntake() {
+	private IntakeEjectInterface intEj;
+
+	public CloseIntake(IntakeEjectInterface intEj) {
 		super();
-		// Use requires() here to declare subsystem dependencies
-		// eg. requires(chassis);
+		requires(Robot.intakeEject);
+		this.intEj = intEj;
 	}
 
 	// Called once when the command executes
+	@Override
 	protected void initialize() {
-		Robot.intakeEject.closeIntake();
-		SmartDashboard.putBoolean("Intake Open", false);
+		intEj.closeIntake();
 	}
 
 }

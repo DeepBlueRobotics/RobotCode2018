@@ -1,5 +1,8 @@
 package org.usfirst.frc.team199.Robot2018.commands;
 
+import org.usfirst.frc.team199.Robot2018.Robot;
+import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEjectInterface;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -7,30 +10,37 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class EjectToSwitch extends Command {
 
-    public EjectToSwitch() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-    }
+	private IntakeEjectInterface intEj;
 
-    // Called just before this Command runs the first time
-    protected void initialize() {
-    }
+	public EjectToSwitch(IntakeEjectInterface intEj) {
+		requires(Robot.intakeEject);
+		this.intEj = intEj;
+	}
 
-    // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-    }
+	// Called just before this Command runs the first time
+	@Override
+	protected void initialize() {
+	}
 
-    // Make this return true when this Command no longer needs to run execute()
-    protected boolean isFinished() {
-        return false;
-    }
+	// Called repeatedly when this Command is scheduled to run
+	@Override
+	protected void execute() {
+	}
 
-    // Called once after isFinished returns true
-    protected void end() {
-    }
+	// Make this return true when this Command no longer needs to run execute()
+	@Override
+	protected boolean isFinished() {
+		return false;
+	}
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() {
-    }
+	// Called once after isFinished returns true
+	@Override
+	protected void end() {
+	}
+
+	// Called when another command which requires one or more of the same
+	// subsystems is scheduled to run
+	@Override
+	protected void interrupted() {
+	}
 }

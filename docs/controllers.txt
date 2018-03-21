@@ -36,8 +36,8 @@
 	buttons
 		1	A	close intake [CloseIntake]
 		2	B	open intake [OpenIntake]
-		3	X	raise intake [RaiseIntake]
-		4	Y	lower intake [LowerIntake]
+		3	X	
+		4	Y	
 		5	LB	take in [IntakeCube]
 		6	RB	take out [OuttakeCube]
 		7	back run lift motor up [RunLift]

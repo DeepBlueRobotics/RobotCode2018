@@ -20,7 +20,7 @@ import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
 import org.usfirst.frc.team199.Robot2018.subsystems.Drivetrain;
-import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEject;
+import org.usfirst.frc.team199.Robot2018.subsystems.IntakeEjectBagged;
 import org.usfirst.frc.team199.Robot2018.subsystems.Lift;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -43,7 +43,7 @@ public class Robot extends IterativeRobot {
 
 	public static Climber climber;
 	public static ClimberAssist climberAssist;
-	public static IntakeEject intakeEject;
+	public static IntakeEjectBagged intakeEject;
 	public static Lift lift;
 	public static RobotMap rmap;
 	public static Drivetrain dt;
@@ -59,6 +59,7 @@ public class Robot extends IterativeRobot {
 	String[] fmsPossibilities = { "LL", "LR", "RL", "RR" };
 
 	public static SmartDashboardInterface sd = new SmartDashboardInterface() {
+		@Override
 		public double getConst(String key, double def) {
 			Preferences pref = Preferences.getInstance();
 			if (!pref.containsKey("Const/" + key)) {
@@ -71,6 +72,7 @@ public class Robot extends IterativeRobot {
 			return pref.getDouble("Const/" + key, def);
 		}
 
+		@Override
 		public void putConst(String key, double def) {
 			Preferences pref = Preferences.getInstance();
 			pref.putDouble("Const/" + key, def);
@@ -79,14 +81,17 @@ public class Robot extends IterativeRobot {
 			}
 		}
 
+		@Override
 		public void putData(String string, PIDController controller) {
 			SmartDashboard.putData(string, controller);
 		}
 
+		@Override
 		public void putNumber(String string, double d) {
 			SmartDashboard.putNumber(string, d);
 		}
 
+		@Override
 		public void putBoolean(String string, boolean b) {
 			SmartDashboard.putBoolean(string, b);
 		}
@@ -129,7 +134,7 @@ public class Robot extends IterativeRobot {
 		rmap = new RobotMap();
 		climber = new Climber();
 		climberAssist = new ClimberAssist();
-		intakeEject = new IntakeEject();
+		intakeEject = new IntakeEjectBagged();
 		lift = new Lift();
 		dt = new Drivetrain(sd);
 		oi = new OI(this);
@@ -186,7 +191,7 @@ public class Robot extends IterativeRobot {
 		dt.resetAHRS();
 		AutoUtils.state = new State(0, 0, 0);
 		Scheduler.getInstance().add(new ShiftLowGear());
-		Scheduler.getInstance().add(new CloseIntake());
+		Scheduler.getInstance().add(new CloseIntake(intakeEject));
 		String fmsInput = DriverStation.getInstance().getGameSpecificMessage();
 		Autonomous.Position startPos = posChooser.getSelected();
 		double autoDelay = SmartDashboard.getNumber("Auto Delay", 0);

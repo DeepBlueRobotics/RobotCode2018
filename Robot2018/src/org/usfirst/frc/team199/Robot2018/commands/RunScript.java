@@ -44,19 +44,19 @@ public class RunScript extends CommandGroup {
 				addSequential(new PIDMove(distance, Robot.dt, Robot.sd, Robot.dt.getDistEncAvg()));
 				break;
 			case "switch":
-				addSequential(new EjectToSwitch());
+				addSequential(new EjectToSwitch(Robot.intakeEject));
 				break;
 			case "scale":
-				addSequential(new EjectToScale());
+				addSequential(new EjectToScale(Robot.intakeEject));
 				break;
 			case "exchange":
-				addSequential(new EjectToExchange());
+				addSequential(new EjectToExchange(Robot.intakeEject));
 				break;
 			case "wait":
 				addSequential(new WaitCommand(Double.parseDouble(cmdArgs)));
 				break;
 			case "intake":
-				addSequential(new IntakeCube());
+				addSequential(new IntakeCube(Robot.intakeEject));
 				break;
 			case "jump":
 				addSequential(new RunScript(cmdArgs));
