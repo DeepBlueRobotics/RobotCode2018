@@ -21,6 +21,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	private final DoubleSolenoid rightSolenoid = RobotMap.rightIntakeSolenoid;
 	private boolean leftOpen = isOpen(leftSolenoid.get());
 	private boolean rightOpen = isOpen(rightSolenoid.get());
+	private boolean hasCube = false;
 
 	/**
 	 * Return whether or not a side of the intake (L/R) is open
@@ -38,6 +39,7 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 */
 	@Override
 	public void initDefaultCommand() {
+		// I don't want this on the manipulator joysticks during a match
 		setDefaultCommand(new DefaultIntake());
 	}
 
@@ -64,7 +66,10 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	 */
 	@Override
 	public boolean hasCube() {
-		return pdp.getCurrent(Robot.rmap.getPort("PDP Intake Left Channel", 4)) > Robot.getConst("Max Current", 39)
+		SmartDashboard.putNumber("Intake Current Left", Robot.rmap.getPort("PDP Intake Left Channel", 4));
+
+		SmartDashboard.putNumber("Intake Current Right", Robot.rmap.getPort("PDP Intake Left Channel", 11));
+		return pdp.getCurrent(Robot.rmap.getPort("PDP Intake Left Channel", 4)) > Robot.getConst("Max Current", 15)
 				|| pdp.getCurrent(Robot.rmap.getPort("PDP Intake Right Channel", 11)) > Robot.getConst("Max Current",
 						39);
 	}
@@ -113,6 +118,15 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	public void runIntake(double speed) {
 		runLeftIntake(speed);
 		runRightIntake(speed);
+	}
+
+	/**
+	 * Toggles the left and right intake between open (kReverse) and closed
+	 * (kForward).
+	 */
+	public void toggleIntake() {
+		toggleLeftIntake();
+		toggleRightIntake();
 	}
 
 	/**

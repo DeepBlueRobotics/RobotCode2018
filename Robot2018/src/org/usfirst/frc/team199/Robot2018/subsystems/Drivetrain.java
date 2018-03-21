@@ -52,11 +52,20 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	private SmartDashboardInterface sd;
 
 	private boolean highGear;
+	private boolean isInverted;
+	private int inverted;
 
+	/**
+	 * Sets up velocity PID controllers. Initializes to not in high gear and to not
+	 * inverted.
+	 */
 	public Drivetrain(SmartDashboardInterface sd) {
 		this.sd = sd;
 
 		highGear = false;
+
+		isInverted = false;
+		inverted = 1;
 
 		// all 0s for controller construction because they all get set to right values
 		// by resetAllVelocityPIDConsts
@@ -85,11 +94,26 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		}
 	}
 
+	/**
+	 * Inverts the drivetrain (forward is backward, left is right) by toggling a
+	 * motor output multiplier (between 1 and -1) and the distance encoders (between
+	 * inverted or not). The motor output multiplier is used in arcadeDrive and
+	 * tankDrive for final speed/turn and left/right outputs.
+	 */
+	public void reverseDT() {
+		inverted *= -1;
+		isInverted = !isInverted;
+		leftEncDist.setReverseDirection(isInverted);
+		rightEncDist.setReverseDirection(isInverted);
+		SmartDashboard.putBoolean("DT is Inverted", isInverted);
+	}
+
 	@Override
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleopDrive());
 	}
 
+	@Override
 	public boolean isVPIDUsed() {
 		return Robot.getBool("Teleop velocity PID", false);
 	}
@@ -151,6 +175,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 * 
 	 * @return the rate of the left encoder
 	 */
+	@Override
 	public double getLeftEncRate() {
 		return leftEncRate.getRate();
 	}
@@ -160,6 +185,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 * 
 	 * @return the rate of the right encoder
 	 */
+	@Override
 	public double getRightEncRate() {
 		return rightEncRate.getRate();
 	}
@@ -259,7 +285,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 				turn *= Robot.getConst("Turn Slow Ratio", 0.5);
 			}
 		}
-		robotDrive.arcadeDrive(speed, turn, Robot.getBool("Square Drive Values", false));
+		robotDrive.arcadeDrive(inverted * speed, turn, Robot.getBool("Square Drive Values", false));
 	}
 
 	/**
@@ -272,11 +298,18 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	 */
 	@Override
 	public void tankDrive(double leftSpeed, double rightSpeed) {
-		if (Robot.oi.leftJoy.getRawButton(1) || Robot.oi.rightJoy.getRawButton(1)) {
+		if (Robot.oi.leftJoy.getRawButton(1)) {
 			leftSpeed *= Robot.getConst("Speed Slow Ratio", 0.5);
+		}
+		if (Robot.oi.rightJoy.getRawButton(1)) {
 			rightSpeed *= Robot.getConst("Speed Slow Ratio", 0.5);
 		}
-		robotDrive.tankDrive(leftSpeed, rightSpeed, Robot.getBool("Square Drive Values", false));
+		if (isInverted) {
+			double leftSpd = leftSpeed;
+			leftSpeed = rightSpeed;
+			rightSpeed = leftSpd;
+		}
+		robotDrive.tankDrive(inverted * leftSpeed, inverted * rightSpeed, Robot.getBool("Square Drive Values", false));
 	}
 
 	/**
@@ -331,6 +364,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		fancyGyro.reset();
 	}
 
+	@Override
 	public double getGyroRate() {
 		return fancyGyro.getRate();
 	}
@@ -432,6 +466,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	/**
 	 * @return the gyroscope
 	 */
+	@Override
 	public PIDSource getGyro() {
 		return fancyGyro;
 	}
@@ -530,6 +565,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		SmartDashboard.putData("Right PID Controller", rightVelocityController);
 	}
 
+	@Override
 	public double getPIDMoveConstant() {
 		double G = Robot.rmap.getGearRatio();
 		double T = Robot.rmap.getStallTorque();
@@ -541,6 +577,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		return Math.sqrt(Robot.rmap.convertMtoIn((8 * T * G) / (R * M)));
 	}
 
+	@Override
 	public double getPIDTurnConstant() {
 		double G = Robot.rmap.getGearRatio();
 		double T = Robot.rmap.getStallTorque();

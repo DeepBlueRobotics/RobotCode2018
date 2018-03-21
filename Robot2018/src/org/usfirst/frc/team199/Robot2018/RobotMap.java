@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -43,7 +44,7 @@ public class RobotMap {
 	public static DigitalSource liftEncPort1;
 	public static DigitalSource liftEncPort2;
 
-	//public static WPI_TalonSRX climberMotor;
+	// public static WPI_TalonSRX climberMotor;
 
 	public static VictorSP leftIntakeMotor;
 	public static VictorSP rightIntakeMotor;
@@ -123,18 +124,25 @@ public class RobotMap {
 
 	public RobotMap() {
 		pdp = new PowerDistributionPanel();
-		
+
 		liftMotorA = new WPI_VictorSPX(getPort("LiftVictorSPX", 5));
 		configSPX(liftMotorA);
 		liftMotorB = new WPI_TalonSRX(getPort("1LiftTalonSRX", 6));
 		configSRX(liftMotorB);
 		liftMotorC = new WPI_TalonSRX(getPort("2LiftTalonSRX", 7));
 		configSRX(liftMotorC);
-		liftMotors = new SpeedControllerGroup(liftMotorB, liftMotorA, liftMotorC);
+		// liftMotors = new SpeedControllerGroup(liftMotorB, liftMotorA, liftMotorC);
+		liftMotors = new SpeedControllerGroup(liftMotorC);
+		liftMotors.setName("Lift", "CIM Motor");
+		liftMotors.setInverted(true);
+		LiveWindow.add(liftMotors);
+
 		liftEncPort1 = new DigitalInput(getPort("1LiftEnc", 4));
 		liftEncPort2 = new DigitalInput(getPort("2LiftEnc", 5));
 		liftEnc = new Encoder(liftEncPort1, liftEncPort2);
 		liftEnc.setPIDSourceType(PIDSourceType.kDisplacement);
+		liftEnc.setName("Lift", "Encoder");
+		LiveWindow.add(liftEnc);
 
 		leftIntakeMotor = new VictorSP(getPort("IntakeLeftVictorSP", 8));
 		rightIntakeMotor = new VictorSP(getPort("IntakeRightVictorSP", 9));
@@ -169,6 +177,9 @@ public class RobotMap {
 		rightEncDist.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
 		rightEncRate.setDistancePerPulse(Robot.getConst("DPP", DIST_PER_PULSE_RATIO));
 		rightEncRate.setReverseDirection(true);
+
+		leftEncDist.setReverseDirection(false);
+		rightEncDist.setReverseDirection(false);
 
 		dtRightMaster = new WPI_TalonSRX(getPort("RightTalonSRXMaster", 4));
 		configSRX(dtRightMaster);
@@ -252,7 +263,10 @@ public class RobotMap {
 		return Robot.getConst("Radius of Drivetrain Wheel", 0.0635);
 	}
 
-	public double getOmegaMax() {
+	/**
+	 * @return the RPM max of a CIM
+	 */
+	public static double getOmegaMax() {
 		return Robot.getConst("Omega Max", 5330);
 	}
 
@@ -264,7 +278,10 @@ public class RobotMap {
 		return Robot.getConst("Code cycle time", 0.05);
 	}
 
-	public double getStallTorque() {
+	/**
+	 * @return the stall torque of a CIM
+	 */
+	public static double getStallTorque() {
 		return Robot.getConst("Stall Torque", 2.41);
 	}
 
@@ -273,7 +290,12 @@ public class RobotMap {
 		return lbs * 0.45359237;
 	}
 
-	private double convertNtokG(double newtons) {
+	/**
+	 * @param the
+	 *            weight (in Newtons)
+	 * @return the equivalent mass (in kg)
+	 */
+	public static double convertNtokG(double newtons) {
 		// weight / accel due to grav = kg
 		return newtons / 9.81;
 	}
