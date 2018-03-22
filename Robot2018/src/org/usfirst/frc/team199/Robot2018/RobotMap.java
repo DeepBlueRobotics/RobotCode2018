@@ -73,6 +73,7 @@ public class RobotMap {
 	public static DoubleSolenoid dtGear;
 
 	private final double DIST_PER_PULSE_RATIO = (5.0 * Math.PI) * (17.0 / 25) / (3.0 * 256);
+	public final double gravity = 9.80665;
 
 	/**
 	 * This function takes in a TalonSRX motorController and sets nominal and peak
