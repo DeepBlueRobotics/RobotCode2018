@@ -9,12 +9,11 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class EjectToSwitch extends CommandGroup {
 
-	public EjectToSwitch() {
+	public EjectToSwitch(double dist) {
 		addSequential(new AutoLift(Robot.lift, "SWITCH"));
-		addSequential(
-				new PIDMove(Robot.getConst("Auto Switch Move Dist", 18), Robot.dt, Robot.sd, Robot.dt.getDistEncAvg()));
+		addSequential(new PIDMove(dist, Robot.dt, Robot.sd, Robot.dt.getDistEncAvg()));
 		addSequential(new OuttakeCube());
-		addSequential(new PIDMove(-1 * Robot.getConst("Auto Switch Move Dist", 18), Robot.dt, Robot.sd,
+		addSequential(new PIDMove(-1 * Robot.getConst("Switch move back dist", 12), Robot.dt, Robot.sd,
 				Robot.dt.getDistEncAvg()));
 		addSequential(new AutoLift(Robot.lift, "GROUND"));
 	}

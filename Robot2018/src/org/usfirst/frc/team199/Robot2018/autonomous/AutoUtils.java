@@ -109,7 +109,7 @@ public class AutoUtils {
 		// moveto takes in a set of points, and the last arg can be a number
 		if (instruction.equals("moveto")) {
 			if (args == "") {
-				logError(lineNumber, "The command `moveto` requires at least one argument.");
+				logError(lineNumber, "The command `" + instruction + "` requires at least one argument.");
 				return false;
 			}
 
@@ -117,13 +117,13 @@ public class AutoUtils {
 			for (int i = 0; i < splitArgs.length - 1; i++) {
 				if (!isPoint(splitArgs[i])) {
 					logError(lineNumber,
-							"The arguments for command `moveto` should be points formatted like this: " + "`(x,y)`.");
+							"The arguments for command `" + instruction + "` should be points formatted like this: " + "`(x,y)`.");
 					return false;
 				}
 			}
 
 			if (!isDouble(splitArgs[splitArgs.length - 1]) && !isPoint(splitArgs[splitArgs.length - 1])) {
-				logError(lineNumber, "The last argument for command `moveto` should be a number, or a point "
+				logError(lineNumber, "The last argument for command `" + instruction + "` should be a number, or a point "
 						+ "formatted like this: `(x,y)`.");
 				return false;
 			}
@@ -132,32 +132,32 @@ public class AutoUtils {
 		// turn can take a number or point
 		else if (instruction.equals("turn")) {
 			if (args.contains(" ")) {
-				logError(lineNumber, "Command `turn` only accepts one argument.");
+				logError(lineNumber, "Command `" + instruction + "` only accepts one argument.");
 				return false;
 			}
 
 			if (!isDouble(args) && !isPoint(args)) {
-				logError(lineNumber, "The argument for command `turn` should be a number or a point formatted like "
+				logError(lineNumber, "The argument for command `" + instruction + "` should be a number or a point formatted like "
 						+ "this: `(x,y)`.");
 				return false;
 			}
 		}
 
-		// move and wait can take only a number
-		else if (instruction.equals("move") || instruction.equals("wait")) {
+		// these can take only a number
+		else if (instruction.equals("move") || instruction.equals("wait") || instruction.equals("switch") || instruction.equals("scale")) {
 			if (args.contains(" ")) {
-				logError(lineNumber, "Command `move` only accepts one argument.");
+				logError(lineNumber, "Command `" + instruction + "` only accepts one argument.");
 				return false;
 			}
 
 			if (!isDouble(args)) {
-				logError(lineNumber, "The argument for command `move` should be a number.");
+				logError(lineNumber, "The argument for command `" + instruction + "` should be a number.");
 				return false;
 			}
 		}
 
 		// switch, scale, exchange, intake, and end all don't have any args
-		else if (instruction.equals("switch") || instruction.equals("scale") || instruction.equals("exchange")
+		else if (instruction.equals("exchange")
 				|| instruction.equals("intake") || instruction.equals("end")) {
 			if (!args.equals("")) {
 				logError(lineNumber, "Command `" + instruction + "` does not accept any arguments.");
@@ -168,7 +168,7 @@ public class AutoUtils {
 		// Jump only takes one argument
 		else if (instruction.equals("jump")) {
 			if (args.contains(" ")) {
-				logError(lineNumber, "Command `jump` only accepts one argument.");
+				logError(lineNumber, "Command `" + instruction + "` only accepts one argument.");
 				return false;
 			}
 		}
