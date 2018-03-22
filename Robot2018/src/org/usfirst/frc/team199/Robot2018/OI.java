@@ -18,7 +18,6 @@ import org.usfirst.frc.team199.Robot2018.commands.PIDMove;
 import org.usfirst.frc.team199.Robot2018.commands.PIDTurn;
 import org.usfirst.frc.team199.Robot2018.commands.ResetEncoders;
 import org.usfirst.frc.team199.Robot2018.commands.SetDistancePerPulse;
-import org.usfirst.frc.team199.Robot2018.commands.ShiftDriveType;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftHighGear;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 import org.usfirst.frc.team199.Robot2018.commands.StopIntake;
@@ -44,7 +43,7 @@ public class OI {
 	public Joystick rightJoy;
 	private JoystickButton shiftLowGearButton;
 	private JoystickButton shiftHighGearButton;
-	private JoystickButton shiftDriveTypeButton;
+	// private JoystickButton shiftDriveTypeButton;
 	private JoystickButton pIDMoveButton;
 	private JoystickButton pIDTurnButton;
 	private JoystickButton resetEncButton;
@@ -82,8 +81,9 @@ public class OI {
 
 	public OI(Robot robot) {
 		leftJoy = new Joystick(0);
-		shiftDriveTypeButton = new JoystickButton(leftJoy, getButton("Shift Drive Type", 2));
-		shiftDriveTypeButton.whenPressed(new ShiftDriveType());
+		// shiftDriveTypeButton = new JoystickButton(leftJoy, getButton("Shift Drive
+		// Type", 2));
+		// shiftDriveTypeButton.whenPressed(new ShiftDriveType());
 
 		invertDTButton = new JoystickButton(leftJoy, getButton("Invert Drivetrain", 3));
 		invertDTButton.whenPressed(new InvertDrivetrain());

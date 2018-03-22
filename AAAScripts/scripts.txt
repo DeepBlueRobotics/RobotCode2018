@@ -8,7 +8,7 @@ moveto (0,120) #Drive past auto line
 #Switch
 RRxx:
 moveto (0,148) -90
-switch 19
+switch 17
 
 RLxx:
 move 56
@@ -76,7 +76,7 @@ moveto (0, 120) #Drive past auto line
 #Switch
 LLxx:
 moveto (0,148) 90
-switch 19
+switch 17
 
 LRxx:
 move 56
@@ -141,12 +141,12 @@ moveto (0, 12) (40, 88)
 
 # Switch
 CRxx:
-moveto (0,15) (50,85) 0
-switch 15
+moveto (0,15) (50,80) 0
+switch 18
 
 CLxx:
-moveto (0,15) (-60,85) 0
-switch 15
+moveto (0,15) (-60,80) 0
+switch 18
 
 
 # Switch and Exchange

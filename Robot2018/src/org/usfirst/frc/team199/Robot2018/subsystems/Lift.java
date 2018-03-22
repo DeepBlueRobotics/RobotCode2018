@@ -61,7 +61,7 @@ public class Lift extends PIDSubsystem implements LiftInterface {
 		WIGGLE_ROOM = (int) Robot.getConst("Lift wiggle room", 3.0); // inches
 
 		// calculate constant measurements
-		GROUND_DIST = 0;
+		GROUND_DIST = 0.7;
 		HOLD_CUBE_DIST = 4;
 		// distance to switch 18.75 inches in starting position
 		SWITCH_DIST = (18.75 + WIGGLE_ROOM) / NUM_STAGES;

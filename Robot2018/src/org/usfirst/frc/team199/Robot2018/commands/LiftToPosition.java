@@ -24,8 +24,9 @@ public class LiftToPosition extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		lift.getPIDController().setPID(Robot.getConst("LiftkP", 0.1), Robot.getConst("LiftkI", 0),
-				Robot.getConst("LiftkD", 0), Robot.getConst("LiftkF", 0.1));
+		// lift.getPIDController().setPID(Robot.getConst("LiftkP", 0.1),
+		// Robot.getConst("LiftkI", 0),
+		// Robot.getConst("LiftkD", 0), Robot.getConst("LiftkF", 0.1));
 		double setpoint = lift.getDesiredDistFromPos(pos);
 		lift.setSetpoint(setpoint);
 		System.out.println("Target Height: " + setpoint);
