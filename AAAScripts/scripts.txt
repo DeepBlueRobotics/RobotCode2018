@@ -9,6 +9,9 @@ moveto (0,120) #Drive past auto line
 RRxx:
 moveto (0,148) -90
 switch 18
+moveto (-10, 220)
+intake
+moveto (-22, 205)
 
 RLxx:
 move 56
@@ -77,6 +80,9 @@ moveto (0, 120) #Drive past auto line
 LLxx:
 moveto (0,148) 90
 switch 18
+moveto (10, 220)
+intake
+moveto (22, 205)
 
 LRxx:
 move 56
@@ -143,10 +149,16 @@ moveto (0, 12) (40, 88)
 CRxx:
 moveto (0,15) (50,80) 0
 switch 16
+move -40
+intake
+moveto (20, 65)
 
 CLxx:
 moveto (0,15) (-60,80) 0
 switch 16
+move -40
+intake
+moveto (-30, 65)
 
 
 # Switch and Exchange
