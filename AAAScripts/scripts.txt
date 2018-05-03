@@ -7,9 +7,11 @@ moveto (0,120) #Drive past auto line
 
 #Switch
 RRxx:
-moveto (0,155) 
-turn -90
-switch
+moveto (0,148) -90
+switch 18
+moveto (-10, 220)
+intake
+moveto (-22, 205)
 
 RLxx:
 move 56
@@ -76,9 +78,11 @@ moveto (0, 120) #Drive past auto line
 
 #Switch
 LLxx:
-move 150
-turn 90
-switch
+moveto (0,148) 90
+switch 18
+moveto (10, 220)
+intake
+moveto (22, 205)
 
 LRxx:
 move 56
@@ -139,17 +143,22 @@ exchange
 
 # Cross Auto Line 
 Cxxx: 
-moveto (0,50) (48,50) (48,92)  #cross baseline
-
+moveto (0, 12) (40, 88)
 
 # Switch
 CRxx:
-moveto (0,50) (48,50) (48,85) 
-switch #deploy switch 
+moveto (0,15) (50,80) 0
+switch 16
+move -40
+intake
+moveto (20, 65)
 
 CLxx:
-moveto (0,50) (-56,50) (-56,85)
-switch #deploy switch 
+moveto (0,15) (-60,80) 0
+switch 16
+move -40
+intake
+moveto (-30, 65)
 
 
 # Switch and Exchange

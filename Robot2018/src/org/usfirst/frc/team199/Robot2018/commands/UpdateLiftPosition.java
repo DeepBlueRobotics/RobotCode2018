@@ -54,7 +54,7 @@ public class UpdateLiftPosition extends Command {
 			goToGround = false;
 		}
 
-		if (goToGround || angle != -1) {
+		if (/* goToGround || */ angle != -1) {
 			desiredDist = lift.getDesiredDistFromPos(desiredPos);
 			lift.setSetpoint(desiredDist);
 		}

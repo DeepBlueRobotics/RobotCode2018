@@ -183,8 +183,8 @@ public class Robot extends IterativeRobot {
 
 		listen = new Listener();
 		lift.resetEnc();
-		CameraServer.getInstance().startAutomaticCapture(0);
-		CameraServer.getInstance().startAutomaticCapture(1);
+		// CameraServer.getInstance().startAutomaticCapture(0);
+		CameraServer.getInstance().startAutomaticCapture((int) Robot.getConst("Camera Port", 1));
 	}
 
 	/**

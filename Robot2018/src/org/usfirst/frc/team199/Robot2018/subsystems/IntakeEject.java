@@ -127,6 +127,8 @@ public class IntakeEject extends Subsystem implements IntakeEjectInterface {
 	public void toggleIntake() {
 		toggleLeftIntake();
 		toggleRightIntake();
+		SmartDashboard.putBoolean("Left Intake Open", leftOpen);
+		SmartDashboard.putBoolean("Right Intake Open", rightOpen);
 	}
 
 	/**
