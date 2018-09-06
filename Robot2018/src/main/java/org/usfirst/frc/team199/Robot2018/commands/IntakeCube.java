@@ -29,6 +29,7 @@ public class IntakeCube extends Command {
 		tim.reset();
 		// tim.start();
 		overDraw = false;
+		Robot.stopIntake = false;
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -52,14 +53,14 @@ public class IntakeCube extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return tim.get() > Robot.getConst("Has Cube Timeout", 0.5) || Robot.stopIntake;
+		return (tim.get() > Robot.getConst("Has Cube Timeout", 0.5)) || Robot.stopIntake;
 	}
 
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
 		Robot.intakeEject.stopIntake();
-		Robot.stopIntake = false;
+		Robot.stopIntake = true;
 		if (Robot.robot.isAutonomous()) {
 			Scheduler.getInstance().add(new LiftToPosition(Robot.lift, LiftHeight.SWITCH));
 		}
@@ -69,5 +70,6 @@ public class IntakeCube extends Command {
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
+		end();
 	}
 }
