@@ -236,6 +236,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 			if (Robot.getBool("Arcade Drive Default Setup", true)) {
 				forw = -Robot.oi.leftJoy.getY();
 				turn = Robot.oi.rightJoy.getX();
+				System.out.println("Forward is " + forw + " and turn is " + turn);
 				Robot.dt.arcadeDrive(squareJoy ? Robot.oi.squareValueKeepSign(forw) : forw,
 						squareJoy ? Robot.oi.squareValueKeepSign(turn) : turn);
 			} else {

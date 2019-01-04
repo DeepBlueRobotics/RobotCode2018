@@ -41,7 +41,7 @@ public class UpdateLiftPosition extends Command {
 		// if (manipulatorPluggedIn) {
 		int angle = Robot.oi.manipulator.getPOV();
 
-		System.out.println("POV Reading: " + angle);
+		// System.out.println("POV Reading: " + angle);
 
 		if (angle == 180) {
 			desiredPos = LiftHeight.HOLD_CUBE;
@@ -65,9 +65,9 @@ public class UpdateLiftPosition extends Command {
 			lift.setSetpoint(desiredDist);
 			goToGround = false;
 		}
-		System.out.println("Desired Pos: " + desiredPos);
-		System.out.println("Desired Dist: " + desiredDist);
-		System.out.println("Current Dist: " + lift.getHeight());
+		// System.out.println("Desired Pos: " + desiredPos);
+		// System.out.println("Desired Dist: " + desiredDist);
+		// System.out.println("Current Dist: " + lift.getHeight());
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

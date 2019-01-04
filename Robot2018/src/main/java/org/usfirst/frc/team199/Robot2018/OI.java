@@ -88,20 +88,21 @@ public class OI {
 		invertDTButton = new JoystickButton(leftJoy, getButton("Invert Drivetrain", 3));
 		invertDTButton.whenPressed(new InvertDrivetrain());
 
-		pIDMoveButton = new JoystickButton(leftJoy, getButton("PID Move", 7));
-		pIDMoveButton
-				.whenPressed(new PIDMove(Robot.sd.getConst("Move Targ", 24), Robot.dt, Robot.sd, RobotMap.distEncAvg));
-		pIDTurnButton = new JoystickButton(leftJoy, getButton("PID Turn", 8));
-		pIDTurnButton
-				.whenReleased(new PIDTurn(Robot.getConst("Turn Targ", 90), Robot.dt, Robot.sd, RobotMap.fancyGyro));
+		// commented out for safety reasons
+		// pIDMoveButton = new JoystickButton(leftJoy, getButton("PID Move", 7));
+		// pIDMoveButton
+		// 		.whenPressed(new PIDMove(Robot.sd.getConst("Move Targ", 24), Robot.dt, Robot.sd, RobotMap.distEncAvg));
+		// pIDTurnButton = new JoystickButton(leftJoy, getButton("PID Turn", 8));
+		// pIDTurnButton
+		// 		.whenReleased(new PIDTurn(Robot.getConst("Turn Targ", 90), Robot.dt, Robot.sd, RobotMap.fancyGyro));
 
-		resetEncButton = new JoystickButton(leftJoy, getButton("Reset Dist Enc", 10));
-		resetEncButton.whenPressed(new ResetEncoders());
+		// resetEncButton = new JoystickButton(leftJoy, getButton("Reset Dist Enc", 10));
+		// resetEncButton.whenPressed(new ResetEncoders());
 
-		findTurnTimeConstantButton = new JoystickButton(leftJoy, getButton("Find Turn Time Constant", 11));
+		// findTurnTimeConstantButton = new JoystickButton(leftJoy, getButton("Find Turn Time Constant", 11));
 		// the command will only run in test mode
-		findTurnTimeConstantButton
-				.whenPressed(new FindTurnTimeConstant(robot, Robot.dt, Robot.rmap.fancyGyro, Robot.sd));
+		// findTurnTimeConstantButton
+		// 		.whenPressed(new FindTurnTimeConstant(robot, Robot.dt, Robot.rmap.fancyGyro, Robot.sd));
 
 		testLiftPID = new JoystickButton(leftJoy, getButton("Test Lift PID", 5));
 		testLiftPID.whenPressed(
@@ -118,10 +119,10 @@ public class OI {
 		updateEncoderDPPButton = new JoystickButton(rightJoy, getButton("Get Encoder Dist Per Pulse", 9));
 		updateEncoderDPPButton.whenPressed(new SetDistancePerPulse());
 
-		moveLiftUpButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Up", 10));
-		moveLiftUpButton.whileHeld(new MoveLift(Robot.lift, true));
-		moveLiftDownButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Down", 11));
-		moveLiftDownButton.whileHeld(new MoveLift(Robot.lift, false));
+		// moveLiftUpButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Up", 10));
+		// moveLiftUpButton.whileHeld(new MoveLift(Robot.lift, true));
+		// moveLiftDownButton = new JoystickButton(rightJoy, getButton("Run Lift Motor Down", 11));
+		// moveLiftDownButton.whileHeld(new MoveLift(Robot.lift, false));
 
 		manipulator = new Joystick(2);
 		// if (manipulator.getButtonCount() == 0) {

@@ -53,10 +53,10 @@ public class FindTurnTimeConstant extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		System.out.println("FindTurnTimeConstant is in init()");
-		// if (!robot.isTest()) {
-		// System.out.println("but you're not in test mode.");
-		// return;
-		// }
+		if (!robot.isTest()) {
+		System.out.println("but you're not in test mode.");
+		return;
+		}
 
 		// this should be done in low gear
 		Robot.dt.shiftGears(false);
