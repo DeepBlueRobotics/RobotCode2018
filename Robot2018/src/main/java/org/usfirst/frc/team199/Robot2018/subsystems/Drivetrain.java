@@ -14,6 +14,9 @@ import org.usfirst.frc.team199.Robot2018.autonomous.PIDSourceAverage;
 import org.usfirst.frc.team199.Robot2018.autonomous.VelocityPIDController;
 import org.usfirst.frc.team199.Robot2018.commands.TeleopDrive;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -55,6 +58,14 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	private boolean isInverted;
 	private int inverted;
 
+	// Variables for drivetrain characterization
+	public double suppliedVoltage;
+	public double maximumVoltage;
+	public double voltage_step;
+	public double[] desired_voltages;
+
+	public double voltage_runtime;	// Number of seconds since increaseVoltageLinear was first run
+
 	/**
 	 * Sets up velocity PID controllers. Initializes to not in high gear and to not
 	 * inverted.
@@ -66,6 +77,13 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 
 		isInverted = false;
 		inverted = 1;
+
+		suppliedVoltage = 0.0;
+		maximumVoltage = 9.0;
+		voltage_step = 0.25 / 50; // IncreaseVoltageLinear is called 50 times per every second
+		desired_voltages = new double[1];
+		desired_voltages[0] = 6.0;
+		voltage_runtime = 0.0;
 
 		// all 0s for controller construction because they all get set to right values
 		// by resetAllVelocityPIDConsts
@@ -591,5 +609,29 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	private double convertNtokG(double newtons) {
 		// weight / accel due to grav = kg
 		return newtons / 9.81;
+	}
+
+	// Write the measured velocity to a csv file (part of drivetrain characterization)
+	public void writeMeasuredVelocity(FileWriter fw) {
+		double leftMotorVelocity;
+		double rightMotorVelocity;
+		StringBuilder sb = new StringBuilder();
+				
+		leftMotorVelocity = getLeftEncRate();
+		rightMotorVelocity = getRightEncRate();
+
+		voltage_runtime += 0.02;	// IncreaseVoltageLinearly occurs every 1/50 of a second
+		sb.append(String.valueOf(voltage_runtime));
+		sb.append(",");
+		sb.append(String.valueOf(leftMotorVelocity));
+		sb.append(",");
+		sb.append(String.valueOf(rightMotorVelocity));
+		sb.append("\n");
+
+		try {
+			fw.write(sb.toString());
+		} catch (IOException e) {
+			System.out.println("FileWriter object cannot write StringBuilder object");
+		}
 	}
 }

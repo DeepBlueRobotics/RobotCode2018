@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix.ErrorCode;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -78,12 +79,14 @@ public class RobotMap {
 	 * This function takes in a TalonSRX motorController and sets nominal and peak
 	 * outputs to the default
 	 * 
-	 * @param mc
-	 *            the TalonSRX to configure
+	 * @param mc the TalonSRX to configure
+	 * @throws RuntimeException
 	 */
 	private void configSRX(WPI_TalonSRX mc) {
 		// stuff cole said to put
 		int kTimeout = (int) Robot.getConst("kTimeoutMs", 10);
+		ErrorCode ecDeadband, ecVoltSat;
+
 		mc.configNominalOutputForward(0, kTimeout);
 		mc.configNominalOutputReverse(0, kTimeout);
 		mc.configPeakOutputForward(1, kTimeout);
@@ -97,19 +100,28 @@ public class RobotMap {
 		mc.configContinuousCurrentLimit(40, 0);
 		mc.enableCurrentLimit(true);
 
-		mc.configNeutralDeadband(Robot.getConst("Motor Deadband", 0.001), kTimeout);
+		ecDeadband = mc.configNeutralDeadband(Robot.getConst("Motor Deadband", 0.001), kTimeout);
+		if (!ecDeadband.equals(ErrorCode.OK)) {
+			throw new RuntimeException("Deadband Configuration could not be set");
+		}
 
 		mc.setNeutralMode(NeutralMode.Brake);
+		ecVoltSat = mc.configVoltageCompSaturation(9.0, kTimeout);
+
+		if (!ecVoltSat.equals(ErrorCode.OK)) {
+			throw new RuntimeException("Voltage Saturation Configuration could not be set");
+		}
 	}
 
 	/**
 	 * This function takes in a VictorSPX motorController and sets nominal and peak
 	 * outputs to the default
 	 * 
-	 * @param mc
-	 *            the VictorSPX to configure
+	 * @param mc the VictorSPX to configure
+	 * @throws RuntimeException
 	 */
 	private void configSPX(WPI_VictorSPX mc) {
+		ErrorCode ecDeadband, ecVoltSat;
 		// stuff cole said to put
 		int kTimeout = (int) Robot.getConst("kTimeoutMs", 10);
 		mc.configNominalOutputForward(0, kTimeout);
@@ -117,9 +129,17 @@ public class RobotMap {
 		mc.configPeakOutputForward(1, kTimeout);
 		mc.configPeakOutputReverse(-1, kTimeout);
 
-		mc.configNeutralDeadband(Robot.getConst("Motor Deadband", 0.001), kTimeout);
+		ecDeadband = mc.configNeutralDeadband(Robot.getConst("Motor Deadband", 0.001), kTimeout);
+		if (!ecDeadband.equals(ErrorCode.OK)) {
+			throw new RuntimeException("Deadband Configuration could not be set");
+		}
 
 		mc.setNeutralMode(NeutralMode.Brake);
+		ecVoltSat = mc.configVoltageCompSaturation(9.0, kTimeout);
+
+		if (!ecVoltSat.equals(ErrorCode.OK)) {
+			throw new RuntimeException("Voltage Saturation Configuration could not be set");
+		}
 	}
 
 	public RobotMap() {

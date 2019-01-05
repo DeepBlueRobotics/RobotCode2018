@@ -16,6 +16,8 @@ import org.usfirst.frc.team199.Robot2018.autonomous.State;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous;
 import org.usfirst.frc.team199.Robot2018.commands.Autonomous.Strategy;
 import org.usfirst.frc.team199.Robot2018.commands.CloseIntake;
+import org.usfirst.frc.team199.Robot2018.commands.IncreaseVoltageLinear;
+import org.usfirst.frc.team199.Robot2018.commands.IncreaseVoltageStepwise;
 import org.usfirst.frc.team199.Robot2018.commands.ShiftLowGear;
 import org.usfirst.frc.team199.Robot2018.subsystems.Climber;
 import org.usfirst.frc.team199.Robot2018.subsystems.ClimberAssist;
@@ -187,6 +189,9 @@ public class Robot extends IterativeRobot {
 		lift.resetEnc();
 		// CameraServer.getInstance().startAutomaticCapture(0);
 		CameraServer.getInstance().startAutomaticCapture((int) Robot.getConst("Camera Port", 1));
+
+		SmartDashboard.putData(new IncreaseVoltageLinear(dt, dt.voltage_step, "drivetrain_characterization.csv"));
+		SmartDashboard.putData(new IncreaseVoltageStepwise(dt, dt.desired_voltages, "drivetrain_characterization.csv"));
 	}
 
 	/**
