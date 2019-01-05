@@ -61,12 +61,16 @@ public class IncreaseVoltageStepwise extends Command {
 
     @Override
 	protected void end() {
-    
+        try {
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Cannot close FileWriter");
+        }
     }
 
     @Override
 	protected void interrupted() {
-    
+        end();
     }
 
     public void increaseVoltageIndex() {

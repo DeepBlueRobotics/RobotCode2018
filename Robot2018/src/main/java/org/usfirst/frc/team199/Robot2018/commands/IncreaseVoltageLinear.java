@@ -67,6 +67,11 @@ public class IncreaseVoltageLinear extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
+        try {
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Cannot close FileWriter");
+        }
 	}
 
 	// Called when another command which requires one or more of the same
