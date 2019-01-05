@@ -52,7 +52,11 @@ public class IncreaseVoltageStepwise extends Command {
     @Override
     // Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-        return false;
+        if (dt.getLeftEncRate() >= 0.75 * dt.getCurrentMaxSpeed() || dt.getRightEncRate() >= 0.75 * dt.getCurrentMaxSpeed()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
