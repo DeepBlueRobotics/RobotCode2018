@@ -58,13 +58,9 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 	private boolean isInverted;
 	private int inverted;
 
-	// Variables for drivetrain characterization
 	public double suppliedVoltage;
-	public double maximumVoltage;
-	public double voltage_step;
-	public double[] desired_voltages;
-
-	public double voltage_runtime;	// Number of seconds since increaseVoltageLinear was first run
+	public double maxVoltage;
+	public double voltage_runtime;
 
 	/**
 	 * Sets up velocity PID controllers. Initializes to not in high gear and to not
@@ -79,10 +75,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		inverted = 1;
 
 		suppliedVoltage = 0.0;
-		maximumVoltage = 9.0;
-		voltage_step = 0.25 / 50; // IncreaseVoltageLinear is called 50 times per every second
-		desired_voltages = new double[1];
-		desired_voltages[0] = 6.0;
+		maxVoltage = 9.0;
 		voltage_runtime = 0.0;
 
 		// all 0s for controller construction because they all get set to right values

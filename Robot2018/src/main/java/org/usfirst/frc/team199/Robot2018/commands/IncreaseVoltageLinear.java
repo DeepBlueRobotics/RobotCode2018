@@ -15,13 +15,19 @@ public class IncreaseVoltageLinear extends Command {
     private Drivetrain dt;
     private FileWriter fw;
     private String filename;
-    private double volt_step;
+    
+    public double suppliedVoltage;
+    public double volt_step;
+
+	public double voltage_runtime;	// Number of seconds since increaseVoltageLinear was first run
+
 
 	public IncreaseVoltageLinear(Drivetrain dt, double volt_step, String filename) {
         requires(dt);
         this.dt = dt;
         this.volt_step = volt_step;
         this.filename = filename;
+        voltage_runtime = 0.0;
     }
 
 	// Called just before this Command runs the first time
@@ -43,11 +49,11 @@ public class IncreaseVoltageLinear extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-        if (dt.suppliedVoltage + volt_step <= dt.maximumVoltage) {
+        if (dt.suppliedVoltage + volt_step <= dt.maxVoltage) {
             dt.suppliedVoltage += volt_step;
 
             if (Robot.getBool("Arcade Drive Default Setup", true)) {
-				dt.arcadeDrive(dt.suppliedVoltage / dt.maximumVoltage, 0.0);
+				dt.arcadeDrive(dt.suppliedVoltage / dt.maxVoltage, 0.0);
             }
             
             dt.writeMeasuredVelocity(fw);
@@ -57,7 +63,7 @@ public class IncreaseVoltageLinear extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		if (dt.suppliedVoltage >= dt.maximumVoltage) {
+		if (dt.suppliedVoltage >= dt.maxVoltage) {
             return true;
         }
         else {

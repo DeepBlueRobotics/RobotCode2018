@@ -23,6 +23,7 @@ public class IncreaseVoltageStepwise extends Command {
         this.volt_steps = volt_steps;
         this.filename = filename;
         voltage_index = 0;
+        this.volt_steps = volt_steps;
     }
 
     @Override
