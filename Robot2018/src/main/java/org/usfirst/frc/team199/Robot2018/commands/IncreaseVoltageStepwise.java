@@ -35,7 +35,7 @@ public class IncreaseVoltageStepwise extends Command {
             fw.write("LeftMotorVelocity (inches / s),");
             fw.write("RightMotorVelocity (inches / s)\n");
         } catch (IOException e) {
-            System.out.println("FileWriter object could not be created. Does the file with the associated filename exist?");
+            System.out.println("Error caught creating FileWriter object: " + e);
         }
     }
 
