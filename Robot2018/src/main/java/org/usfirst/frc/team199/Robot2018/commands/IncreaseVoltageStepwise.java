@@ -32,6 +32,7 @@ public class IncreaseVoltageStepwise extends Command {
             f.createNewFile();
             fw = new FileWriter(f);
             fw.write("Timestamp (s),");
+            fw.write("Voltage (V),");
             fw.write("LeftMotorVelocity (inches / s),");
             fw.write("RightMotorVelocity (inches / s)\n");
         } catch (IOException e) {

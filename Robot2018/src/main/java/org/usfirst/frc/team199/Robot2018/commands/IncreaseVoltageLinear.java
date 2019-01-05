@@ -32,8 +32,9 @@ public class IncreaseVoltageLinear extends Command {
             f.createNewFile();
             fw = new FileWriter(f);
             fw.write("Timestamp (s),");
+            fw.write("Voltage (V),");
             fw.write("LeftMotorVelocity (inches / s),");
-            fw.write("RightMotorVelocity (inches / s)\n");
+            fw.write("RightMotorVelocity (inches / s)\r\n");
         } catch (IOException e) {
             System.out.println("Error caught creating FileWriter object: " + e);
         }

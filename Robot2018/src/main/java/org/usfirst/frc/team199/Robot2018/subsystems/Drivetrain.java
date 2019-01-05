@@ -623,10 +623,12 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		voltage_runtime += 0.02;	// IncreaseVoltageLinearly occurs every 1/50 of a second
 		sb.append(String.valueOf(voltage_runtime));
 		sb.append(",");
+		sb.append(String.valueOf(suppliedVoltage));
+		sb.append(",");
 		sb.append(String.valueOf(leftMotorVelocity));
 		sb.append(",");
 		sb.append(String.valueOf(rightMotorVelocity));
-		sb.append("\n");
+		sb.append("\r\n");
 
 		try {
 			fw.write(sb.toString());
