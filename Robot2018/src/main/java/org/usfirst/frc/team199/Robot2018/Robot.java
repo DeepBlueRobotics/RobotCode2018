@@ -190,8 +190,9 @@ public class Robot extends IterativeRobot {
 		// CameraServer.getInstance().startAutomaticCapture(0);
 		CameraServer.getInstance().startAutomaticCapture((int) Robot.getConst("Camera Port", 1));
 
-		SmartDashboard.putData(new IncreaseVoltageLinear(dt, dt.voltage_step, "drivetrain_characterization.csv"));
-		SmartDashboard.putData(new IncreaseVoltageStepwise(dt, dt.desired_voltages, "drivetrain_characterization.csv"));
+		String fname = "/home/lvuser/drivetrain_characterization.csv";
+		SmartDashboard.putData(new IncreaseVoltageLinear(dt, dt.voltage_step, fname));
+		SmartDashboard.putData(new IncreaseVoltageStepwise(dt, dt.desired_voltages, fname));
 	}
 
 	/**
