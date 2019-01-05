@@ -33,6 +33,7 @@ public class IncreaseVoltageLinear extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
+        dt.suppliedVoltage = 0.0;
         File f = new File(filename);
         try {
             f.createNewFile();
@@ -49,15 +50,12 @@ public class IncreaseVoltageLinear extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-        if (dt.suppliedVoltage + volt_step <= dt.maxVoltage) {
-            dt.suppliedVoltage += volt_step;
-
-            if (Robot.getBool("Arcade Drive Default Setup", true)) {
-				dt.arcadeDrive(dt.suppliedVoltage / dt.maxVoltage, 0.0);
-            }
-            
-            dt.writeMeasuredVelocity(fw);
+        if (Robot.getBool("Arcade Drive Default Setup", true)) {
+            dt.arcadeDrive(dt.suppliedVoltage / dt.maxVoltage, 0.0);
         }
+        
+        dt.writeMeasuredVelocity(fw);
+        dt.suppliedVoltage += volt_step;
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
