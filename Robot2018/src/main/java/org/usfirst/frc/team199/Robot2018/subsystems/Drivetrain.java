@@ -631,7 +631,7 @@ public class Drivetrain extends Subsystem implements DrivetrainInterface {
 		try {
 			fw.write(sb.toString());
 		} catch (IOException e) {
-			System.out.println("FileWriter object cannot write StringBuilder object");
+			System.out.println("FileWriter object cannot write StringBuilder object: " + e);
 		}
 	}
 }
