@@ -45,7 +45,7 @@ public class IncreaseVoltageStepwise extends Command {
 	protected void execute() {
         dt.suppliedVoltage = volt_steps[voltage_index];
         if (Robot.getBool("Arcade Drive Default Setup", true)) {
-			dt.arcadeDrive(dt.suppliedVoltage / dt.maximumVoltage, 0.0);
+			dt.arcadeDrive(dt.suppliedVoltage / dt.maxVoltage, 0.0);
         }
             
          dt.writeMeasuredVelocity(fw);
